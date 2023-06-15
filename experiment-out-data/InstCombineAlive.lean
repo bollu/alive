@@ -352,6 +352,53 @@ example : forall (w : Nat) (b a b a : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:AddSub:1202
+-- precondition: true
+/-
+  %nx = xor %x, -1
+  %r = add %nx, C
+
+=>
+  %nx = xor %x, -1
+  %r = sub (C - 1), %x
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x C x C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:add w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (1)) %v9999;
+  %v7 := pair:%v5 %v6;
+  %v8 := op:sub w %v7;
+  %v9 := pair:%v8 %v1;
+  %v10 := op:sub w %v9
+  dsl_ret %v10
+  ]
+  := by sorry
+
 -- Name:AddSub:1295
 -- precondition: true
 /-
@@ -588,6 +635,43 @@ example : forall (w : Nat) (a x a x : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:AddSub:1539-2
+-- precondition: true
+/-
+  %r = sub %x, C
+
+=>
+  %r = add %x, -C
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x C x C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3
+  dsl_ret %v4
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := op:neg w %v2;
+  %v4 := pair:%v1 %v3;
+  %v5 := op:add w %v4
+  dsl_ret %v5
+  ]
+  := by sorry
+
 -- Name:AddSub:1546
 -- precondition: true
 /-
@@ -701,6 +785,99 @@ example : forall (w : Nat) (a a : Nat),TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:xor w %v3
   dsl_ret %v4
+  ]
+  := by sorry
+
+-- Name:AddSub:1564
+-- precondition: true
+/-
+  %nx = xor %x, -1
+  %r = sub C, %nx
+
+=>
+  %nx = xor %x, -1
+  %r = add %x, (C + 1)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x C x C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v5 %v4;
+  %v7 := op:sub w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (1)) %v9999;
+  %v7 := pair:%v5 %v6;
+  %v8 := op:add w %v7;
+  %v9 := pair:%v1 %v8;
+  %v10 := op:add w %v9
+  dsl_ret %v10
+  ]
+  := by sorry
+
+-- Name:AddSub:1574
+-- precondition: true
+/-
+  %rhs = add %X, C2
+  %r = sub C, %rhs
+
+=>
+  %rhs = add %X, C2
+  %r = sub (C - C2), %X
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C2 C X C2 C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v5 %v4;
+  %v7 := op:sub w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v5 %v2;
+  %v7 := op:sub w %v6;
+  %v8 := pair:%v7 %v1;
+  %v9 := op:sub w %v8
+  dsl_ret %v9
   ]
   := by sorry
 
@@ -834,6 +1011,465 @@ example : forall (w : Nat) (A B A B : Nat),TSSA.eval
   %v6 := op:xor w %v5;
   %v7 := pair:%v1 %v2;
   %v8 := op:and w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:AndOrXor:135
+-- precondition: true
+/-
+  %op = xor %X, C1
+  %r = and %op, C2
+
+=>
+  %a = and %X, C2
+  %op = xor %X, C1
+  %r = xor %a, (C1 & C2)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C1 C2 X C2 C1 : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:and w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:and w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:xor w %v6;
+  %v8 := pair:%v5 %v2;
+  %v9 := op:and w %v8;
+  %v10 := pair:%v4 %v9;
+  %v11 := op:xor w %v10
+  dsl_ret %v11
+  ]
+  := by sorry
+
+-- Name:AndOrXor:144
+-- precondition: true
+/-
+  %op = or %X, C1
+  %r = and %op, C2
+
+=>
+  %o = or %X, (C1 & C2)
+  %op = or %X, C1
+  %r = and %o, C2
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C1 C2 X C1 C2 : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:and w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v4 := pair:%v2 %v3;
+  %v5 := op:and w %v4;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:or w %v6;
+  %v8 := pair:%v1 %v2;
+  %v9 := op:or w %v8;
+  %v10 := pair:%v7 %v3;
+  %v11 := op:and w %v10
+  dsl_ret %v11
+  ]
+  := by sorry
+
+-- Name:AndOrXor:698
+-- precondition: true
+/-
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, 0
+  %op1 = icmp eq %a2, 0
+  %r = and %op0, %op1
+
+=>
+  %or = or %b, %d
+  %a3 = and %a, %or
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, 0
+  %op1 = icmp eq %a2, 0
+  %r = icmp eq %a3, 0
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b d b d a : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:and w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:and w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := pair:%v4 %v8;
+  %v10 := op:eq w %v9;
+  %v11 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v12 := pair:%v7 %v11;
+  %v13 := op:eq w %v12;
+  %v14 := pair:%v10 %v13;
+  %v15 := op:and w %v14
+  dsl_ret %v15
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v6 := pair:%v5 %v4;
+  %v7 := op:and w %v6;
+  %v8 := pair:%v5 %v1;
+  %v9 := op:and w %v8;
+  %v10 := pair:%v5 %v2;
+  %v11 := op:and w %v10;
+  %v12 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v13 := pair:%v9 %v12;
+  %v14 := op:eq w %v13;
+  %v15 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v16 := pair:%v11 %v15;
+  %v17 := op:eq w %v16;
+  %v18 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v19 := pair:%v7 %v18;
+  %v20 := op:eq w %v19
+  dsl_ret %v20
+  ]
+  := by sorry
+
+-- Name:AndOrXor:709
+-- precondition: true
+/-
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, %b
+  %op1 = icmp eq %a2, %d
+  %r = and %op0, %op1
+
+=>
+  %or = or %b, %d
+  %a3 = and %a, %or
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, %b
+  %op1 = icmp eq %a2, %d
+  %r = icmp eq %a3, %or
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b d b d a : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:and w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:and w %v6;
+  %v8 := pair:%v4 %v2;
+  %v9 := op:eq w %v8;
+  %v10 := pair:%v7 %v5;
+  %v11 := op:eq w %v10;
+  %v12 := pair:%v9 %v11;
+  %v13 := op:and w %v12
+  dsl_ret %v13
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v6 := pair:%v5 %v4;
+  %v7 := op:and w %v6;
+  %v8 := pair:%v5 %v1;
+  %v9 := op:and w %v8;
+  %v10 := pair:%v5 %v2;
+  %v11 := op:and w %v10;
+  %v12 := pair:%v9 %v1;
+  %v13 := op:eq w %v12;
+  %v14 := pair:%v11 %v2;
+  %v15 := op:eq w %v14;
+  %v16 := pair:%v7 %v4;
+  %v17 := op:eq w %v16
+  dsl_ret %v17
+  ]
+  := by sorry
+
+-- Name:AndOrXor:716
+-- precondition: true
+/-
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, %a
+  %op1 = icmp eq %a2, %a
+  %r = and %op0, %op1
+
+=>
+  %a4 = and %b, %d
+  %a3 = and %a, %a4
+  %a1 = and %a, %b
+  %a2 = and %a, %d
+  %op0 = icmp eq %a1, %a
+  %op1 = icmp eq %a2, %a
+  %r = icmp eq %a3, %a
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b d b d a : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:and w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:and w %v6;
+  %v8 := pair:%v4 %v1;
+  %v9 := op:eq w %v8;
+  %v10 := pair:%v7 %v1;
+  %v11 := op:eq w %v10;
+  %v12 := pair:%v9 %v11;
+  %v13 := op:and w %v12
+  dsl_ret %v13
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (d)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:and w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v6 := pair:%v5 %v4;
+  %v7 := op:and w %v6;
+  %v8 := pair:%v5 %v1;
+  %v9 := op:and w %v8;
+  %v10 := pair:%v5 %v2;
+  %v11 := op:and w %v10;
+  %v12 := pair:%v9 %v5;
+  %v13 := op:eq w %v12;
+  %v14 := pair:%v11 %v5;
+  %v15 := op:eq w %v14;
+  %v16 := pair:%v7 %v5;
+  %v17 := op:eq w %v16
+  dsl_ret %v17
+  ]
+  := by sorry
+
+-- Name:AndOrXor:794
+-- precondition: true
+/-
+  %op0 = icmp sgt %a, %b
+  %op1 = icmp ne %a, %b
+  %r = and %op0, %op1
+
+=>
+  %op0 = icmp sgt %a, %b
+  %op1 = icmp ne %a, %b
+  %r = icmp sgt %a, %b
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b a b : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v4 %v6;
+  %v8 := op:and w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v1 %v2;
+  %v8 := op:sgt w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:AndOrXor:827
+-- precondition: true
+/-
+  %op0 = icmp eq %a, 0
+  %op1 = icmp eq %b, 0
+  %r = and %op0, %op1
+
+=>
+  %o = or %a, %b
+  %op0 = icmp eq %a, 0
+  %op1 = icmp eq %b, 0
+  %r = icmp eq %o, 0
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b a b : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v7 := pair:%v5 %v6;
+  %v8 := op:eq w %v7;
+  %v9 := pair:%v4 %v8;
+  %v10 := op:and w %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:eq w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := pair:%v2 %v8;
+  %v10 := op:eq w %v9;
+  %v11 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v12 := pair:%v4 %v11;
+  %v13 := op:eq w %v12
+  dsl_ret %v13
+  ]
+  := by sorry
+
+-- Name:AndOrXor:887-2
+-- precondition: true
+/-
+  %op0 = icmp eq %a, C1
+  %op1 = icmp ne %a, C1
+  %r = and %op0, %op1
+
+=>
+  %op0 = icmp eq %a, C1
+  %op1 = icmp ne %a, C1
+  %r = false
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a C1 a C1 : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v4 %v6;
+  %v8 := op:and w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := op:const (Bitvec.ofInt' w (false)) %v9999;
+  %v8 := op:copy %v7
   dsl_ret %v8
   ]
   := by sorry
@@ -1215,6 +1851,316 @@ example : forall (w : Nat) (A B A B : Nat),TSSA.eval
   %v10 := pair:%v1 %v2;
   %v11 := op:and w %v10
   dsl_ret %v11
+  ]
+  := by sorry
+
+-- Name:AndOrXor:1683-1
+-- precondition: true
+/-
+  %op0 = icmp ugt %a, %b
+  %op1 = icmp eq %a, %b
+  %r = or %op0, %op1
+
+=>
+  %op0 = icmp ugt %a, %b
+  %op1 = icmp eq %a, %b
+  %r = icmp uge %a, %b
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b a b : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ugt w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:eq w %v5;
+  %v7 := pair:%v4 %v6;
+  %v8 := op:or w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ugt w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:eq w %v5;
+  %v7 := pair:%v1 %v2;
+  %v8 := op:uge w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:AndOrXor:1683-2
+-- precondition: true
+/-
+  %op0 = icmp uge %a, %b
+  %op1 = icmp ne %a, %b
+  %r = or %op0, %op1
+
+=>
+  %op0 = icmp uge %a, %b
+  %op1 = icmp ne %a, %b
+  %r = true
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b a b : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:uge w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v4 %v6;
+  %v8 := op:or w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:uge w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := op:const (Bitvec.ofInt' w (true)) %v9999;
+  %v8 := op:copy %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:AndOrXor:1704
+-- precondition: true
+/-
+  %cmp1 = icmp eq %B, 0
+  %cmp2 = icmp ult %A, %B
+  %r = or %cmp1, %cmp2
+
+=>
+  %b1 = add %B, -1
+  %cmp1 = icmp eq %B, 0
+  %cmp2 = icmp ult %A, %B
+  %r = icmp uge %b1, %A
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (B A B A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:ult w %v6;
+  %v8 := pair:%v4 %v7;
+  %v9 := op:or w %v8
+  dsl_ret %v9
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:eq w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v9 := pair:%v8 %v1;
+  %v10 := op:ult w %v9;
+  %v11 := pair:%v4 %v8;
+  %v12 := op:uge w %v11
+  dsl_ret %v12
+  ]
+  := by sorry
+
+-- Name:AndOrXor:1705
+-- precondition: true
+/-
+  %cmp1 = icmp eq %B, 0
+  %cmp2 = icmp ugt %B, %A
+  %r = or %cmp1, %cmp2
+
+=>
+  %b1 = add %B, -1
+  %cmp1 = icmp eq %B, 0
+  %cmp2 = icmp ugt %B, %A
+  %r = icmp uge %b1, %A
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (B A B A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:ugt w %v6;
+  %v8 := pair:%v4 %v7;
+  %v9 := op:or w %v8
+  dsl_ret %v9
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:eq w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v9 := pair:%v1 %v8;
+  %v10 := op:ugt w %v9;
+  %v11 := pair:%v4 %v8;
+  %v12 := op:uge w %v11
+  dsl_ret %v12
+  ]
+  := by sorry
+
+-- Name:AndOrXor:1733
+-- precondition: true
+/-
+  %cmp1 = icmp ne %A, 0
+  %cmp2 = icmp ne %B, 0
+  %r = or %cmp1, %cmp2
+
+=>
+  %or = or %A, %B
+  %cmp1 = icmp ne %A, 0
+  %cmp2 = icmp ne %B, 0
+  %r = icmp ne %or, 0
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A B A B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ne w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v7 := pair:%v5 %v6;
+  %v8 := op:ne w %v7;
+  %v9 := pair:%v4 %v8;
+  %v10 := op:or w %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:ne w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := pair:%v2 %v8;
+  %v10 := op:ne w %v9;
+  %v11 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v12 := pair:%v4 %v11;
+  %v13 := op:ne w %v12
+  dsl_ret %v13
+  ]
+  := by sorry
+
+-- Name:AndOrXor:2063  (X ^ C1) | C2 --> (X | C2) ^ (C1 & ~C2)
+-- precondition: true
+/-
+  %op0 = xor %x, C1
+  %r = or %op0, C
+
+=>
+  %or = or %x, C
+  %op0 = xor %x, C1
+  %r = xor %or, (C1 & ~C)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x C1 C x C C1 : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:or w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C1)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:xor w %v6;
+  %v8 := op:not w %v2;
+  %v9 := pair:%v5 %v8;
+  %v10 := op:and w %v9;
+  %v11 := pair:%v4 %v10;
+  %v12 := op:xor w %v11
+  dsl_ret %v12
   ]
   := by sorry
 
@@ -1958,6 +2904,66 @@ example : forall (w : Nat) (A C1 op1 A op1 C1 : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:AndOrXor:2375
+-- precondition: true
+/-
+  %op0 = select i1 %x, %A, %B
+  %op1 = select i1 %x, %C, %D
+  %r = or %op0, %op1
+
+=>
+  %t = or %A, %C
+  %f = or %B, %D
+  %op0 = select i1 %x, %A, %B
+  %op1 = select i1 %x, %C, %D
+  %r = select i1 %x, %t, %f
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x A B C D A C B D x : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v7 := op:const (Bitvec.ofInt' w (D)) %v9999;
+  %v8 := triple:%v1 %v6 %v7;
+  %v9 := op:select %v8;
+  %v10 := pair:%v5 %v9;
+  %v11 := op:or w %v10
+  dsl_ret %v11
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:or w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (D)) %v9999;
+  %v7 := pair:%v5 %v6;
+  %v8 := op:or w %v7;
+  %v9 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v10 := triple:%v9 %v1 %v5;
+  %v11 := op:select %v10;
+  %v12 := triple:%v9 %v2 %v6;
+  %v13 := op:select %v12;
+  %v14 := triple:%v9 %v4 %v8;
+  %v15 := op:select %v14
+  dsl_ret %v15
+  ]
+  := by sorry
+
 -- Name:AndOrXor:2416
 -- precondition: true
 /-
@@ -2217,6 +3223,141 @@ example : forall (w : Nat) (x y x y : Nat),TSSA.eval
   %v7 := op:ashr w %v6;
   %v8 := pair:%v1 %v5;
   %v9 := op:ashr w %v8
+  dsl_ret %v9
+  ]
+  := by sorry
+
+-- Name:AndOrXor:2453
+-- precondition: true
+/-
+  %op0 = icmp slt %x, %y
+  %r = xor %op0, -1
+
+=>
+  %op0 = icmp slt %x, %y
+  %r = icmp sge %x, %y
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x y x y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:xor w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:sge w %v5
+  dsl_ret %v6
+  ]
+  := by sorry
+
+-- Name:AndOrXor:2475
+-- precondition: true
+/-
+  %op0 = sub C, %x
+  %r = xor %op0, -1
+
+=>
+  %op0 = sub C, %x
+  %r = add %x, (-1 - C)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (C x C x : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:xor w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := pair:%v2 %v7;
+  %v9 := op:add w %v8
+  dsl_ret %v9
+  ]
+  := by sorry
+
+-- Name:AndOrXor:2486
+-- precondition: true
+/-
+  %op0 = add %x, C
+  %r = xor %op0, -1
+
+=>
+  %op0 = add %x, C
+  %r = sub (-1 - C), %x
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x C x C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:xor w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v5 %v2;
+  %v7 := op:sub w %v6;
+  %v8 := pair:%v7 %v1;
+  %v9 := op:sub w %v8
   dsl_ret %v9
   ]
   := by sorry
@@ -2656,6 +3797,54 @@ example : forall (w : Nat) (b a a b : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:AndOrXor:2663
+-- precondition: true
+/-
+  %op0 = icmp ule %a, %b
+  %op1 = icmp ne %a, %b
+  %r = xor %op0, %op1
+
+=>
+  %op0 = icmp ule %a, %b
+  %op1 = icmp ne %a, %b
+  %r = icmp uge %a, %b
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (a b a b : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ule w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v4 %v6;
+  %v8 := op:xor w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (a)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (b)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ule w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:ne w %v5;
+  %v7 := pair:%v1 %v2;
+  %v8 := op:uge w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
 -- Name:152
 -- precondition: true
 /-
@@ -2837,6 +4026,88 @@ example : forall (w : Nat) (X Y X Y : Nat),TSSA.eval
   %v9 := pair:%v2 %v6;
   %v10 := op:mul w %v9
   dsl_ret %v10
+  ]
+  := by sorry
+
+-- Name:265
+-- precondition: true
+/-
+  %div = udiv exact %X, %Y
+  %r = mul %div, %Y
+
+=>
+  %div = udiv exact %X, %Y
+  %r = %X
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X Y X Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:udiv w %v3;
+  %v5 := pair:%v4 %v2;
+  %v6 := op:mul w %v5
+  dsl_ret %v6
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:udiv w %v3;
+  %v5 := op:copy %v1
+  dsl_ret %v5
+  ]
+  := by sorry
+
+-- Name:265-2
+-- precondition: true
+/-
+  %div = sdiv exact %X, %Y
+  %r = mul %div, %Y
+
+=>
+  %div = sdiv exact %X, %Y
+  %r = %X
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X Y X Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sdiv w %v3;
+  %v5 := pair:%v4 %v2;
+  %v6 := op:mul w %v5
+  dsl_ret %v6
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sdiv w %v3;
+  %v5 := op:copy %v1
+  dsl_ret %v5
   ]
   := by sorry
 
@@ -3218,6 +4489,96 @@ example : forall (w : Nat) (Y Op1 Y Op1 : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:SimplifyDivRemOfSelect
+-- precondition: true
+/-
+  %sel = select i1 %c, %Y, 0
+  %r = udiv %X, %sel
+
+=>
+  %sel = select i1 %c, %Y, 0
+  %r = udiv %X, %Y
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (c Y X c Y X : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v7 := pair:%v6 %v5;
+  %v8 := op:udiv w %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:udiv w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:805
+-- precondition: true
+/-
+  %r = sdiv 1, %X
+
+=>
+  %inc = add %X, 1
+  %c = icmp ult %inc, 3
+  %r = select i1 %c, %X, 0
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X X : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (1)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sdiv w %v3
+  dsl_ret %v4
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (3)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:ult w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := triple:%v7 %v1 %v8;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]
+  := by sorry
+
 -- Name:820
 -- precondition: true
 /-
@@ -3435,6 +4796,737 @@ example : forall (w : Nat) (X X : Nat),TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sub w %v3
   dsl_ret %v4
+  ]
+  := by sorry
+
+-- Name:1049
+-- precondition: true
+/-
+  %Op0 = sub nsw i11 0, %X
+  %r = sdiv %Op0, C
+
+=>
+  %Op0 = sub nsw i11 0, %X
+  %r = sdiv %X, -C
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C X C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:sdiv w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := op:neg w %v5;
+  %v7 := pair:%v2 %v6;
+  %v8 := op:sdiv w %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:Select:485-2
+-- precondition: true
+/-
+  %c = icmp ult i32 %x, 0
+  %r = select i1 %c, %A, %B
+
+=>
+  %c = icmp ult i32 %x, 0
+  %r = %B
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x A B x B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ult w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v7 := triple:%v4 %v5 %v6;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ult w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v6 := op:copy %v5
+  dsl_ret %v6
+  ]
+  := by sorry
+
+-- Name:Select:489-2
+-- precondition: true
+/-
+  %c = icmp ugt i32 %x, -1
+  %r = select i1 %c, %A, %B
+
+=>
+  %c = icmp ugt i32 %x, -1
+  %r = %B
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x A B x B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ugt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v6 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v7 := triple:%v4 %v5 %v6;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ugt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v6 := op:copy %v5
+  dsl_ret %v6
+  ]
+  := by sorry
+
+-- Name:Select:637
+-- precondition: true
+/-
+  %c = icmp eq %X, C
+  %r = select i1 %c, %X, %Y
+
+=>
+  %c = icmp eq %X, C
+  %r = select i1 %c, C, %Y
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C Y X C Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v6 := triple:%v4 %v1 %v5;
+  %v7 := op:select %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:eq w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v6 := triple:%v4 %v2 %v5;
+  %v7 := op:select %v6
+  dsl_ret %v7
+  ]
+  := by sorry
+
+-- Name:Select:641
+-- precondition: true
+/-
+  %c = icmp ne %X, C
+  %r = select i1 %c, %Y, %X
+
+=>
+  %c = icmp ne %X, C
+  %r = select i1 %c, %Y, C
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C Y X C Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ne w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v6 := triple:%v4 %v5 %v1;
+  %v7 := op:select %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:ne w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v6 := triple:%v4 %v5 %v2;
+  %v7 := op:select %v6
+  dsl_ret %v7
+  ]
+  := by sorry
+
+-- Name:Select:699
+-- precondition: true
+/-
+  %c = icmp uge %A, %B
+  %umax = select i1 %c, %A, %B
+  %c2 = icmp uge %umax, %B
+  %umax2 = select i1 %c2, %umax, %B
+
+=>
+  %c = icmp uge %A, %B
+  %umax = select i1 %c, %A, %B
+  %c2 = icmp uge %umax, %B
+  %umax2 = select i1 %c, %A, %B
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A B A B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:uge w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:uge w %v7;
+  %v9 := triple:%v8 %v6 %v2;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:uge w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:uge w %v7;
+  %v9 := triple:%v4 %v1 %v2;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]
+  := by sorry
+
+-- Name:Select:700
+-- precondition: true
+/-
+  %c = icmp slt %A, %B
+  %smin = select i1 %c, %A, %B
+  %c2 = icmp slt %smin, %B
+  %smin2 = select i1 %c2, %smin, %B
+
+=>
+  %c = icmp slt %A, %B
+  %smin = select i1 %c, %A, %B
+  %c2 = icmp slt %smin, %B
+  %smin2 = select i1 %c, %A, %B
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A B A B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:slt w %v7;
+  %v9 := triple:%v8 %v6 %v2;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:slt w %v7;
+  %v9 := triple:%v4 %v1 %v2;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]
+  := by sorry
+
+-- Name:Select:704
+-- precondition: true
+/-
+  %c = icmp slt %A, %B
+  %smin = select i1 %c, %A, %B
+  %c2 = icmp sge %smin, %A
+  %smax = select i1 %c2, %smin, %A
+
+=>
+  %c = icmp slt %A, %B
+  %smin = select i1 %c, %A, %B
+  %c2 = icmp sge %smin, %A
+  %smax = %A
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A B A B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v1;
+  %v8 := op:sge w %v7;
+  %v9 := triple:%v8 %v6 %v1;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v1;
+  %v8 := op:sge w %v7;
+  %v9 := op:copy %v1
+  dsl_ret %v9
+  ]
+  := by sorry
+
+-- Name:Select:705
+-- precondition: true
+/-
+  %c = icmp sge %A, %B
+  %umax = select i1 %c, %A, %B
+  %c2 = icmp slt %umax, %A
+  %umin = select i1 %c2, %umax, %A
+
+=>
+  %c = icmp sge %A, %B
+  %umax = select i1 %c, %A, %B
+  %c2 = icmp slt %umax, %A
+  %umin = %A
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A B A B : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sge w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v1;
+  %v8 := op:slt w %v7;
+  %v9 := triple:%v8 %v6 %v1;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (B)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sge w %v3;
+  %v5 := triple:%v4 %v1 %v2;
+  %v6 := op:select %v5;
+  %v7 := pair:%v6 %v1;
+  %v8 := op:slt w %v7;
+  %v9 := op:copy %v1
+  dsl_ret %v9
+  ]
+  := by sorry
+
+-- Name:Select:740
+-- precondition: true
+/-
+  %c = icmp sgt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp sgt %abs, -1
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c2, %abs, %minus2
+
+=>
+  %c = icmp sgt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp sgt %abs, -1
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c, %A, %minus
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v1 %v7;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:sgt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v12 %v9 %v15;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v1 %v7;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:sgt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v4 %v1 %v7;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]
+  := by sorry
+
+-- Name:Select:741
+-- precondition: true
+/-
+  %c = icmp sgt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %minus, %A
+  %c2 = icmp sgt %abs, -1
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c2, %minus2, %abs
+
+=>
+  %c = icmp sgt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %minus, %A
+  %c2 = icmp sgt %abs, -1
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c, %minus, %A
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v7 %v1;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:sgt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v12 %v15 %v9;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v7 %v1;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:sgt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v4 %v7 %v1;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]
+  := by sorry
+
+-- Name:Select:746
+-- precondition: true
+/-
+  %c = icmp slt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp sgt %abs, 0
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c2, %abs, %minus2
+
+=>
+  %minus = sub 0, %A
+  %c3 = icmp sgt %A, 0
+  %c = icmp slt %A, 0
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp sgt %abs, 0
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c3, %A, %minus
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:slt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v1 %v7;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:sgt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v12 %v9 %v15;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v2 %v5;
+  %v7 := op:sgt w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := pair:%v2 %v8;
+  %v10 := op:slt w %v9;
+  %v11 := triple:%v10 %v2 %v4;
+  %v12 := op:select %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v12 %v13;
+  %v15 := op:sgt w %v14;
+  %v16 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v17 := pair:%v16 %v12;
+  %v18 := op:sub w %v17;
+  %v19 := triple:%v7 %v2 %v4;
+  %v20 := op:select %v19
+  dsl_ret %v20
+  ]
+  := by sorry
+
+-- Name:Select:747
+-- precondition: true
+/-
+  %c = icmp sgt %A, 0
+  %minus = sub 0, %A
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp slt %abs, 0
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c2, %abs, %minus2
+
+=>
+  %minus = sub 0, %A
+  %c3 = icmp slt %A, 0
+  %c = icmp sgt %A, 0
+  %abs = select i1 %c, %A, %minus
+  %c2 = icmp slt %abs, 0
+  %minus2 = sub 0, %abs
+  %abs2 = select i1 %c3, %A, %minus
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (A A : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sgt w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v5 %v1;
+  %v7 := op:sub w %v6;
+  %v8 := triple:%v4 %v1 %v7;
+  %v9 := op:select %v8;
+  %v10 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v11 := pair:%v9 %v10;
+  %v12 := op:slt w %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v13 %v9;
+  %v15 := op:sub w %v14;
+  %v16 := triple:%v12 %v9 %v15;
+  %v17 := op:select %v16
+  dsl_ret %v17
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (A)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v6 := pair:%v2 %v5;
+  %v7 := op:slt w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v9 := pair:%v2 %v8;
+  %v10 := op:sgt w %v9;
+  %v11 := triple:%v10 %v2 %v4;
+  %v12 := op:select %v11;
+  %v13 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v14 := pair:%v12 %v13;
+  %v15 := op:slt w %v14;
+  %v16 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v17 := pair:%v16 %v12;
+  %v18 := op:sub w %v17;
+  %v19 := triple:%v7 %v2 %v4;
+  %v20 := op:select %v19
+  dsl_ret %v20
   ]
   := by sorry
 
@@ -3754,6 +5846,267 @@ example : forall (w : Nat) (a b a b : Nat),TSSA.eval
   ]
   := by sorry
 
+-- Name:Select:962
+-- precondition: true
+/-
+  %s1 = add %x, %y
+  %s2 = add %x, %z
+  %r = select i1 %c, %s1, %s2
+
+=>
+  %yz = select i1 %c, %y, %z
+  %s1 = add %x, %y
+  %s2 = add %x, %z
+  %r = add %x, %yz
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x y z c c y z x : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (z)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:add w %v6;
+  %v8 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v9 := triple:%v8 %v4 %v7;
+  %v10 := op:select %v9
+  dsl_ret %v10
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (z)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v7 := pair:%v6 %v2;
+  %v8 := op:add w %v7;
+  %v9 := pair:%v6 %v3;
+  %v10 := op:add w %v9;
+  %v11 := pair:%v6 %v5;
+  %v12 := op:add w %v11
+  dsl_ret %v12
+  ]
+  := by sorry
+
+-- Name:Select:967a
+-- precondition: true
+/-
+  %sum = add i9 %x, %y
+  %dif = sub %x, %y
+  %r = select i1 %c, %sum, %dif
+
+=>
+  %neg = sub 0, %y
+  %sel = select i1 %c, %y, %neg
+  %sum = add i9 %x, %y
+  %dif = sub %x, %y
+  %r = add %x, %sel
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x y c y c x : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:add w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:sub w %v5;
+  %v7 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v8 := triple:%v7 %v4 %v6;
+  %v9 := op:select %v8
+  dsl_ret %v9
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v6 := triple:%v5 %v2 %v4;
+  %v7 := op:select %v6;
+  %v8 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v9 := pair:%v8 %v2;
+  %v10 := op:add w %v9;
+  %v11 := pair:%v8 %v2;
+  %v12 := op:sub w %v11;
+  %v13 := pair:%v8 %v7;
+  %v14 := op:add w %v13
+  dsl_ret %v14
+  ]
+  := by sorry
+
+-- Name:Select:967b
+-- precondition: true
+/-
+  %sum = sub i9 %x, %y
+  %dif = add %x, %y
+  %r = select i1 %c, %sum, %dif
+
+=>
+  %neg = sub 0, %y
+  %sel = select i1 %c, %neg, %y
+  %sum = sub i9 %x, %y
+  %dif = add %x, %y
+  %r = add %x, %sel
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (x y c y c x : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := pair:%v1 %v2;
+  %v6 := op:add w %v5;
+  %v7 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v8 := triple:%v7 %v4 %v6;
+  %v9 := op:select %v8
+  dsl_ret %v9
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (0)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (y)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:sub w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v6 := triple:%v5 %v4 %v2;
+  %v7 := op:select %v6;
+  %v8 := op:const (Bitvec.ofInt' w (x)) %v9999;
+  %v9 := pair:%v8 %v2;
+  %v10 := op:sub w %v9;
+  %v11 := pair:%v8 %v2;
+  %v12 := op:add w %v11;
+  %v13 := pair:%v8 %v7;
+  %v14 := op:add w %v13
+  dsl_ret %v14
+  ]
+  := by sorry
+
+-- Name:Select:1070
+-- precondition: true
+/-
+  %X = select i1 %c, %W, %Z
+  %r = select i1 %c, %X, %Y
+
+=>
+  %X = select i1 %c, %W, %Z
+  %r = select i1 %c, %W, %Y
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (c W Z Y c W Z Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (W)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Z)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v7 := triple:%v1 %v5 %v6;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (W)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Z)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v7 := triple:%v1 %v2 %v6;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:Select:1078
+-- precondition: true
+/-
+  %Y = select i1 %c, %W, %Z
+  %r = select i1 %c, %X, %Y
+
+=>
+  %Y = select i1 %c, %W, %Z
+  %r = select i1 %c, %X, %Z
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (c W Z X c W Z X : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (W)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Z)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v7 := triple:%v1 %v6 %v5;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (c)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (W)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Z)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4;
+  %v6 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v7 := triple:%v1 %v6 %v3;
+  %v8 := op:select %v7
+  dsl_ret %v8
+  ]
+  := by sorry
+
 -- Name:Select:1087
 -- precondition: true
 /-
@@ -3797,6 +6150,121 @@ example : forall (w : Nat) (val X Y val Y X : Nat),TSSA.eval
   %v7 := triple:%v1 %v5 %v6;
   %v8 := op:select %v7
   dsl_ret %v8
+  ]
+  := by sorry
+
+-- Name:Select:1100
+-- precondition: true
+/-
+  %r = select i1 true, %X, %Y
+
+=>
+  %r = %X
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X Y X : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (true)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4
+  dsl_ret %v5
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:copy %v1
+  dsl_ret %v2
+  ]
+  := by sorry
+
+-- Name:Select:1105
+-- precondition: true
+/-
+  %r = select i1 false, %X, %Y
+
+=>
+  %r = %Y
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X Y Y : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (false)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v3 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v4 := triple:%v1 %v2 %v3;
+  %v5 := op:select %v4
+  dsl_ret %v5
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (Y)) %v9999;
+  %v2 := op:copy %v1
+  dsl_ret %v2
+  ]
+  := by sorry
+
+-- Name:InstCombineShift: 239
+-- precondition: true
+/-
+  %Op0 = shl %X, C
+  %r = lshr %Op0, C
+
+=>
+  %Op0 = shl %X, C
+  %r = and %X, (-1 u>> C)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C X C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:shl w %v3;
+  %v5 := pair:%v4 %v2;
+  %v6 := op:lhsr w %v5
+  dsl_ret %v6
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:shl w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v5 %v2;
+  %v7 := op:lhsr w %v6;
+  %v8 := pair:%v1 %v7;
+  %v9 := op:and w %v8
+  dsl_ret %v9
   ]
   := by sorry
 
@@ -4203,6 +6671,55 @@ example : forall (w : Nat) (X C C2 Y Y C X C2 : Nat),TSSA.eval
 -- Name:InstCombineShift: 497
 -- precondition: true
 /-
+  %Op0 = xor %X, C2
+  %r = lshr %Op0, C
+
+=>
+  %s2 = lshr %X, C
+  %Op0 = xor %X, C2
+  %r = xor %s2, (C2 u>> C)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C2 C X C C2 : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:xor w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v6 := pair:%v4 %v5;
+  %v7 := op:lhsr w %v6
+  dsl_ret %v7
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:lhsr w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (C2)) %v9999;
+  %v6 := pair:%v1 %v5;
+  %v7 := op:xor w %v6;
+  %v8 := pair:%v5 %v2;
+  %v9 := op:lhsr w %v8;
+  %v10 := pair:%v4 %v9;
+  %v11 := op:xor w %v10
+  dsl_ret %v11
+  ]
+  := by sorry
+
+-- Name:InstCombineShift: 497
+-- precondition: true
+/-
   %Op0 = add %X, C2
   %r = shl %Op0, C
 
@@ -4246,6 +6763,51 @@ example : forall (w : Nat) (X C2 C X C C2 : Nat),TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:add w %v10
   dsl_ret %v11
+  ]
+  := by sorry
+
+-- Name:InstCombineShift: 582
+-- precondition: true
+/-
+  %Op0 = shl %X, C
+  %r = lshr %Op0, C
+
+=>
+  %Op0 = shl %X, C
+  %r = and %X, (-1 u>> C)
+
+-/
+open SSA EDSL in
+example : forall (w : Nat) (X C X C : Nat),TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:shl w %v3;
+  %v5 := pair:%v4 %v2;
+  %v6 := op:lhsr w %v5
+  dsl_ret %v6
+  ]  = 
+  TSSA.eval
+  (Op := Op) (e := e)
+  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
+  [dsl_bb|
+  ^bb
+  %v9999 := unit: ;
+  %v1 := op:const (Bitvec.ofInt' w (X)) %v9999;
+  %v2 := op:const (Bitvec.ofInt' w (C)) %v9999;
+  %v3 := pair:%v1 %v2;
+  %v4 := op:shl w %v3;
+  %v5 := op:const (Bitvec.ofInt' w (-1)) %v9999;
+  %v6 := pair:%v5 %v2;
+  %v7 := op:lhsr w %v6;
+  %v8 := pair:%v1 %v7;
+  %v9 := op:and w %v8
+  dsl_ret %v9
   ]
   := by sorry
 
