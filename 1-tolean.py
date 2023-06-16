@@ -532,8 +532,8 @@ def print_as_lean(opt):
   return out;
 
 
-LEAN_PREAMBLE="""
-import SSA.Core.WellTypedFramework
+LEAN_PREAMBLE= """import SSA.Core.WellTypedFramework
+import SSA.Core.Tactic
 import SSA.Projects.InstCombine.InstCombineBase
 
 open SSA InstCombine EDSL
