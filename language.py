@@ -1274,6 +1274,8 @@ def to_lean_unary_cst_value(val, state):
   assert isinstance(state, ToLeanState)
   if val.op == CnstUnaryOp.Not:
     return state.build_assign(LExprOp("not w", to_lean_value(val.v, state)))
+  elif val.op == CnstUnaryOp.Neg:
+    return state.build_assign(LExprOp("neg w", to_lean_value(val.v, state)))
   else:
     raise RuntimeError("unknown unary constant '%s'" % (val.op, ))
 
@@ -1285,11 +1287,30 @@ def to_lean_binary_cst_value(val, state):
   v1 = to_lean_value(val.v1, state)
   v2 = to_lean_value(val.v2, state)
 
-  if val.op == CnstBinaryOp.Shl:
-    largs = state.build_pair(v1, v2)
-    return state.build_assign(LExprOp("shl w", largs))
+  # And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
+  mapping = {
+    CnstBinaryOp.And : "and",
+    CnstBinaryOp.Or  : "or",
+    CnstBinaryOp.Xor : "xor",
+    CnstBinaryOp.Add : "add",
+    CnstBinaryOp.Sub : "sub",
+    CnstBinaryOp.Mul : "mul",
+    CnstBinaryOp.Div : "div",
+    CnstBinaryOp.DivU : "divu",
+    CnstBinaryOp.RemU : "remu",
+    CnstBinaryOp.AShr : "ashr",
+    CnstBinaryOp.LShr : "lhsr",
+    CnstBinaryOp.Shl : "shl",
+  }
+
+  opname = None
+  if val.op in mapping:
+    opname = mapping[val.op] + " " + "w"
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
+
+  largs = state.build_pair(v1, v2)
+  return state.build_assign(LExprOp(opname, largs))
 
 def to_lean_value(val, state):
   assert isinstance(val, Value)
@@ -1317,7 +1338,7 @@ def to_lean_value(val, state):
     # TODO: think if this can be unified with ConstantVal
     state.add_constant_name(cleaned_up_name) # add a new constant to be generated in the def.
     return lval
-  elif isinstance(val, BinOp):
+  elif isinstance(val, Instr):
     return state.find_var_or_throw(val.getName())
   raise RuntimeError("cannot convert value '%s' (type: '%s')" % (val, val.__class__))
 
@@ -1328,6 +1349,7 @@ def to_lean_binop(bop, state):
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
   # FIXME: hardcoded width to be 'w'
+  #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add w", pair)
   if bop.op == BinOp.Sub: return LExprOp("sub w", pair)
   if bop.op == BinOp.Mul: return LExprOp("mul w", pair)
@@ -1355,14 +1377,39 @@ def to_lean_select(instr, state):
   triple = state.build_triple(lcond, lv1, lv2)
   return LExprOp("select", triple)
 
+def to_lean_conversion_op(instr, state):
+  assert isinstance(instr, ConversionOp)
+  # TODO: how does on e handle different bit widths?
+  print("dbg> to_lean_binop(%s) type(%s)" % (instr, instr.__class__))
+  out = ""
+  lv1 = to_lean_value(instr.v, state)
+  type_src = instr.stype
+  type_tgt = instr.type
+  raise RuntimeError("unknown conversion op '%s' ; conversionop.op = '%s'" % (instr, ConversionOp.opnames[instr.op])) 
+
+def to_lean_icmp(instr, state):
+  assert isinstance(instr, Icmp)
+  opname = "%s w" % (Icmp.opnames[instr.op], )
+  lv1 = to_lean_value(instr.v1, state)
+  lv2 = to_lean_value(instr.v2, state)
+  pair = state.build_pair(lv1, lv2)
+  return LExprOp(opname, pair)
+
 def to_lean_instr(instr, state):
   print("dbg> to_lean_instr(%s) type(%s)" % (instr, instr.__class__))
   if isinstance(instr, BinOp):
     return to_lean_binop(instr, state)
+  elif isinstance(instr, ConversionOp):
+    return to_lean_conversion_op(instr, state)
   elif isinstance(instr, Select):
     return to_lean_select(instr, state)
+  elif isinstance(instr, Icmp):
+    return to_lean_icmp(instr, state)
+  elif isinstance(instr, CopyOperand):
+    var = to_lean_value(instr.v, state)
+    return LExprOp("copy", var) # copy variable into this value.
   else:
-    raise RuntimeError("unknown instruction '%s'" % (instr, ))
+    raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
   
     
 def to_lean_prog(p, num_indent=2, skip=[]):
