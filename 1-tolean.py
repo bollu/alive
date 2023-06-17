@@ -542,7 +542,7 @@ def print_as_lean(opt):
   out += ("  ]");
   out += ("\n  := by")
   out += ("\n     simp_mlir")
-  out += ("\n     sorry")
+  out += ("\n     print_goal_as_error")
   return out;
 
 

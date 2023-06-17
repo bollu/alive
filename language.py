@@ -1411,7 +1411,7 @@ def to_lean_binop(bop, state):
   if bop.op == BinOp.SRem: return LExprOp("srem", bitwidth, pair)
   if bop.op == BinOp.Shl: return LExprOp("shl", bitwidth, pair)
   if bop.op == BinOp.AShr: return LExprOp("ashr", bitwidth, pair)
-  if bop.op == BinOp.LShr: return LExprOp("lhsr", bitwidth, pair)
+  if bop.op == BinOp.LShr: return LExprOp("lshr", bitwidth, pair)
   if bop.op == BinOp.Mul: return LExprOp("mul", bitwidth, pair)
   if bop.op == BinOp.And: return LExprOp("and", bitwidth, pair)
   if bop.op == BinOp.Or: return LExprOp("or", bitwidth, pair)
