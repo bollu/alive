@@ -66,7 +66,7 @@ theorem alive_AddSub_1043 : forall (w : Nat) (Z C1 RHS : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1152
 -- precondition: true
@@ -103,7 +103,7 @@ theorem alive_AddSub_1152: forall (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1156
 -- precondition: true
@@ -139,7 +139,7 @@ theorem alive_AddSub_1156 : forall (w : Nat) (b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1156-2
 -- precondition: true
@@ -175,7 +175,7 @@ theorem alive_AddSub_1156_2 : forall (w : Nat) (b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1156-3
 -- precondition: true
@@ -211,7 +211,7 @@ theorem alive_AddSub_1156_3 : forall (w : Nat) (b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1164
 -- precondition: true
@@ -256,7 +256,7 @@ theorem alive_AddSub_1164 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1165
 -- precondition: true
@@ -313,7 +313,7 @@ theorem alive_AddSub_1165 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1176
 -- precondition: true
@@ -358,7 +358,7 @@ theorem alive_AddSub_1176 : forall (w : Nat) (b a : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1202
 -- precondition: true
@@ -406,7 +406,7 @@ theorem alive_AddSub_1202 : forall (w : Nat) (x C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1295
 -- precondition: true
@@ -455,7 +455,7 @@ theorem alive_AddSub_1295 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1309
 -- precondition: true
@@ -504,7 +504,7 @@ theorem alive_AddSub_1309 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1309-2
 -- precondition: true
@@ -553,7 +553,7 @@ theorem alive_AddSub_1309_2 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1309-3
 -- precondition: true
@@ -602,7 +602,7 @@ theorem alive_AddSub_1309_3 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1539
 -- precondition: true
@@ -647,7 +647,7 @@ theorem alive_AddSub_1539 : forall (w : Nat) (a x : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1539-2
 -- precondition: true
@@ -685,7 +685,7 @@ theorem alive_AddSub_1539_2 : forall (w : Nat) (x C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1546
 -- precondition: true
@@ -730,7 +730,7 @@ theorem alive_AddSub_1546 : forall (w : Nat) (a x : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1556
 -- precondition: true
@@ -767,7 +767,7 @@ theorem alive_AddSub_1556: forall (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1560
 -- precondition: true
@@ -804,7 +804,7 @@ theorem alive_AddSub_1560 : forall (w : Nat) (a : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1564
 -- precondition: true
@@ -852,7 +852,7 @@ theorem alive_AddSub_1564 : forall (w : Nat) (x C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1574
 -- precondition: true
@@ -899,7 +899,7 @@ theorem alive_AddSub_1574 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1614
 -- precondition: true
@@ -943,7 +943,7 @@ theorem alive_AddSub_1614 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1619
 -- precondition: true
@@ -987,7 +987,7 @@ theorem alive_AddSub_1619 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AddSub:1624
 -- precondition: true
@@ -1036,7 +1036,7 @@ theorem alive_AddSub_1624 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:135
 -- precondition: true
@@ -1086,7 +1086,7 @@ theorem alive_AndOrXor_135 : forall (w : Nat) (X C1 C2 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:144
 -- precondition: true
@@ -1136,7 +1136,7 @@ theorem alive_AndOrXor_144 : forall (w : Nat) (X C1 C2 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:698
 -- precondition: true
@@ -1210,7 +1210,7 @@ theorem alive_AndOrXor_698: forall (a b d : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:709
 -- precondition: true
@@ -1279,7 +1279,7 @@ theorem alive_AndOrXor_709: forall (a b d : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:716
 -- precondition: true
@@ -1348,7 +1348,7 @@ theorem alive_AndOrXor_716: forall (a b d : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:794
 -- precondition: true
@@ -1397,7 +1397,7 @@ theorem alive_AndOrXor_794: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:827
 -- precondition: true
@@ -1454,7 +1454,7 @@ theorem alive_AndOrXor_827: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:887-2
 -- precondition: true
@@ -1503,7 +1503,7 @@ theorem alive_AndOrXor_887_2: forall (a C1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1230  ~A & ~B -> ~(A | B)
 -- precondition: true
@@ -1560,7 +1560,7 @@ theorem alive_AndOrXor_1230__ : forall (w : Nat) (notOp0 notOp1 : Nat), TSSA.eva
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1241 (A|B) & ~(A&B) => A^B
 -- precondition: true
@@ -1617,7 +1617,7 @@ theorem alive_AndOrXor_1241_ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1247 ~(A&B) & (A|B) => A^B
 -- precondition: true
@@ -1674,7 +1674,7 @@ theorem alive_AndOrXor_1247_ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1253 A & (A^B) -> A & ~B
 -- precondition: true
@@ -1721,7 +1721,7 @@ theorem alive_AndOrXor_1253_A_ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1280 (~A|B)&A -> A&B
 -- precondition: true
@@ -1772,7 +1772,7 @@ theorem alive_AndOrXor_1280_ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1288 (A ^ B) & ((B ^ C) ^ A) -> (A ^ B) & ~C
 -- precondition: true
@@ -1833,7 +1833,7 @@ theorem alive_AndOrXor_1288_ : forall (w : Nat) (A B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1294 (A | B) & ((~A) ^ B) -> (A & B)
 -- precondition: true
@@ -1890,7 +1890,7 @@ theorem alive_AndOrXor_1294_ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1683-1
 -- precondition: true
@@ -1939,7 +1939,7 @@ theorem alive_AndOrXor_1683_1: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1683-2
 -- precondition: true
@@ -1988,7 +1988,7 @@ theorem alive_AndOrXor_1683_2: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1704
 -- precondition: true
@@ -2043,7 +2043,7 @@ theorem alive_AndOrXor_1704: forall (B A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1705
 -- precondition: true
@@ -2098,7 +2098,7 @@ theorem alive_AndOrXor_1705: forall (B A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:1733
 -- precondition: true
@@ -2155,7 +2155,7 @@ theorem alive_AndOrXor_1733: forall (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2063  (X ^ C1) | C2 --> (X | C2) ^ (C1 & ~C2)
 -- precondition: true
@@ -2206,7 +2206,7 @@ theorem alive_AndOrXor_2063__ : forall (w : Nat) (x C1 C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2113   ((~A & B) | A) -> (A | B)
 -- precondition: true
@@ -2257,7 +2257,7 @@ theorem alive_AndOrXor_2113___ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2118   ((A & B) | ~A) -> (~A | B)
 -- precondition: true
@@ -2308,7 +2308,7 @@ theorem alive_AndOrXor_2118___ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2123   (A & (~B)) | (A ^ B) -> (A ^ B)
 -- precondition: true
@@ -2365,7 +2365,7 @@ theorem alive_AndOrXor_2123___ : forall (w : Nat) (B A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2188
 -- precondition: true
@@ -2430,7 +2430,7 @@ theorem alive_AndOrXor_2188 : forall (w : Nat) (D A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2231  (A ^ B) | ((B ^ C) ^ A) -> (A ^ B) | C
 -- precondition: true
@@ -2487,7 +2487,7 @@ theorem alive_AndOrXor_2231__ : forall (w : Nat) (A B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2243  ((B | C) & A) | B -> B | (A & C)
 -- precondition: true
@@ -2541,7 +2541,7 @@ theorem alive_AndOrXor_2243__ : forall (w : Nat) (B C A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2247  (~A | ~B) == (~(A & B))
 -- precondition: true
@@ -2598,7 +2598,7 @@ theorem alive_AndOrXor_2247__ : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2263
 -- precondition: true
@@ -2641,7 +2641,7 @@ theorem alive_AndOrXor_2263 : forall (w : Nat) (op0 B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2264
 -- precondition: true
@@ -2696,7 +2696,7 @@ theorem alive_AndOrXor_2264 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2265
 -- precondition: true
@@ -2745,7 +2745,7 @@ theorem alive_AndOrXor_2265 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2284
 -- precondition: true
@@ -2800,7 +2800,7 @@ theorem alive_AndOrXor_2284 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2285
 -- precondition: true
@@ -2855,7 +2855,7 @@ theorem alive_AndOrXor_2285 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2297
 -- precondition: true
@@ -2912,7 +2912,7 @@ theorem alive_AndOrXor_2297 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2367
 -- precondition: true
@@ -2960,7 +2960,7 @@ theorem alive_AndOrXor_2367 : forall (w : Nat) (A C1 op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2375
 -- precondition: true
@@ -3021,7 +3021,7 @@ theorem alive_AndOrXor_2375 : forall (w : Nat) (x A B C D : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2416
 -- precondition: true
@@ -3077,7 +3077,7 @@ theorem alive_AndOrXor_2416 : forall (w : Nat) (nx y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2417
 -- precondition: true
@@ -3133,7 +3133,7 @@ theorem alive_AndOrXor_2417 : forall (w : Nat) (nx y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2429
 -- precondition: true
@@ -3185,7 +3185,7 @@ theorem alive_AndOrXor_2429 : forall (w : Nat) (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2430
 -- precondition: true
@@ -3237,7 +3237,7 @@ theorem alive_AndOrXor_2430 : forall (w : Nat) (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2443
 -- precondition: true
@@ -3289,7 +3289,7 @@ theorem alive_AndOrXor_2443 : forall (w : Nat) (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2453
 -- precondition: true
@@ -3333,7 +3333,7 @@ theorem alive_AndOrXor_2453: forall (x y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2475
 -- precondition: true
@@ -3380,7 +3380,7 @@ theorem alive_AndOrXor_2475 : forall (w : Nat) (C x : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2486
 -- precondition: true
@@ -3427,7 +3427,7 @@ theorem alive_AndOrXor_2486 : forall (w : Nat) (x C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2581  (B|A)^B -> A & ~B
 -- precondition: true
@@ -3474,7 +3474,7 @@ theorem alive_AndOrXor_2581__ : forall (w : Nat) (a op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2587  (B&A)^A -> ~B & A
 -- precondition: true
@@ -3521,7 +3521,7 @@ theorem alive_AndOrXor_2587__ : forall (w : Nat) (a op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2595
 -- precondition: true
@@ -3570,7 +3570,7 @@ theorem alive_AndOrXor_2595 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2607
 -- precondition: true
@@ -3635,7 +3635,7 @@ theorem alive_AndOrXor_2607 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2617
 -- precondition: true
@@ -3700,7 +3700,7 @@ theorem alive_AndOrXor_2617 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2627
 -- precondition: true
@@ -3758,7 +3758,7 @@ theorem alive_AndOrXor_2627 : forall (w : Nat) (a c b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2647
 -- precondition: true
@@ -3807,7 +3807,7 @@ theorem alive_AndOrXor_2647 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2658
 -- precondition: true
@@ -3870,7 +3870,7 @@ theorem alive_AndOrXor_2658 : forall (w : Nat) (b a : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:AndOrXor:2663
 -- precondition: true
@@ -3919,7 +3919,7 @@ theorem alive_AndOrXor_2663: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:152
 -- precondition: true
@@ -3956,7 +3956,7 @@ theorem alive_152 : forall (w : Nat) (x : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:160
 -- precondition: true
@@ -4003,7 +4003,7 @@ theorem alive_160: forall (x C2 C1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:229
 -- precondition: true
@@ -4054,7 +4054,7 @@ theorem alive_229 : forall (w : Nat) (X C1 Op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:239
 -- precondition: true
@@ -4107,7 +4107,7 @@ theorem alive_239 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:265
 -- precondition: true
@@ -4149,7 +4149,7 @@ theorem alive_265 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:265-2
 -- precondition: true
@@ -4191,7 +4191,7 @@ theorem alive_265_2 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:266
 -- precondition: true
@@ -4243,7 +4243,7 @@ theorem alive_266 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:266-2
 -- precondition: true
@@ -4295,7 +4295,7 @@ theorem alive_266_2 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:275
 -- precondition: true
@@ -4341,7 +4341,7 @@ theorem alive_275: forall (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:275-2
 -- precondition: true
@@ -4387,7 +4387,7 @@ theorem alive_275_2: forall (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:276
 -- precondition: true
@@ -4441,7 +4441,7 @@ theorem alive_276: forall (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:276-2
 -- precondition: true
@@ -4495,7 +4495,7 @@ theorem alive_276_2: forall (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:283
 -- precondition: true
@@ -4532,7 +4532,7 @@ theorem alive_283: forall (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:290 & 292
 -- precondition: true
@@ -4577,7 +4577,7 @@ theorem alive_290_ : forall (w : Nat) (Y Op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:SimplifyDivRemOfSelect
 -- precondition: true
@@ -4624,7 +4624,7 @@ theorem alive_SimplifyDivRemOfSelect : forall (w : Nat) (c Y X : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:805
 -- precondition: true
@@ -4669,7 +4669,7 @@ theorem alive_805 : forall (w : Nat) (X : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:820
 -- precondition: true
@@ -4718,9 +4718,9 @@ theorem alive_820: forall (X Op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
--- Name:820
+-- Name:820'
 -- precondition: true
 /-
   %Z = urem i9 %X, %Op1
@@ -4733,7 +4733,7 @@ theorem alive_820: forall (X Op1 : Nat), TSSA.eval
   %r = udiv %X, %Op1
 
 -/
-theorem alive_820: forall (X Op1 : Nat), TSSA.eval
+theorem alive_820': forall (X Op1 : Nat), TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 9)))
   [dsl_bb|
@@ -4767,7 +4767,7 @@ theorem alive_820: forall (X Op1 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:891
 -- precondition: true
@@ -4807,12 +4807,12 @@ theorem alive_891: forall (N x : Nat), TSSA.eval
   %v4 := op:shl 13 %v3;
   %v5 := op:const (Bitvec.ofInt' 13 (x)) %v0;
   %v6 := pair:%v5 %v2;
-  %v7 := op:lhsr 13 %v6
+  %v7 := op:lshr 13 %v6
   dsl_ret %v7
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:891-exact
 -- precondition: true
@@ -4852,12 +4852,12 @@ theorem alive_891_exact: forall (N x : Nat), TSSA.eval
   %v4 := op:shl 13 %v3;
   %v5 := op:const (Bitvec.ofInt' 13 (x)) %v0;
   %v6 := pair:%v5 %v2;
-  %v7 := op:lhsr 13 %v6
+  %v7 := op:lshr 13 %v6
   dsl_ret %v7
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:1030
 -- precondition: true
@@ -4894,7 +4894,7 @@ theorem alive_1030 : forall (w : Nat) (X : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:1049
 -- precondition: true
@@ -4940,7 +4940,7 @@ theorem alive_1049: forall (X C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:485-2
 -- precondition: true
@@ -4985,7 +4985,7 @@ theorem alive_Select_485_2 : forall (w : Nat) (x A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:489-2
 -- precondition: true
@@ -5030,7 +5030,7 @@ theorem alive_Select_489_2 : forall (w : Nat) (x A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:637
 -- precondition: true
@@ -5075,7 +5075,7 @@ theorem alive_Select_637 : forall (w : Nat) (X C Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:641
 -- precondition: true
@@ -5120,7 +5120,7 @@ theorem alive_Select_641 : forall (w : Nat) (X C Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:699
 -- precondition: true
@@ -5175,7 +5175,7 @@ theorem alive_Select_699 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:700
 -- precondition: true
@@ -5230,7 +5230,7 @@ theorem alive_Select_700 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:704
 -- precondition: true
@@ -5284,7 +5284,7 @@ theorem alive_Select_704 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:705
 -- precondition: true
@@ -5338,7 +5338,7 @@ theorem alive_Select_705 : forall (w : Nat) (A B : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:740
 -- precondition: true
@@ -5411,7 +5411,7 @@ theorem alive_Select_740 : forall (w : Nat) (A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:741
 -- precondition: true
@@ -5484,7 +5484,7 @@ theorem alive_Select_741 : forall (w : Nat) (A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:746
 -- precondition: true
@@ -5561,7 +5561,7 @@ theorem alive_Select_746 : forall (w : Nat) (A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:747
 -- precondition: true
@@ -5638,7 +5638,7 @@ theorem alive_Select_747 : forall (w : Nat) (A : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:846
 -- precondition: true
@@ -5676,7 +5676,7 @@ theorem alive_Select_846: forall (B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:850
 -- precondition: true
@@ -5718,7 +5718,7 @@ theorem alive_Select_850: forall (B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:855
 -- precondition: true
@@ -5756,7 +5756,7 @@ theorem alive_Select_855: forall (B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:859
 -- precondition: true
@@ -5798,7 +5798,7 @@ theorem alive_Select_859: forall (B C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:851
 -- precondition: true
@@ -5835,7 +5835,7 @@ theorem alive_Select_851: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:852
 -- precondition: true
@@ -5872,7 +5872,7 @@ theorem alive_Select_852: forall (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:858
 -- precondition: true
@@ -5917,9 +5917,9 @@ theorem alive_Select_858 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
--- Name:Select:859
+-- Name:Select:859'
 -- precondition: true
 /-
   %nota = xor %a, -1
@@ -5930,7 +5930,7 @@ theorem alive_Select_858 : forall (w : Nat) (a b : Nat), TSSA.eval
   %r = or %nota, %b
 
 -/
-theorem alive_Select_859 : forall (w : Nat) (a b : Nat), TSSA.eval
+theorem alive_Select_859' : forall (w : Nat) (a b : Nat), TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
   [dsl_bb|
@@ -5962,7 +5962,7 @@ theorem alive_Select_859 : forall (w : Nat) (a b : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:962
 -- precondition: true
@@ -6018,7 +6018,7 @@ theorem alive_Select_962 : forall (w : Nat) (x y z c : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:967a
 -- precondition: true
@@ -6076,7 +6076,7 @@ theorem alive_Select_967a: forall (x y c : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:967b
 -- precondition: true
@@ -6134,7 +6134,7 @@ theorem alive_Select_967b: forall (x y c : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:1070
 -- precondition: true
@@ -6181,7 +6181,7 @@ theorem alive_Select_1070 : forall (w : Nat) (c W Z Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:1078
 -- precondition: true
@@ -6228,7 +6228,7 @@ theorem alive_Select_1078 : forall (w : Nat) (c W Z X : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:1087
 -- precondition: true
@@ -6275,7 +6275,7 @@ theorem alive_Select_1087 : forall (w : Nat) (val X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:1100
 -- precondition: true
@@ -6311,7 +6311,7 @@ theorem alive_Select_1100 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:Select:1105
 -- precondition: true
@@ -6347,7 +6347,7 @@ theorem alive_Select_1105 : forall (w : Nat) (X Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 239
 -- precondition: true
@@ -6371,7 +6371,7 @@ theorem alive_InstCombineShift__239 : forall (w : Nat) (X C : Nat), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:shl w %v3;
   %v5 := pair:%v4 %v2;
-  %v6 := op:lhsr w %v5
+  %v6 := op:lshr w %v5
   dsl_ret %v6
   ]  = 
   TSSA.eval
@@ -6393,7 +6393,7 @@ theorem alive_InstCombineShift__239 : forall (w : Nat) (X C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 279
 -- precondition: true
@@ -6415,7 +6415,7 @@ theorem alive_InstCombineShift__279 : forall (w : Nat) (X C : Nat), TSSA.eval
   %v1 := op:const (Bitvec.ofInt' w (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr w %v3;
+  %v4 := op:lshr w %v3;
   %v5 := pair:%v4 %v2;
   %v6 := op:shl w %v5
   dsl_ret %v6
@@ -6429,7 +6429,7 @@ theorem alive_InstCombineShift__279 : forall (w : Nat) (X C : Nat), TSSA.eval
   %v1 := op:const (Bitvec.ofInt' w (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr w %v3;
+  %v4 := op:lshr w %v3;
   %v5 := op:const (Bitvec.ofInt' w (-1)) %v0;
   %v6 := pair:%v5 %v2;
   %v7 := op:shl w %v6;
@@ -6439,7 +6439,7 @@ theorem alive_InstCombineShift__279 : forall (w : Nat) (X C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 351
 -- precondition: true
@@ -6486,7 +6486,7 @@ theorem alive_InstCombineShift__351: forall (X C1 C2 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 422-1
 -- precondition: true
@@ -6512,7 +6512,7 @@ theorem alive_InstCombineShift__422_1: forall (X C Y : Nat), TSSA.eval
   %v1 := op:const (Bitvec.ofInt' 31 (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' 31 (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr 31 %v3;
+  %v4 := op:lshr 31 %v3;
   %v5 := op:const (Bitvec.ofInt' 31 (Y)) %v0;
   %v6 := pair:%v5 %v4;
   %v7 := op:add 31 %v6;
@@ -6534,7 +6534,7 @@ theorem alive_InstCombineShift__422_1: forall (X C Y : Nat), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:add 31 %v6;
   %v8 := pair:%v5 %v2;
-  %v9 := op:lhsr 31 %v8;
+  %v9 := op:lshr 31 %v8;
   %v10 := pair:%v1 %v9;
   %v11 := op:add 31 %v10;
   %v12 := op:const (Bitvec.ofInt' 31 (-1)) %v0;
@@ -6546,7 +6546,7 @@ theorem alive_InstCombineShift__422_1: forall (X C Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 422-2
 -- precondition: true
@@ -6606,7 +6606,7 @@ theorem alive_InstCombineShift__422_2: forall (X C Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 440
 -- precondition: true
@@ -6634,7 +6634,7 @@ theorem alive_InstCombineShift__440 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   %v1 := op:const (Bitvec.ofInt' w (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr w %v3;
+  %v4 := op:lshr w %v3;
   %v5 := op:const (Bitvec.ofInt' w (C2)) %v0;
   %v6 := pair:%v4 %v5;
   %v7 := op:and w %v6;
@@ -6662,7 +6662,7 @@ theorem alive_InstCombineShift__440 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   %v9 := pair:%v8 %v3;
   %v10 := op:shl w %v9;
   %v11 := pair:%v1 %v3;
-  %v12 := op:lhsr w %v11;
+  %v12 := op:lshr w %v11;
   %v13 := pair:%v12 %v2;
   %v14 := op:and w %v13;
   %v15 := pair:%v8 %v14;
@@ -6673,7 +6673,7 @@ theorem alive_InstCombineShift__440 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 458
 -- precondition: true
@@ -6733,7 +6733,7 @@ theorem alive_InstCombineShift__458: forall (X C Y : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 476
 -- precondition: true
@@ -6761,7 +6761,7 @@ theorem alive_InstCombineShift__476 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   %v1 := op:const (Bitvec.ofInt' w (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr w %v3;
+  %v4 := op:lshr w %v3;
   %v5 := op:const (Bitvec.ofInt' w (C2)) %v0;
   %v6 := pair:%v4 %v5;
   %v7 := op:and w %v6;
@@ -6789,7 +6789,7 @@ theorem alive_InstCombineShift__476 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   %v9 := pair:%v5 %v8;
   %v10 := op:and w %v9;
   %v11 := pair:%v5 %v2;
-  %v12 := op:lhsr w %v11;
+  %v12 := op:lshr w %v11;
   %v13 := pair:%v12 %v6;
   %v14 := op:and w %v13;
   %v15 := pair:%v14 %v1;
@@ -6800,7 +6800,7 @@ theorem alive_InstCombineShift__476 : forall (w : Nat) (X C C2 Y : Nat), TSSA.ev
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 497
 -- precondition: true
@@ -6826,7 +6826,7 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   %v4 := op:xor w %v3;
   %v5 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v6 := pair:%v4 %v5;
-  %v7 := op:lhsr w %v6
+  %v7 := op:lshr w %v6
   dsl_ret %v7
   ]  = 
   TSSA.eval
@@ -6838,7 +6838,7 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   %v1 := op:const (Bitvec.ofInt' w (X)) %v0;
   %v2 := op:const (Bitvec.ofInt' w (C)) %v0;
   %v3 := pair:%v1 %v2;
-  %v4 := op:lhsr w %v3;
+  %v4 := op:lshr w %v3;
   %v5 := op:const (Bitvec.ofInt' w (C2)) %v0;
   %v6 := pair:%v1 %v5;
   %v7 := op:xor w %v6;
@@ -6850,9 +6850,9 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
--- Name:InstCombineShift: 497
+-- Name:InstCombineShift: 497'''
 -- precondition: true
 /-
   %Op0 = add %X, C2
@@ -6864,7 +6864,7 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   %r = add %s2, (C2 << C)
 
 -/
-theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
+theorem alive_InstCombineShift__497''' : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
   [dsl_bb|
@@ -6900,7 +6900,7 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 582
 -- precondition: true
@@ -6924,7 +6924,7 @@ theorem alive_InstCombineShift__582 : forall (w : Nat) (X C : Nat), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:shl w %v3;
   %v5 := pair:%v4 %v2;
-  %v6 := op:lhsr w %v5
+  %v6 := op:lshr w %v5
   dsl_ret %v6
   ]  = 
   TSSA.eval
@@ -6946,7 +6946,7 @@ theorem alive_InstCombineShift__582 : forall (w : Nat) (X C : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error
 
 -- Name:InstCombineShift: 724
 -- precondition: true
@@ -6993,4 +6993,4 @@ theorem alive_InstCombineShift__724: forall (C1 A C2 : Nat), TSSA.eval
   ]
   := by
      simp_mlir
-     sorry
+     print_goal_as_error

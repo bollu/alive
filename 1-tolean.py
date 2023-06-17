@@ -614,6 +614,7 @@ def convert_to_lean_all():
            "tests/instcombine/shift.opt"]
   stats = Statistics()
   errors = []
+  names = []
   with open(out_path, "w") as of:
     of.write(LEAN_PREAMBLE)
     # first run everything for 1 minute, then 5 minutes, then 1 hour
@@ -623,6 +624,10 @@ def convert_to_lean_all():
         opts = parse_opt_file(f.read())
         for opt in opts:
             name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+            while name in names:
+              name = name + "'"
+            names.append(name)
+            opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
             print("%s : %s" % (pre, pre.__class__))
             if str(pre) != "true": continue
             error = None

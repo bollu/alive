@@ -120,7 +120,7 @@ tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,
 tests/instcombine/muldivrem.opt,805,
 tests/instcombine/muldivrem.opt,809,unknown conversion op 'zext %c' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,820,
-tests/instcombine/muldivrem.opt,820,
+tests/instcombine/muldivrem.opt,820',
 tests/instcombine/muldivrem.opt,891,
 tests/instcombine/muldivrem.opt,891-exact,
 tests/instcombine/muldivrem.opt,976,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
@@ -132,9 +132,9 @@ tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; convers
 tests/instcombine/select.opt,Select:485-2,
 tests/instcombine/select.opt,Select:489-2,
 tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:576',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:637,
 tests/instcombine/select.opt,Select:641,
 tests/instcombine/select.opt,Select:699,
@@ -152,7 +152,7 @@ tests/instcombine/select.opt,Select:859,
 tests/instcombine/select.opt,Select:851,
 tests/instcombine/select.opt,Select:852,
 tests/instcombine/select.opt,Select:858,
-tests/instcombine/select.opt,Select:859,
+tests/instcombine/select.opt,Select:859',
 tests/instcombine/select.opt,Select:869,unknown conversion op 'zext C' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:873,unknown conversion op 'sext C' ; conversionop.op = 'sext'
 tests/instcombine/select.opt,Select:877,unknown conversion op 'zext %notc' ; conversionop.op = 'zext'
@@ -180,6 +180,6 @@ tests/instcombine/shift.opt,InstCombineShift: 440,
 tests/instcombine/shift.opt,InstCombineShift: 458,
 tests/instcombine/shift.opt,InstCombineShift: 476,
 tests/instcombine/shift.opt,InstCombineShift: 497,
-tests/instcombine/shift.opt,InstCombineShift: 497,
+tests/instcombine/shift.opt,InstCombineShift: 497''',
 tests/instcombine/shift.opt,InstCombineShift: 582,
 tests/instcombine/shift.opt,InstCombineShift: 724,
