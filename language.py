@@ -1228,7 +1228,7 @@ class LExprOp(LExpr):
     self.bw = bw
     self.v = v
   def __repr__(self):
-    if self.op.find("Int'") == -1:
+    if self.op.find("const") == -1:
       return "op:" + self.op + " " + str(self.bw) + " " + self.v.to_lean_str()
     else:
       return "op:" + self.op + " " + self.v.to_lean_str()
@@ -1347,7 +1347,7 @@ def to_lean_binary_cst_value(val, state):
     CnstBinaryOp.DivU : "divu",
     CnstBinaryOp.RemU : "remu",
     CnstBinaryOp.AShr : "ashr",
-    CnstBinaryOp.LShr : "lhsr",
+    CnstBinaryOp.LShr : "lshr",
     CnstBinaryOp.Shl : "shl",
   }
 
@@ -1370,7 +1370,12 @@ def to_lean_value(val, state):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
     bitwidth = to_bitwidth(val)
-    lrhs = LExprOp("const (Bitvec.ofInt' " + str(bitwidth) + " (%s))" % val.getName(), bitwidth, state.unit_index())
+    const_expr = "const "
+    if val.getName() == "true" or val.getName() == "false":
+      const_expr+= " (Vector.cons %s Vector.nil)" % val.getName()
+    else:
+      const_expr+=  "(Bitvec.ofInt' " + str(bitwidth) + " (%s))" % val.getName()
+    lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     return lval
@@ -1395,7 +1400,7 @@ def to_lean_binop(bop, state):
   lv1 = to_lean_value(bop.v1, state)
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
-  bitwidth = to_bitwidth(bop)
+  bitwidth = unify_bitwidths([state.bitwidths[lv1], state.bitwidths[lv2]])
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
   if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
@@ -1437,7 +1442,7 @@ def to_lean_conversion_op(instr, state):
 
 def to_lean_icmp(instr, state):
   assert isinstance(instr, Icmp)
-  opname = "%s "  % (Icmp.opnames[instr.op], ) + str(to_bitwidth(instr))
+  opname = "icmp %s "  % (Icmp.opnames[instr.op], )
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
