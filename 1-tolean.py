@@ -497,8 +497,9 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
 
 def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
-  (src_str, src_state) = to_lean_prog(src, num_indent=2, skip=[])
-  (tgt_str, tgt_state) = to_lean_prog(tgt, num_indent=2, skip=[])
+  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[])
+  bitwidth = unify_bitwidths([src_bw, tgt_bw])
 
   print "----------------------------------------"
   out = ""
@@ -510,12 +511,12 @@ def print_as_lean(opt):
   out += "=>\n"
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
-  out += ("theorem alive_" + (name.replace(':', '_').replace('-','_')) + ": forall (w : Nat) ")
-  out += "(" + " ".join(src_state.constant_names + tgt_state.constant_names) + " : Nat)"
+  out += ("theorem alive_" + (name.replace(':', '_').replace('-','_')) + (" : forall (w : Nat) " if bitwidth == 'w' else ": forall "))
+  out += "(" + " ".join([x  for x in src_state.constant_names or x in tgt_state.constant_names]) + " : Nat)"
   out += (",")
-  out += "TSSA.eval\n"
+  out += " TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))\n"
+  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += "  [dsl_bb|\n"
   out += src_str + "\n"
   out += ("  ]");

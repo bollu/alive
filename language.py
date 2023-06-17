@@ -1110,6 +1110,30 @@ class Ret(TerminatorInst):
     return And(self.type == self.val.type, self.type.getTypeConstraints(bitwidth))
 
 
+def to_bitwidth(obj):
+    t = str(obj.type)
+    if len(t) > 0 and t[0] == 'i':
+      return int(t[1:])
+    else:
+      return 'w'
+
+def unify_bitwidths_base(w1, w2):
+  if w1 == 'w':
+    return w2
+  if w2 == 'w':
+    return w1
+  if w1 != w2:
+      raise RuntimeError("Error: incompatible bitwidths: " + str(w1) + "and" + str(w2))
+  else:
+    return w1
+
+def unify_bitwidths(ws):
+  res = 'w'
+  for w in ws:
+    res = unify_bitwidths_base(w,res)
+  print("dbg> unifying" + str(ws) + ":" + str(res))
+  return res
+
 ################################
 def print_prog(p, skip):
   for bb, instrs in p.iteritems():
@@ -1196,25 +1220,31 @@ class LExprTriple(LExpr):
             self.v3.to_lean_str()
 
 class LExprOp(LExpr):
-  def __init__(self, op, v):
+  def __init__(self, op, bw, v):
     assert isinstance(op, str)
+    assert isinstance(bw, str) or isinstance(bw, int)
     assert isinstance(v, LVar)
     self.op = op
+    self.bw = bw
     self.v = v
   def __repr__(self):
-    return "op:" + self.op + " " + self.v.to_lean_str()
+    if self.op.find("Int'") == -1:
+      return "op:" + self.op + " " + str(self.bw) + " " + self.v.to_lean_str()
+    else:
+      return "op:" + self.op + " " + self.v.to_lean_str()
 
   def to_lean_str(self):
     return str(self)
 
 class ToLeanState:
   def unit_index(self):
-    return LVar(9999)
+    return LVar(0) # 0 should never be assigned
 
   def __init__(self):
     self.assigns = []
     self.constant_names = []
     self.varmap = {}
+    self.bitwidths = {}
     self.nvars = 0 # number of variables so far
     pass
 
@@ -1237,19 +1267,37 @@ class ToLeanState:
     assert isinstance(rhs, LExpr)
     self.assigns.append((lhs, rhs))
 
+  def expr_bitwidth(self,expr):
+    if isinstance(expr, LExprUnit):
+      return 'w'
+    if isinstance(expr, LExprPair):
+      # TODO: probably need to flatten here in general
+      return [self.bitwidths[expr.v1],self.bitwidths[expr.v2]]
+    if isinstance(expr, LExprTriple):
+      # TODO: probably need to flatten here in general
+      return [self.bitwidths[expr.v1],self.bitwidths[expr.v2], self.bitwidths[expr.v3]]
+    if isinstance(expr, LExprOp):
+      return expr.bw
+    raise RuntimeError("error: unknown LExpr type:" + str(expr))
+
   def build_assign(self, rhs):
     v = self.new_var()
     self._append_assign(v, rhs)
+    self.bitwidths[v] = self.expr_bitwidth(rhs)
     return v
   
   def build_pair(self, v1, v2):
     v = self.new_var()
     self._append_assign(v, LExprPair(v1, v2))
+    # TODO: probably need to flatten here in general
+    self.bitwidths[v] = [self.bitwidths[v1],self.bitwidths[v2]]
     return v
     
   def build_triple(self, v1, v2, v3):
     v = self.new_var()
     self._append_assign(v, LExprTriple(v1, v2, v3))
+    # TODO: probably need to flatten here in general
+    self.bitwidths[v] = [self.bitwidths[v1],self.bitwidths[v2], self.bitwidths[v3]]
     return v
 
   def find_var_or_throw(self, v):
@@ -1269,20 +1317,13 @@ class ToLeanState:
       print(" -> None")
       return None
 
-def to_bitwidth(obj):
-    t = str(obj.type)
-    if len(t) > 0 and t[0] == 'i':
-      return int(t[1:])
-    else:
-      return 'w'
-
 def to_lean_unary_cst_value(val, state):
   assert isinstance(val, CnstUnaryOp)
   assert isinstance(state, ToLeanState)
   if val.op == CnstUnaryOp.Not:
-    return state.build_assign(LExprOp("not " + to_bitwidth(val), to_lean_value(val.v, state)))
+    return state.build_assign(LExprOp("not", to_bitwidth(val), to_lean_value(val.v, state)))
   elif val.op == CnstUnaryOp.Neg:
-    return state.build_assign(LExprOp("neg " + to_bitwidth(val), to_lean_value(val.v, state)))
+    return state.build_assign(LExprOp("neg", to_bitwidth(val), to_lean_value(val.v, state)))
   else:
     raise RuntimeError("unknown unary constant '%s'" % (val.op, ))
 
@@ -1312,11 +1353,11 @@ def to_lean_binary_cst_value(val, state):
 
   opname = None
   if val.op in mapping:
-    opname = mapping[val.op] + " " + to_bitwidth(val)
+    opname = mapping[val.op]
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
   largs = state.build_pair(v1, v2)
-  return state.build_assign(LExprOp(opname, largs))
+  return state.build_assign(LExprOp(opname,to_bitwidth(val), largs))
 
 def to_lean_value(val, state):
   assert isinstance(val, Value)
@@ -1329,7 +1370,7 @@ def to_lean_value(val, state):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
     bitwidth = to_bitwidth(val)
-    lrhs = LExprOp("const (Bitvec.ofInt' " + str(bitwidth) + " (%s))" % val.getName(), state.unit_index())
+    lrhs = LExprOp("const (Bitvec.ofInt' " + str(bitwidth) + " (%s))" % val.getName(), bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     return lval
@@ -1338,7 +1379,7 @@ def to_lean_value(val, state):
     if lval is not None:
       return lval  
     cleaned_up_name = val.name.replace("%", "")
-    lrhs = LExprOp("const (Bitvec.ofInt' " + str(to_bitwidth(val)) + " (%s))" % cleaned_up_name, state.unit_index())
+    lrhs = LExprOp("const (Bitvec.ofInt' " + str(to_bitwidth(val)) + " (%s))" % cleaned_up_name, to_bitwidth(val), state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
@@ -1356,20 +1397,20 @@ def to_lean_binop(bop, state):
   pair = state.build_pair(lv1, lv2)
   bitwidth = to_bitwidth(bop)
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
-  if bop.op == BinOp.Add: return LExprOp("add " + str(bitwidth), pair)
-  if bop.op == BinOp.Sub: return LExprOp("sub " + str(bitwidth), pair)
-  if bop.op == BinOp.Mul: return LExprOp("mul " + str(bitwidth), pair)
-  if bop.op == BinOp.UDiv: return LExprOp("udiv " + str(bitwidth), pair)
-  if bop.op == BinOp.SDiv: return LExprOp("sdiv " + str(bitwidth), pair)
-  if bop.op == BinOp.URem: return LExprOp("urem " + str(bitwidth), pair)
-  if bop.op == BinOp.SRem: return LExprOp("srem " + str(bitwidth), pair)
-  if bop.op == BinOp.Shl: return LExprOp("shl " + str(bitwidth), pair)
-  if bop.op == BinOp.AShr: return LExprOp("ashr " + str(bitwidth), pair)
-  if bop.op == BinOp.LShr: return LExprOp("lhsr " + str(bitwidth), pair)
-  if bop.op == BinOp.Mul: return LExprOp("mul " + str(bitwidth), pair)
-  if bop.op == BinOp.And: return LExprOp("and " + str(bitwidth), pair)
-  if bop.op == BinOp.Or: return LExprOp("or " + str(bitwidth), pair)
-  if bop.op == BinOp.Xor: return LExprOp("xor " + str(bitwidth), pair)
+  if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
+  if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
+  if bop.op == BinOp.Mul: return LExprOp("mul", bitwidth, pair)
+  if bop.op == BinOp.UDiv: return LExprOp("udiv", bitwidth, pair)
+  if bop.op == BinOp.SDiv: return LExprOp("sdiv", bitwidth, pair)
+  if bop.op == BinOp.URem: return LExprOp("urem", bitwidth, pair)
+  if bop.op == BinOp.SRem: return LExprOp("srem", bitwidth, pair)
+  if bop.op == BinOp.Shl: return LExprOp("shl", bitwidth, pair)
+  if bop.op == BinOp.AShr: return LExprOp("ashr", bitwidth, pair)
+  if bop.op == BinOp.LShr: return LExprOp("lhsr", bitwidth, pair)
+  if bop.op == BinOp.Mul: return LExprOp("mul", bitwidth, pair)
+  if bop.op == BinOp.And: return LExprOp("and", bitwidth, pair)
+  if bop.op == BinOp.Or: return LExprOp("or", bitwidth, pair)
+  if bop.op == BinOp.Xor: return LExprOp("xor", bitwidth, pair)
   else:
     raise RuntimeError("unknown binop '%s' ; bop.op = '%s'" % (bop, bop.op)) 
 
@@ -1380,8 +1421,9 @@ def to_lean_select(instr, state):
   lcond = to_lean_value(instr.c, state)
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
+  bitwidth = unify_bitwidths( [state.bitwidths[lv1], state.bitwidths[lv2]])
   triple = state.build_triple(lcond, lv1, lv2)
-  return LExprOp("select", triple)
+  return LExprOp("select", bitwidth, triple)
 
 def to_lean_conversion_op(instr, state):
   assert isinstance(instr, ConversionOp)
@@ -1399,7 +1441,7 @@ def to_lean_icmp(instr, state):
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
-  return LExprOp(opname, pair)
+  return LExprOp(opname, 1, pair)
 
 def to_lean_instr(instr, state):
   print("dbg> to_lean_instr(%s) type(%s)" % (instr, instr.__class__))
@@ -1413,7 +1455,7 @@ def to_lean_instr(instr, state):
     return to_lean_icmp(instr, state)
   elif isinstance(instr, CopyOperand):
     var = to_lean_value(instr.v, state)
-    return LExprOp("copy", var) # copy variable into this value.
+    return LExprOp("copy", state.bitwidths[var] ,var) # copy variable into this value.
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
   
@@ -1424,7 +1466,7 @@ def to_lean_prog(p, num_indent=2, skip=[]):
   out += " "*num_indent + "^bb"
   
   # create a single unit that is reused everywhere.
-  state._append_assign(state.unit_index(), LExprUnit()) 
+  state._append_assign(state.unit_index(), LExprUnit())
   for bb, instrs in p.iteritems():
     if bb != "":
       raise RuntimeError("expected no basic block name, got '%s'" % (bb, ))
@@ -1435,6 +1477,7 @@ def to_lean_prog(p, num_indent=2, skip=[]):
       # print("dbg> type of k(%s) : '%s', of v(%s) : '%s'" % (k, type(k), v, v.__class__))
       print("dbg> k:%s := v:%s" % (k, v))
       lrhs = to_lean_instr(v, state) # l for lean
+      #TODO here
       kstr = str(k)
       if kstr[0] == '%':
         llhs = state.build_assign(lrhs)
@@ -1452,10 +1495,12 @@ def to_lean_prog(p, num_indent=2, skip=[]):
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
+  bitwidth = state.bitwidths[last_var]
+  print("dbg> bitwidths state dict" + str(state.bitwidths))
   out += "\n" + " " * num_indent + "dsl_ret " + lhs.to_lean_str()
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
-  return (out, state)
+  return (out, state, bitwidth)
 
 def countUsers(prog):
   m = {}
