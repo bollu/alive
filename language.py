@@ -1283,7 +1283,15 @@ class ToLeanState:
   def build_assign(self, rhs):
     v = self.new_var()
     self._append_assign(v, rhs)
-    self.bitwidths[v] = self.expr_bitwidth(rhs)
+    #special case for icmp
+    try:
+      _ = self.bitwidths[v]
+      pass
+    except KeyError:
+      if isinstance(rhs, LExprOp) and rhs.op.find("icmp") != -1:
+        self.bitwidths[v] = 1
+      else:
+        self.bitwidths[v] = self.expr_bitwidth(rhs)
     return v
   
   def build_pair(self, v1, v2):
@@ -1401,6 +1409,9 @@ def to_lean_binop(bop, state):
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
   bitwidth = unify_bitwidths([state.bitwidths[lv1], state.bitwidths[lv2]])
+  #trickle up bitwidth
+  state.bitwidths[lv1] = bitwidth
+  state.bitwidths[lv2] = bitwidth
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
   if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
@@ -1446,7 +1457,8 @@ def to_lean_icmp(instr, state):
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
-  return LExprOp(opname, 1, pair)
+  bitwidth = unify_bitwidths([state.bitwidths[lv1], state.bitwidths[lv2]])
+  return LExprOp(opname, bitwidth, pair)
 
 def to_lean_instr(instr, state):
   print("dbg> to_lean_instr(%s) type(%s)" % (instr, instr.__class__))
@@ -1464,9 +1476,11 @@ def to_lean_instr(instr, state):
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
   
-    
-def to_lean_prog(p, num_indent=2, skip=[]):
+
+def to_lean_prog_aux(p, num_indent=2, skip=[], bitwidth_dict = None):
   state = ToLeanState()
+  if bitwidth_dict is not None:
+    state.bitwidths = bitwidth_dict
   out = ""
   out += " "*num_indent + "^bb"
   
@@ -1506,6 +1520,11 @@ def to_lean_prog(p, num_indent=2, skip=[]):
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
   return (out, state, bitwidth)
+
+#two passes: figure out bitwidths
+def to_lean_prog(p, num_indent=2, skip=[]):
+  _, _, bitwidth = to_lean_prog_aux(p, num_indent, skip, bitwidth_dict= None)
+  return to_lean_prog_aux(p, num_indent, skip, bitwidth_dict=bitwidth)
 
 def countUsers(prog):
   m = {}

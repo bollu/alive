@@ -513,8 +513,13 @@ def print_as_lean(opt):
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   #TODO: this is a bit of a drastic unification here... can probably be more principled
   #But at least it is sound... and in fairness, Alive is somewhat imprecise here
-  src_str = src_str.replace(" w ", " " + str(bitwidth) + " ")
-  tgt_str = tgt_str.replace(" w ", " " + str(bitwidth) + " ")
+  if src_bw != tgt_bw:
+    src_str = src_str.replace(" w ", " " + str(bitwidth) + " ")
+    tgt_str = tgt_str.replace(" w ", " " + str(bitwidth) + " ")
+  if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
+    forall_stmt = " : forall (w : Nat) "
+  else:
+    forall_stmt =  ": forall "
   print "----------------------------------------"
   out = ""
   out += ("\n\n")
@@ -525,7 +530,7 @@ def print_as_lean(opt):
   out += "=>\n"
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
-  out += ("theorem alive_" + (sanitize_name(name)) + (" : forall (w : Nat) " if bitwidth == 'w' else ": forall "))
+  out += ("theorem alive_" + sanitize_name(name) + forall_stmt)
   out += "(" + " ".join([x  for x in src_state.constant_names or x in tgt_state.constant_names]) + " : Int)"
   out += (",")
   out += " TSSA.eval\n"
