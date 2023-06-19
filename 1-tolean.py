@@ -1,4 +1,5 @@
 #! /usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 # Copyright 2014-2015 The Alive authors.
 #
@@ -533,7 +534,7 @@ def print_as_lean(opt):
   out += "  [dsl_bb|\n"
   out += src_str + "\n"
   out += ("  ]");
-  out += ("  = \n");
+  out += ("  ⊑\n");
   out += "  TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
   out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"

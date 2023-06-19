@@ -40,7 +40,7 @@ theorem alive_AddSub_1043 : forall (w : Nat) (Z C1 RHS : Int), TSSA.eval
   %v11 := pair:%v9 %v10;
   %v12 := op:add w %v11
   dsl_ret %v12
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -88,7 +88,7 @@ theorem alive_AddSub_1152: forall (x y : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:add 1 %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -124,7 +124,7 @@ theorem alive_AddSub_1156 : forall (w : Nat) (b : Int), TSSA.eval
   %v2 := pair:%v1 %v1;
   %v3 := op:add w %v2
   dsl_ret %v3
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -160,7 +160,7 @@ theorem alive_AddSub_1156_2 : forall (w : Nat) (b : Int), TSSA.eval
   %v2 := pair:%v1 %v1;
   %v3 := op:add w %v2
   dsl_ret %v3
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -196,7 +196,7 @@ theorem alive_AddSub_1156_3 : forall (w : Nat) (b : Int), TSSA.eval
   %v2 := pair:%v1 %v1;
   %v3 := op:add w %v2
   dsl_ret %v3
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -238,7 +238,7 @@ theorem alive_AddSub_1164 : forall (w : Nat) (a b : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:add w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -289,7 +289,7 @@ theorem alive_AddSub_1165 : forall (w : Nat) (a b : Int), TSSA.eval
   %v9 := pair:%v4 %v8;
   %v10 := op:add w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -340,7 +340,7 @@ theorem alive_AddSub_1176 : forall (w : Nat) (b a : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:add w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -385,7 +385,7 @@ theorem alive_AddSub_1202 : forall (w : Nat) (x C : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:add w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -436,7 +436,7 @@ theorem alive_AddSub_1295 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:add w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -485,7 +485,7 @@ theorem alive_AddSub_1309 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:add w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -534,7 +534,7 @@ theorem alive_AddSub_1309_2 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:add w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -583,7 +583,7 @@ theorem alive_AddSub_1309_3 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:add w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -629,7 +629,7 @@ theorem alive_AddSub_1539 : forall (w : Nat) (a x : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:sub w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -669,7 +669,7 @@ theorem alive_AddSub_1539_2 : forall (w : Nat) (x C : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sub w %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -712,7 +712,7 @@ theorem alive_AddSub_1546 : forall (w : Nat) (a x : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:sub w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -752,7 +752,7 @@ theorem alive_AddSub_1556: forall (x y : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sub 1 %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -789,7 +789,7 @@ theorem alive_AddSub_1560 : forall (w : Nat) (a : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sub w %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -831,7 +831,7 @@ theorem alive_AddSub_1564 : forall (w : Nat) (x C : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:sub w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -879,7 +879,7 @@ theorem alive_AddSub_1574 : forall (w : Nat) (X C2 C : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:sub w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -925,7 +925,7 @@ theorem alive_AddSub_1614 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v5 := pair:%v1 %v4;
   %v6 := op:sub w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -969,7 +969,7 @@ theorem alive_AddSub_1619 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v5 := pair:%v4 %v1;
   %v6 := op:sub w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1017,7 +1017,7 @@ theorem alive_AddSub_1624 : forall (w : Nat) (A B : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:sub w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1064,7 +1064,7 @@ theorem alive_AndOrXor_135 : forall (w : Nat) (X C1 C2 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:and w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1114,7 +1114,7 @@ theorem alive_AndOrXor_144 : forall (w : Nat) (X C1 C2 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:and w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1179,7 +1179,7 @@ theorem alive_AndOrXor_698: forall (a b d : Int), TSSA.eval
   %v14 := pair:%v10 %v13;
   %v15 := op:and 1 %v14
   dsl_ret %v15
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1251,7 +1251,7 @@ theorem alive_AndOrXor_709: forall (a b d : Int), TSSA.eval
   %v12 := pair:%v9 %v11;
   %v13 := op:and 1 %v12
   dsl_ret %v13
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1320,7 +1320,7 @@ theorem alive_AndOrXor_716: forall (a b d : Int), TSSA.eval
   %v12 := pair:%v9 %v11;
   %v13 := op:and 1 %v12
   dsl_ret %v13
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1378,7 +1378,7 @@ theorem alive_AndOrXor_794: forall (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:and 1 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1430,7 +1430,7 @@ theorem alive_AndOrXor_827: forall (a b : Int), TSSA.eval
   %v9 := pair:%v4 %v8;
   %v10 := op:and 1 %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1484,7 +1484,7 @@ theorem alive_AndOrXor_887_2: forall (a C1 : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:and 1 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1536,7 +1536,7 @@ theorem alive_AndOrXor_1230__ : forall (w : Nat) (notOp0 notOp1 : Int), TSSA.eva
   %v9 := pair:%v4 %v8;
   %v10 := op:and w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1595,7 +1595,7 @@ theorem alive_AndOrXor_1241_ : forall (w : Nat) (A B : Int), TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:and w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1652,7 +1652,7 @@ theorem alive_AndOrXor_1247_ : forall (w : Nat) (A B : Int), TSSA.eval
   %v10 := pair:%v7 %v9;
   %v11 := op:and w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1701,7 +1701,7 @@ theorem alive_AndOrXor_1253_A_ : forall (w : Nat) (A B : Int), TSSA.eval
   %v5 := pair:%v4 %v1;
   %v6 := op:and w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1752,7 +1752,7 @@ theorem alive_AndOrXor_1280_ : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v7 %v1;
   %v9 := op:and w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1808,7 +1808,7 @@ theorem alive_AndOrXor_1288_ : forall (w : Nat) (A B C : Int), TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:and w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1868,7 +1868,7 @@ theorem alive_AndOrXor_1294_ : forall (w : Nat) (A B : Int), TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:and w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -1920,7 +1920,7 @@ theorem alive_AndOrXor_1683_1: forall (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:or 1 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -1969,7 +1969,7 @@ theorem alive_AndOrXor_1683_2: forall (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:or 1 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -2020,7 +2020,7 @@ theorem alive_AndOrXor_1704: forall (B A : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:or 1 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -2075,7 +2075,7 @@ theorem alive_AndOrXor_1705: forall (B A : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:or 1 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -2131,7 +2131,7 @@ theorem alive_AndOrXor_1733: forall (A B : Int), TSSA.eval
   %v9 := pair:%v4 %v8;
   %v10 := op:or 1 %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -2183,7 +2183,7 @@ theorem alive_AndOrXor_2063__ : forall (w : Nat) (x C1 C : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:or w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2237,7 +2237,7 @@ theorem alive_AndOrXor_2113___ : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v7 %v1;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2288,7 +2288,7 @@ theorem alive_AndOrXor_2118___ : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v7 %v4;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2343,7 +2343,7 @@ theorem alive_AndOrXor_2123___ : forall (w : Nat) (B A : Int), TSSA.eval
   %v10 := pair:%v7 %v9;
   %v11 := op:or w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2405,7 +2405,7 @@ theorem alive_AndOrXor_2188 : forall (w : Nat) (D A : Int), TSSA.eval
   %v13 := pair:%v10 %v12;
   %v14 := op:or w %v13
   dsl_ret %v14
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2465,7 +2465,7 @@ theorem alive_AndOrXor_2231__ : forall (w : Nat) (A B C : Int), TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:or w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2519,7 +2519,7 @@ theorem alive_AndOrXor_2243__ : forall (w : Nat) (B C A : Int), TSSA.eval
   %v8 := pair:%v7 %v1;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2574,7 +2574,7 @@ theorem alive_AndOrXor_2247__ : forall (w : Nat) (A B : Int), TSSA.eval
   %v9 := pair:%v4 %v8;
   %v10 := op:or w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2624,7 +2624,7 @@ theorem alive_AndOrXor_2263 : forall (w : Nat) (op0 B : Int), TSSA.eval
   %v5 := pair:%v1 %v4;
   %v6 := op:or w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2673,7 +2673,7 @@ theorem alive_AndOrXor_2264 : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v1 %v7;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2726,7 +2726,7 @@ theorem alive_AndOrXor_2265 : forall (w : Nat) (A B : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:or w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2777,7 +2777,7 @@ theorem alive_AndOrXor_2284 : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v1 %v7;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2832,7 +2832,7 @@ theorem alive_AndOrXor_2285 : forall (w : Nat) (A B : Int), TSSA.eval
   %v8 := pair:%v1 %v7;
   %v9 := op:or w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2890,7 +2890,7 @@ theorem alive_AndOrXor_2297 : forall (w : Nat) (A B : Int), TSSA.eval
   %v10 := pair:%v4 %v9;
   %v11 := op:or w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2940,7 +2940,7 @@ theorem alive_AndOrXor_2367 : forall (w : Nat) (A C1 op1 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:or w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -2995,7 +2995,7 @@ theorem alive_AndOrXor_2375 : forall (w : Nat) (x A B C D : Int), TSSA.eval
   %v10 := pair:%v5 %v9;
   %v11 := op:or w %v10
   dsl_ret %v11
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3054,7 +3054,7 @@ theorem alive_AndOrXor_2416 : forall (w : Nat) (nx y : Int), TSSA.eval
   %v9 := pair:%v7 %v8;
   %v10 := op:xor w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3110,7 +3110,7 @@ theorem alive_AndOrXor_2417 : forall (w : Nat) (nx y : Int), TSSA.eval
   %v9 := pair:%v7 %v8;
   %v10 := op:xor w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3162,7 +3162,7 @@ theorem alive_AndOrXor_2429 : forall (w : Nat) (x y : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:xor w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3214,7 +3214,7 @@ theorem alive_AndOrXor_2430 : forall (w : Nat) (x y : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:xor w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3269,7 +3269,7 @@ theorem alive_AndOrXor_2443 : forall (w : Nat) (x y : Int), TSSA.eval
   %v9 := pair:%v7 %v8;
   %v10 := op:xor w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3316,7 +3316,7 @@ theorem alive_AndOrXor_2453: forall (x y : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:xor 1 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -3360,7 +3360,7 @@ theorem alive_AndOrXor_2475 : forall (w : Nat) (C x : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:xor w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3407,7 +3407,7 @@ theorem alive_AndOrXor_2486 : forall (w : Nat) (x C : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:xor w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3454,7 +3454,7 @@ theorem alive_AndOrXor_2581__ : forall (w : Nat) (a op1 : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:xor w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3501,7 +3501,7 @@ theorem alive_AndOrXor_2587__ : forall (w : Nat) (a op1 : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:xor w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3551,7 +3551,7 @@ theorem alive_AndOrXor_2595 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:xor w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3610,7 +3610,7 @@ theorem alive_AndOrXor_2607 : forall (w : Nat) (a b : Int), TSSA.eval
   %v13 := pair:%v10 %v12;
   %v14 := op:xor w %v13
   dsl_ret %v14
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3675,7 +3675,7 @@ theorem alive_AndOrXor_2617 : forall (w : Nat) (a b : Int), TSSA.eval
   %v13 := pair:%v10 %v12;
   %v14 := op:xor w %v13
   dsl_ret %v14
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3733,7 +3733,7 @@ theorem alive_AndOrXor_2627 : forall (w : Nat) (a c b : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:xor w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3788,7 +3788,7 @@ theorem alive_AndOrXor_2647 : forall (w : Nat) (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:xor w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3844,7 +3844,7 @@ theorem alive_AndOrXor_2658 : forall (w : Nat) (b a : Int), TSSA.eval
   %v11 := pair:%v7 %v10;
   %v12 := op:xor w %v11
   dsl_ret %v12
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3900,7 +3900,7 @@ theorem alive_AndOrXor_2663: forall (a b : Int), TSSA.eval
   %v7 := pair:%v4 %v6;
   %v8 := op:xor 1 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -3941,7 +3941,7 @@ theorem alive_152 : forall (w : Nat) (x : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:mul w %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -3983,7 +3983,7 @@ theorem alive_160: forall (x C2 C1 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:mul 7 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 7)))
@@ -4032,7 +4032,7 @@ theorem alive_229 : forall (w : Nat) (X C1 Op1 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:mul w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4086,7 +4086,7 @@ theorem alive_239 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v9 := pair:%v4 %v8;
   %v10 := op:mul w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4133,7 +4133,7 @@ theorem alive_265 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:mul w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4175,7 +4175,7 @@ theorem alive_265_2 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:mul w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4222,7 +4222,7 @@ theorem alive_266 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:mul w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4274,7 +4274,7 @@ theorem alive_266_2 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:mul w %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4322,7 +4322,7 @@ theorem alive_275: forall (X Y : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:mul 5 %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 5)))
@@ -4368,7 +4368,7 @@ theorem alive_275_2: forall (X Y : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:mul 5 %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 5)))
@@ -4419,7 +4419,7 @@ theorem alive_276: forall (X Y : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:mul 5 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 5)))
@@ -4473,7 +4473,7 @@ theorem alive_276_2: forall (X Y : Int), TSSA.eval
   %v8 := pair:%v4 %v7;
   %v9 := op:mul 5 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 5)))
@@ -4517,7 +4517,7 @@ theorem alive_283: forall (X Y : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:mul 1 %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -4559,7 +4559,7 @@ theorem alive_290_ : forall (w : Nat) (Y Op1 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:mul w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4605,7 +4605,7 @@ theorem alive_SimplifyDivRemOfSelect : forall (w : Nat) (c Y X : Int), TSSA.eval
   %v7 := pair:%v6 %v5;
   %v8 := op:udiv w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4648,7 +4648,7 @@ theorem alive_805 : forall (w : Nat) (X : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sdiv w %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4699,7 +4699,7 @@ theorem alive_820: forall (X Op1 : Int), TSSA.eval
   %v7 := pair:%v6 %v2;
   %v8 := op:sdiv 9 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 9)))
@@ -4748,7 +4748,7 @@ theorem alive_820': forall (X Op1 : Int), TSSA.eval
   %v7 := pair:%v6 %v2;
   %v8 := op:udiv 9 %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 9)))
@@ -4794,7 +4794,7 @@ theorem alive_891: forall (N x : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:udiv 13 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 13)))
@@ -4839,7 +4839,7 @@ theorem alive_891_exact: forall (N x : Int), TSSA.eval
   %v6 := pair:%v5 %v4;
   %v7 := op:udiv 13 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 13)))
@@ -4879,7 +4879,7 @@ theorem alive_1030 : forall (w : Nat) (X : Int), TSSA.eval
   %v3 := pair:%v1 %v2;
   %v4 := op:sdiv w %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -4921,7 +4921,7 @@ theorem alive_1049: forall (X C : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:sdiv 11 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 11)))
@@ -4968,7 +4968,7 @@ theorem alive_Select_485_2 : forall (w : Nat) (x A B : Int), TSSA.eval
   %v7 := triple:%v4 %v5 %v6;
   %v8 := op:select w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5013,7 +5013,7 @@ theorem alive_Select_489_2 : forall (w : Nat) (x A B : Int), TSSA.eval
   %v7 := triple:%v4 %v5 %v6;
   %v8 := op:select w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5057,7 +5057,7 @@ theorem alive_Select_637 : forall (w : Nat) (X C Y : Int), TSSA.eval
   %v6 := triple:%v4 %v1 %v5;
   %v7 := op:select w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5102,7 +5102,7 @@ theorem alive_Select_641 : forall (w : Nat) (X C Y : Int), TSSA.eval
   %v6 := triple:%v4 %v5 %v1;
   %v7 := op:select w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5154,7 +5154,7 @@ theorem alive_Select_699 : forall (w : Nat) (A B : Int), TSSA.eval
   %v9 := triple:%v8 %v6 %v2;
   %v10 := op:select w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5209,7 +5209,7 @@ theorem alive_Select_700 : forall (w : Nat) (A B : Int), TSSA.eval
   %v9 := triple:%v8 %v6 %v2;
   %v10 := op:select w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5264,7 +5264,7 @@ theorem alive_Select_704 : forall (w : Nat) (A B : Int), TSSA.eval
   %v9 := triple:%v8 %v6 %v1;
   %v10 := op:select w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5318,7 +5318,7 @@ theorem alive_Select_705 : forall (w : Nat) (A B : Int), TSSA.eval
   %v9 := triple:%v8 %v6 %v1;
   %v10 := op:select w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5383,7 +5383,7 @@ theorem alive_Select_740 : forall (w : Nat) (A : Int), TSSA.eval
   %v16 := triple:%v12 %v9 %v15;
   %v17 := op:select w %v16
   dsl_ret %v17
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5456,7 +5456,7 @@ theorem alive_Select_741 : forall (w : Nat) (A : Int), TSSA.eval
   %v16 := triple:%v12 %v15 %v9;
   %v17 := op:select w %v16
   dsl_ret %v17
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5530,7 +5530,7 @@ theorem alive_Select_746 : forall (w : Nat) (A : Int), TSSA.eval
   %v16 := triple:%v12 %v9 %v15;
   %v17 := op:select w %v16
   dsl_ret %v17
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5607,7 +5607,7 @@ theorem alive_Select_747 : forall (w : Nat) (A : Int), TSSA.eval
   %v16 := triple:%v12 %v9 %v15;
   %v17 := op:select w %v16
   dsl_ret %v17
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5661,7 +5661,7 @@ theorem alive_Select_846: forall (B C : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select 1 %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5700,7 +5700,7 @@ theorem alive_Select_850: forall (B C : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select 1 %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5741,7 +5741,7 @@ theorem alive_Select_855: forall (B C : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select 1 %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5780,7 +5780,7 @@ theorem alive_Select_859: forall (B C : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select 1 %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5820,7 +5820,7 @@ theorem alive_Select_851: forall (a b : Int), TSSA.eval
   %v3 := triple:%v1 %v2 %v1;
   %v4 := op:select 1 %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5857,7 +5857,7 @@ theorem alive_Select_852: forall (a b : Int), TSSA.eval
   %v3 := triple:%v1 %v1 %v2;
   %v4 := op:select 1 %v3
   dsl_ret %v4
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 1)))
@@ -5899,7 +5899,7 @@ theorem alive_Select_858 : forall (w : Nat) (a b : Int), TSSA.eval
   %v6 := triple:%v1 %v4 %v5;
   %v7 := op:select w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5944,7 +5944,7 @@ theorem alive_Select_859' : forall (w : Nat) (a b : Int), TSSA.eval
   %v6 := triple:%v1 %v5 %v4;
   %v7 := op:select w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -5995,7 +5995,7 @@ theorem alive_Select_962 : forall (w : Nat) (x y z c : Int), TSSA.eval
   %v9 := triple:%v8 %v4 %v7;
   %v10 := op:select w %v9
   dsl_ret %v10
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6051,7 +6051,7 @@ theorem alive_Select_967a: forall (x y c : Int), TSSA.eval
   %v8 := triple:%v7 %v4 %v6;
   %v9 := op:select 9 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 9)))
@@ -6109,7 +6109,7 @@ theorem alive_Select_967b: forall (x y c : Int), TSSA.eval
   %v8 := triple:%v7 %v4 %v6;
   %v9 := op:select 9 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 9)))
@@ -6162,7 +6162,7 @@ theorem alive_Select_1070 : forall (w : Nat) (c W Z Y : Int), TSSA.eval
   %v7 := triple:%v1 %v5 %v6;
   %v8 := op:select w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6209,7 +6209,7 @@ theorem alive_Select_1078 : forall (w : Nat) (c W Z X : Int), TSSA.eval
   %v7 := triple:%v1 %v6 %v5;
   %v8 := op:select w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6256,7 +6256,7 @@ theorem alive_Select_1087 : forall (w : Nat) (val X Y : Int), TSSA.eval
   %v7 := triple:%v4 %v5 %v6;
   %v8 := op:select w %v7
   dsl_ret %v8
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6298,7 +6298,7 @@ theorem alive_Select_1100 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select w %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6334,7 +6334,7 @@ theorem alive_Select_1105 : forall (w : Nat) (X Y : Int), TSSA.eval
   %v4 := triple:%v1 %v2 %v3;
   %v5 := op:select w %v4
   dsl_ret %v5
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6373,7 +6373,7 @@ theorem alive_InstCombineShift__239 : forall (w : Nat) (X C : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:lshr w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6419,7 +6419,7 @@ theorem alive_InstCombineShift__279 : forall (w : Nat) (X C : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:shl w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6466,7 +6466,7 @@ theorem alive_InstCombineShift__351: forall (X C1 C2 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:shl 7 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 7)))
@@ -6519,7 +6519,7 @@ theorem alive_InstCombineShift__422_1: forall (X C Y : Int), TSSA.eval
   %v8 := pair:%v7 %v2;
   %v9 := op:shl 31 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 31)))
@@ -6579,7 +6579,7 @@ theorem alive_InstCombineShift__422_2: forall (X C Y : Int), TSSA.eval
   %v8 := pair:%v7 %v2;
   %v9 := op:shl 31 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 31)))
@@ -6644,7 +6644,7 @@ theorem alive_InstCombineShift__440 : forall (w : Nat) (X C C2 Y : Int), TSSA.ev
   %v11 := pair:%v10 %v2;
   %v12 := op:shl w %v11
   dsl_ret %v12
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6706,7 +6706,7 @@ theorem alive_InstCombineShift__458: forall (X C Y : Int), TSSA.eval
   %v8 := pair:%v7 %v2;
   %v9 := op:shl 31 %v8
   dsl_ret %v9
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 31)))
@@ -6771,7 +6771,7 @@ theorem alive_InstCombineShift__476 : forall (w : Nat) (X C C2 Y : Int), TSSA.ev
   %v11 := pair:%v10 %v2;
   %v12 := op:shl w %v11
   dsl_ret %v12
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6828,7 +6828,7 @@ theorem alive_InstCombineShift__497 : forall (w : Nat) (X C2 C : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:lshr w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6878,7 +6878,7 @@ theorem alive_InstCombineShift__497''' : forall (w : Nat) (X C2 C : Int), TSSA.e
   %v6 := pair:%v4 %v5;
   %v7 := op:shl w %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6926,7 +6926,7 @@ theorem alive_InstCombineShift__582 : forall (w : Nat) (X C : Int), TSSA.eval
   %v5 := pair:%v4 %v2;
   %v6 := op:lshr w %v5
   dsl_ret %v6
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))
@@ -6973,7 +6973,7 @@ theorem alive_InstCombineShift__724: forall (C1 A C2 : Int), TSSA.eval
   %v6 := pair:%v4 %v5;
   %v7 := op:shl 31 %v6
   dsl_ret %v7
-  ]  = 
+  ]  ⊑
   TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec 31)))
