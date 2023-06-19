@@ -525,7 +525,7 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
   out += ("theorem alive_" + (sanitize_name(name)) + (" : forall (w : Nat) " if bitwidth == 'w' else ": forall "))
-  out += "(" + " ".join([x  for x in src_state.constant_names or x in tgt_state.constant_names]) + " : Nat)"
+  out += "(" + " ".join([x  for x in src_state.constant_names or x in tgt_state.constant_names]) + " : Int)"
   out += (",")
   out += " TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
