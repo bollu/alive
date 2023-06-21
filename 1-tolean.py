@@ -28,6 +28,7 @@ import stopit
 import pdb
 import time
 import csv
+import re
 
 def block_model(s, sneg, m):
   # First simplify the model.
@@ -496,12 +497,8 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   return True # succeeded, did not time out
 
 def sanitize_name(name):
-  renamed = name.replace(':', '_').replace('-','_').replace(' ','_')
-  #TODO: this should be a regex but I don't know the python syntax for it ATM
-  for s in ["(",")", "~", "&", ">"]:
-    pos = renamed.find(s)
-    if pos != -1:
-      renamed = renamed[:pos]
+  renamed = re.sub(r'[()~&>]', '', name)
+  renamed = re.sub(r'[:, -]', '_', renamed)
   return renamed
 
 def print_as_lean(opt):

@@ -1193,7 +1193,7 @@ def propagate_bitwidth(expr,bw, skip=[]):
     #it is a pretty hacky design with a string for the const expr
     #so we hackily update it too
     if expr.op.find("const") != -1:
-      expr.op.replace(("ofInt' " + str(expr.bitwidth)),("ofInt' " + str(bw)))
+      expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
     expr.bitwidth = bw
     if expr.op.find("select") != -1:
       skip = [1]
@@ -1407,7 +1407,7 @@ def to_lean_value(val, state):
     if val.getName() == "true" or val.getName() == "false":
       const_expr+= " (Vector.cons %s Vector.nil)" % val.getName()
     else:
-      const_expr+=  "(Bitvec.ofInt' " + str(bitwidth) + " (%s))" % val.getName()
+      const_expr+=  "(Bitvec.ofInt " + str(bitwidth) + " (%s))" % val.getName()
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
@@ -1417,7 +1417,7 @@ def to_lean_value(val, state):
     if lval is not None:
       return lval  
     cleaned_up_name = val.name.replace("%", "")
-    lrhs = LExprOp("const (Bitvec.ofInt' " + str(to_bitwidth(val)) + " (%s))" % cleaned_up_name, to_bitwidth(val), state.unit_index())
+    lrhs = LExprOp("const (Bitvec.ofInt " + str(to_bitwidth(val)) + " (%s))" % cleaned_up_name, to_bitwidth(val), state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
