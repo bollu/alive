@@ -1272,7 +1272,10 @@ class LExprOp(LExpr):
     if self.op.find("select") != -1:
       self.bitwidth = unify_bitwidths(v.expr.bitwidth[1:] + [bitwidth])
     else:
-      self.bitwidth = unify_bitwidths(v.expr.bitwidth)
+      if isinstance(v.expr.bitwidth, list):
+        self.bitwidth = unify_bitwidths(v.expr.bitwidth + [bitwidth])
+      else:
+        self.bitwidth = unify_bitwidths([v.expr.bitwidth, bitwidth])
     propagate_bitwidth(v.expr, self.bitwidth)
     self.v = v
 
@@ -1390,7 +1393,9 @@ def to_lean_binary_cst_value(val, state):
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
   largs = state.build_pair(v1, v2)
-  return state.build_assign(LExprOp(opname,to_bitwidth(val), largs))
+  bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bitwidth, v2.expr.bitwidth])
+  print "dbg> building op '%s' with bitwidth '%s'" % (opname, to_bitwidth(val))
+  return state.build_assign(LExprOp(opname, bitwidth, largs))
 
 def to_lean_value(val, state):
   assert isinstance(val, Value)
@@ -1417,7 +1422,8 @@ def to_lean_value(val, state):
     if lval is not None:
       return lval  
     cleaned_up_name = val.name.replace("%", "")
-    lrhs = LExprOp("const (Bitvec.ofInt " + str(to_bitwidth(val)) + " (%s))" % cleaned_up_name, to_bitwidth(val), state.unit_index())
+    bitwidth = to_bitwidth(val)
+    lrhs = LExprOp("const (Bitvec.ofInt " + str(bitwidth) + " (%s))" % cleaned_up_name, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
