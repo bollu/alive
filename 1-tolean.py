@@ -497,7 +497,7 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   return True # succeeded, did not time out
 
 def sanitize_name(name):
-  renamed = re.sub(r'[()~&>]', '', name)
+  renamed = re.sub(r'[()~&>|^=]', '', name)
   renamed = re.sub(r'[:, -]', '_', renamed)
   return renamed
 
