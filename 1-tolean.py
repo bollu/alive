@@ -508,14 +508,9 @@ def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
   print("dbg> printing " + name + " as lean")
   (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
-  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[])
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
-  #TODO: this is a bit of a drastic unification here... can probably be more principled
-  #But at least it is sound... and in fairness, Alive is somewhat imprecise here
-  if src_bw != tgt_bw:
-    src_str = src_str.replace(" w ", " " + str(bitwidth) + " ")
-    tgt_str = tgt_str.replace(" w ", " " + str(bitwidth) + " ")
   if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
     forall_stmt = " : forall (w : Nat) "
   else:

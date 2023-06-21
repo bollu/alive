@@ -1128,6 +1128,10 @@ def unify_bitwidths_base(w1, w2):
     return w1
 
 def unify_bitwidths(ws):
+  #single var case
+  if isinstance(ws, str) or isinstance(ws, int):
+    return ws
+  assert isinstance(ws, list)
   res = 'w'
   for w in ws:
     res = unify_bitwidths_base(w,res)
@@ -1165,9 +1169,45 @@ def to_str_prog(p, skip):
         out += "  %s\n" % v
   return out
 
+
+def propagate_bitwidth(expr,bw, skip=[]):
+  if isinstance(expr, LExprUnit):
+    return
+  if isinstance(expr, LExprPair):
+    if 1 not in skip:
+      propagate_bitwidth(expr.v1, bw)
+    if 2 not in skip:
+      propagate_bitwidth(expr.v2, bw)
+  if isinstance(expr, LExprTriple):
+    if 1 not in skip:
+      propagate_bitwidth(expr.v1, bw)
+    if 2 not in skip:
+      propagate_bitwidth(expr.v2, bw)
+    if 3 not in skip:
+      propagate_bitwidth(expr.v3, bw)
+  if isinstance(expr, LExprOp):
+    if expr.bitwidth == bw:
+      return # stop if no need to propagate further
+    #don't propagate something more general
+    assert unify_bitwidths[expr.bitwidth, bw] == bw
+    #it is a pretty hacky design with a string for the const expr
+    #so we hackily update it too
+    if expr.op.find("const") != -1:
+      expr.op.replace(("ofInt' " + str(expr.bitwidth)),("ofInt' " + str(bw)))
+    expr.bitwidth = bw
+    if expr.op.find("select") != -1:
+      skip = [1]
+    #icmp's arguments have nothing to do with its output. stop
+    if expr.op.find("icmp") != -1:
+      return
+    else:
+      skip = []
+    propagate_bitwidth(expr.v, bw, skip)
+
 class LVar:
   def __init__(self, v):
     assert isinstance(v, int)
+    self.expr = None
     self.v = v
 
   def __repr__(self):
@@ -1184,7 +1224,8 @@ class LExpr:
 
 
 class LExprUnit(LExpr):
-  def __init__(self): pass
+  def __init__(self):
+    self.bitwidth = 'w'
   def __str__(self): return self.to_lean_str()
   def to_lean_str(self): return "unit: "
 
@@ -1194,6 +1235,7 @@ class LExprPair(LExpr):
     assert isinstance(v2, LVar)
     self.v1 = v1
     self.v2 = v2
+    self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth]
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1209,6 +1251,7 @@ class LExprTriple(LExpr):
     self.v1 = v1
     self.v2 = v2
     self.v3 = v3
+    self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth, v3.expr.bitwidth]
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1220,33 +1263,40 @@ class LExprTriple(LExpr):
             self.v3.to_lean_str()
 
 class LExprOp(LExpr):
-  def __init__(self, op, bw, v):
+  def __init__(self, op, bitwidth, v):
     assert isinstance(op, str)
-    assert isinstance(bw, str) or isinstance(bw, int)
+    assert isinstance(bitwidth, int) or isinstance(bitwidth, str)
     assert isinstance(v, LVar)
     self.op = op
-    self.bw = bw
+
+    if self.op.find("select") != -1:
+      self.bitwidth = unify_bitwidths(v.expr.bitwidth[1:] + [bitwidth])
+    else:
+      self.bitwidth = unify_bitwidths(v.expr.bitwidth)
+    propagate_bitwidth(v.expr, self.bitwidth)
     self.v = v
+
   def __repr__(self):
     if self.op.find("const") == -1:
-      return "op:" + self.op + " " + str(self.bw) + " " + self.v.to_lean_str()
+      return "op:" + self.op + " " + str(self.bitwidth) + " " + self.v.to_lean_str()
     else:
       return "op:" + self.op + " " + self.v.to_lean_str()
 
   def to_lean_str(self):
     return str(self)
 
+
 class ToLeanState:
   def unit_index(self):
-    return LVar(0) # 0 should never be assigned
+    return self.unit_var
 
   def __init__(self):
     self.assigns = []
     self.constant_names = []
     self.varmap = {}
-    self.bitwidths = {}
+    self.unit_var = LVar(0) # 0 should never be assigned
+    self.unit_var.expr = LExprUnit()
     self.nvars = 0 # number of variables so far
-    pass
 
   def new_var(self): # return a new variable name
     self.nvars += 1
@@ -1265,47 +1315,22 @@ class ToLeanState:
   def _append_assign(self, lhs, rhs):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
+    lhs.expr = rhs
     self.assigns.append((lhs, rhs))
-
-  def expr_bitwidth(self,expr):
-    if isinstance(expr, LExprUnit):
-      return 'w'
-    if isinstance(expr, LExprPair):
-      # TODO: probably need to flatten here in general
-      return [self.bitwidths[expr.v1],self.bitwidths[expr.v2]]
-    if isinstance(expr, LExprTriple):
-      # TODO: probably need to flatten here in general
-      return [self.bitwidths[expr.v1],self.bitwidths[expr.v2], self.bitwidths[expr.v3]]
-    if isinstance(expr, LExprOp):
-      return expr.bw
-    raise RuntimeError("error: unknown LExpr type:" + str(expr))
 
   def build_assign(self, rhs):
     v = self.new_var()
     self._append_assign(v, rhs)
-    #special case for icmp
-    try:
-      _ = self.bitwidths[v]
-      pass
-    except KeyError:
-      if isinstance(rhs, LExprOp) and rhs.op.find("icmp") != -1:
-        self.bitwidths[v] = 1
-      else:
-        self.bitwidths[v] = self.expr_bitwidth(rhs)
     return v
   
   def build_pair(self, v1, v2):
     v = self.new_var()
     self._append_assign(v, LExprPair(v1, v2))
-    # TODO: probably need to flatten here in general
-    self.bitwidths[v] = [self.bitwidths[v1],self.bitwidths[v2]]
     return v
     
   def build_triple(self, v1, v2, v3):
     v = self.new_var()
     self._append_assign(v, LExprTriple(v1, v2, v3))
-    # TODO: probably need to flatten here in general
-    self.bitwidths[v] = [self.bitwidths[v1],self.bitwidths[v2], self.bitwidths[v3]]
     return v
 
   def find_var_or_throw(self, v):
@@ -1408,10 +1433,7 @@ def to_lean_binop(bop, state):
   lv1 = to_lean_value(bop.v1, state)
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
-  bitwidth = unify_bitwidths([state.bitwidths[lv1], state.bitwidths[lv2]])
-  #trickle up bitwidth
-  state.bitwidths[lv1] = bitwidth
-  state.bitwidths[lv2] = bitwidth
+  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
   if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
@@ -1437,8 +1459,8 @@ def to_lean_select(instr, state):
   lcond = to_lean_value(instr.c, state)
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
-  bitwidth = unify_bitwidths( [state.bitwidths[lv1], state.bitwidths[lv2]])
   triple = state.build_triple(lcond, lv1, lv2)
+  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
   return LExprOp("select", bitwidth, triple)
 
 def to_lean_conversion_op(instr, state):
@@ -1457,7 +1479,7 @@ def to_lean_icmp(instr, state):
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
-  bitwidth = unify_bitwidths([state.bitwidths[lv1], state.bitwidths[lv2]])
+  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
   return LExprOp(opname, bitwidth, pair)
 
 def to_lean_instr(instr, state):
@@ -1472,15 +1494,13 @@ def to_lean_instr(instr, state):
     return to_lean_icmp(instr, state)
   elif isinstance(instr, CopyOperand):
     var = to_lean_value(instr.v, state)
-    return LExprOp("copy", state.bitwidths[var] ,var) # copy variable into this value.
+    return LExprOp("copy", var.expr.bitwidth ,var) # copy variable into this value.
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
   
 
-def to_lean_prog_aux(p, num_indent=2, skip=[], bitwidth_dict = None):
+def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
   state = ToLeanState()
-  if bitwidth_dict is not None:
-    state.bitwidths = bitwidth_dict
   out = ""
   out += " "*num_indent + "^bb"
   
@@ -1504,27 +1524,25 @@ def to_lean_prog_aux(p, num_indent=2, skip=[], bitwidth_dict = None):
       else:
         raise RuntimeError("unknown instruction with side effect: '%s'" % ((k, v)))
   last_var = None
+  if expected_bitwidth is not None:
+    (lhs,rhs) = state.assigns[-1]
+    lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
+    state.assigns[-1] = (lhs,rhs)
+    propagate_bitwidth(state.assigns[-1], expected_bitwidth)
   for (i, (lhs, rhs)) in enumerate(state.assigns):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
     out += "\n" + " " * num_indent + lhs.to_lean_str() + " := " + rhs.to_lean_str()
     if i + 1 < len(state.assigns):
       out += ";" # we have more, so print a ;
-
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
-  bitwidth = state.bitwidths[last_var]
-  print("dbg> bitwidths state dict" + str(state.bitwidths))
+  bitwidth = last_var.expr.bitwidth
   out += "\n" + " " * num_indent + "dsl_ret " + lhs.to_lean_str()
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
   return (out, state, bitwidth)
-
-#two passes: figure out bitwidths
-def to_lean_prog(p, num_indent=2, skip=[]):
-  _, _, bitwidth = to_lean_prog_aux(p, num_indent, skip, bitwidth_dict= None)
-  return to_lean_prog_aux(p, num_indent, skip, bitwidth_dict=bitwidth)
 
 def countUsers(prog):
   m = {}
