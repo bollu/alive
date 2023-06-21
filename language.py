@@ -1189,11 +1189,12 @@ def propagate_bitwidth(expr,bw, skip=[]):
     if expr.bitwidth == bw:
       return # stop if no need to propagate further
     #don't propagate something more general
-    assert unify_bitwidths[expr.bitwidth, bw] == bw
+    assert unify_bitwidths([expr.bitwidth, bw]) == bw
     #it is a pretty hacky design with a string for the const expr
     #so we hackily update it too
     if expr.op.find("const") != -1:
-      expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
+      expr.op = expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
+      print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
     expr.bitwidth = bw
     if expr.op.find("select") != -1:
       skip = [1]
@@ -1226,6 +1227,7 @@ class LExpr:
 class LExprUnit(LExpr):
   def __init__(self):
     self.bitwidth = 'w'
+  def bw(self): return self.bitwidth
   def __str__(self): return self.to_lean_str()
   def to_lean_str(self): return "unit: "
 
@@ -1236,6 +1238,8 @@ class LExprPair(LExpr):
     self.v1 = v1
     self.v2 = v2
     self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth]
+
+  def bw(self): return self.bitwidth
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1252,6 +1256,8 @@ class LExprTriple(LExpr):
     self.v2 = v2
     self.v3 = v3
     self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth, v3.expr.bitwidth]
+
+  def bw(self): return self.bitwidth
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1278,6 +1284,13 @@ class LExprOp(LExpr):
         self.bitwidth = unify_bitwidths([v.expr.bitwidth, bitwidth])
     propagate_bitwidth(v.expr, self.bitwidth)
     self.v = v
+
+  #output bitwidth
+  def bw(self):
+    if self.op.find("icmp") != -1:
+      return 1
+    else:
+      return self.bitwidth
 
   def __repr__(self):
     if self.op.find("const") == -1:
@@ -1393,8 +1406,10 @@ def to_lean_binary_cst_value(val, state):
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
   largs = state.build_pair(v1, v2)
-  bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bitwidth, v2.expr.bitwidth])
-  print "dbg> building op '%s' with bitwidth '%s'" % (opname, to_bitwidth(val))
+  bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bw(), v2.expr.bw()])
+  propagate_bitwidth(v1.expr, bitwidth)
+  propagate_bitwidth(v2.expr, bitwidth)
+  print "dbg> building op '%s' with bitwidth '%s'" % (opname, bitwidth)
   return state.build_assign(LExprOp(opname, bitwidth, largs))
 
 def to_lean_value(val, state):
@@ -1439,7 +1454,9 @@ def to_lean_binop(bop, state):
   lv1 = to_lean_value(bop.v1, state)
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
-  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
+  propagate_bitwidth(lv1.expr, bitwidth)
+  propagate_bitwidth(lv2.expr, bitwidth)
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
   if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
@@ -1466,7 +1483,7 @@ def to_lean_select(instr, state):
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   triple = state.build_triple(lcond, lv1, lv2)
-  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
   return LExprOp("select", bitwidth, triple)
 
 def to_lean_conversion_op(instr, state):
@@ -1485,7 +1502,7 @@ def to_lean_icmp(instr, state):
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
-  bitwidth = unify_bitwidths([lv1.expr.bitwidth, lv2.expr.bitwidth])
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
   return LExprOp(opname, bitwidth, pair)
 
 def to_lean_instr(instr, state):
@@ -1500,16 +1517,14 @@ def to_lean_instr(instr, state):
     return to_lean_icmp(instr, state)
   elif isinstance(instr, CopyOperand):
     var = to_lean_value(instr.v, state)
-    return LExprOp("copy", var.expr.bitwidth ,var) # copy variable into this value.
+    return LExprOp("copy", var.expr.bw() ,var) # copy variable into this value.
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
   
 
 def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
   state = ToLeanState()
-  out = ""
-  out += " "*num_indent + "^bb"
-  
+
   # create a single unit that is reused everywhere.
   state._append_assign(state.unit_index(), LExprUnit())
   for bb, instrs in p.iteritems():
@@ -1535,6 +1550,10 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
     lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
     state.assigns[-1] = (lhs,rhs)
     propagate_bitwidth(state.assigns[-1], expected_bitwidth)
+
+  print("dbg> printing string start. ")
+  out = ""
+  out += " "*num_indent + "^bb"
   for (i, (lhs, rhs)) in enumerate(state.assigns):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
@@ -1544,7 +1563,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
-  bitwidth = last_var.expr.bitwidth
+  bitwidth = last_var.expr.bw()
   out += "\n" + " " * num_indent + "dsl_ret " + lhs.to_lean_str()
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
