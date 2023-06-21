@@ -507,6 +507,13 @@ def print_as_lean(opt):
   (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
   (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
+  constant_decls = ""
+  for w in src_state.constant_names.iterkeys():
+    constant_decls += "("
+    constant_decls += " ".join([x  for x in src_state.constant_names[w] or x in tgt_state.constant_names[w]])
+    constant_decls += " : Bitvec " + str(bitwidth) + ")\n"
+  for w in tgt_state.constant_names.iterkeys():
+    assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
     forall_stmt = " : forall (w : Nat) "
@@ -523,7 +530,7 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
   out += ("theorem alive_" + sanitize_name(name) + forall_stmt)
-  out += "(" + " ".join([x  for x in src_state.constant_names or x in tgt_state.constant_names]) + " : Int)"
+  out += constant_decls
   out += (",")
   out += " TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"

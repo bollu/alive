@@ -1190,11 +1190,6 @@ def propagate_bitwidth(expr,bw, skip=[]):
       return # stop if no need to propagate further
     #don't propagate something more general
     assert unify_bitwidths([expr.bitwidth, bw]) == bw
-    #it is a pretty hacky design with a string for the const expr
-    #so we hackily update it too
-    if expr.op.find("const") != -1:
-      expr.op = expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
-      print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
     expr.bitwidth = bw
     if expr.op.find("select") != -1:
       skip = [1]
@@ -1308,7 +1303,7 @@ class ToLeanState:
 
   def __init__(self):
     self.assigns = []
-    self.constant_names = []
+    self.constant_names = {}
     self.varmap = {}
     self.unit_var = LVar(0) # 0 should never be assigned
     self.unit_var.expr = LExprUnit()
@@ -1324,10 +1319,13 @@ class ToLeanState:
     print "dbg> adding mapping '%s' -> '%s'" % (var, lvar)
     self.varmap[var] = lvar
 
-  def add_constant_name(self, name):
+  def add_constant_name(self, name, width):
     assert isinstance(name, str)
-    self.constant_names.append(name)
-  
+    if self.constant_names.has_key(width):
+        self.constant_names[width].append(name)
+    else:
+        self.constant_names[width] = [name]
+
   def _append_assign(self, lhs, rhs):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
@@ -1423,11 +1421,7 @@ def to_lean_value(val, state):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
     bitwidth = to_bitwidth(val)
-    const_expr = "const "
-    if val.getName() == "true" or val.getName() == "false":
-      const_expr+= " (Vector.cons %s Vector.nil)" % val.getName()
-    else:
-      const_expr+=  "(Bitvec.ofInt " + str(bitwidth) + " (%s))" % val.getName()
+    const_expr = "const (%s)" % val.getName()
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
@@ -1438,11 +1432,11 @@ def to_lean_value(val, state):
       return lval  
     cleaned_up_name = val.name.replace("%", "")
     bitwidth = to_bitwidth(val)
-    lrhs = LExprOp("const (Bitvec.ofInt " + str(bitwidth) + " (%s))" % cleaned_up_name, bitwidth, state.unit_index())
+    lrhs = LExprOp("const (%s)" % cleaned_up_name, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
-    state.add_constant_name(cleaned_up_name) # add a new constant to be generated in the def.
+    state.add_constant_name(cleaned_up_name, bitwidth) # add a new constant to be generated in the def.
     return lval
   elif isinstance(val, Instr):
     return state.find_var_or_throw(val.getName())
