@@ -524,7 +524,7 @@ def print_as_lean(opt):
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
   width2names = build_width2constants(tgt_state.constant_names)
-  for w in names_widths.iterkeys():
+  for w in width2constants.iterkeys():
     constant_decls += "("
     constant_decls += " ".join([name for name in width2constants[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
