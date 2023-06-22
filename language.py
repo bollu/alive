@@ -1171,34 +1171,43 @@ def to_str_prog(p, skip):
 
 
 def propagate_bitwidth(expr,bw, skip=[]):
+  print("dbg> propagating bw " + str(bw) + " to " + str(expr))
   if isinstance(expr, LExprUnit):
     return
   if isinstance(expr, LExprPair):
     if 1 not in skip:
-      propagate_bitwidth(expr.v1, bw)
+      propagate_bitwidth(expr.v1.expr, bw)
     if 2 not in skip:
-      propagate_bitwidth(expr.v2, bw)
+      propagate_bitwidth(expr.v2.expr, bw)
+    return
   if isinstance(expr, LExprTriple):
     if 1 not in skip:
-      propagate_bitwidth(expr.v1, bw)
+      propagate_bitwidth(expr.v1.expr, bw)
     if 2 not in skip:
-      propagate_bitwidth(expr.v2, bw)
+      propagate_bitwidth(expr.v2.expr, bw)
     if 3 not in skip:
-      propagate_bitwidth(expr.v3, bw)
+      propagate_bitwidth(expr.v3.expr, bw)
+    return
   if isinstance(expr, LExprOp):
     if expr.bitwidth == bw:
       return # stop if no need to propagate further
     #don't propagate something more general
-    assert unify_bitwidths([expr.bitwidth, bw]) == bw
-    expr.bitwidth = bw
-    if expr.op.find("select") != -1:
-      skip = [1]
+    if unify_bitwidths([expr.bitwidth, bw]) != bw:
+      return
     #icmp's arguments have nothing to do with its output. stop
     if expr.op.find("icmp") != -1:
       return
+    expr.bitwidth = bw
+    if expr.op.find("select") != -1:
+      skip = [1]
     else:
       skip = []
     propagate_bitwidth(expr.v, bw, skip)
+    return
+  if isinstance(expr, LVar):
+    propagate_bitwidth(expr.expr, bw)
+    return
+  print("dbg>  can't propagate from %s (type %s). Unknown type" % (expr, expr.__class__))
 
 class LVar:
   def __init__(self, v):
@@ -1301,9 +1310,12 @@ class ToLeanState:
   def unit_index(self):
     return self.unit_var
 
-  def __init__(self):
+  def __init__(self, constants):
     self.assigns = []
-    self.constant_names = {}
+    if constants is None:
+      self.constant_names = {}
+    else:
+      self.constant_names = constants.copy()
     self.varmap = {}
     self.unit_var = LVar(0) # 0 should never be assigned
     self.unit_var.expr = LExprUnit()
@@ -1319,12 +1331,19 @@ class ToLeanState:
     print "dbg> adding mapping '%s' -> '%s'" % (var, lvar)
     self.varmap[var] = lvar
 
-  def add_constant_name(self, name, width):
+  def add_constant_name(self, name, const_expr):
     assert isinstance(name, str)
-    if self.constant_names.has_key(width):
-        self.constant_names[width].append(name)
+    if self.constant_names.has_key(name):
+        #I'm hoping this is a refrerence and will get mutated
+        self.constant_names[name].append(const_expr)
     else:
-        self.constant_names[width] = [name]
+        self.constant_names[name] = [const_expr]
+
+  def const_bitwidth(self, name):
+    if name not in self.constant_names:
+      return None
+    else:
+      return unify_bitwidths([x.bitwidth for x in self.constant_names[name]])
 
   def _append_assign(self, lhs, rhs):
     assert isinstance(lhs, LVar)
@@ -1421,6 +1440,9 @@ def to_lean_value(val, state):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
     bitwidth = to_bitwidth(val)
+    const_bitwidth = state.const_bitwidth(val.getName())
+    if const_bitwidth is not None:
+      bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
     const_expr = "const (%s)" % val.getName()
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
@@ -1432,11 +1454,14 @@ def to_lean_value(val, state):
       return lval  
     cleaned_up_name = val.name.replace("%", "")
     bitwidth = to_bitwidth(val)
+    const_bitwidth = state.const_bitwidth(cleaned_up_name)
+    if const_bitwidth is not None:
+      bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
     lrhs = LExprOp("const (%s)" % cleaned_up_name, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
-    state.add_constant_name(cleaned_up_name, bitwidth) # add a new constant to be generated in the def.
+    state.add_constant_name(cleaned_up_name, lrhs) # add a new constant to be generated in the def.
     return lval
   elif isinstance(val, Instr):
     return state.find_var_or_throw(val.getName())
@@ -1514,11 +1539,15 @@ def to_lean_instr(instr, state):
     return LExprOp("copy", var.expr.bw() ,var) # copy variable into this value.
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
-  
 
-def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
-  state = ToLeanState()
+#def update_constants(state, assigns):
+#  for (lhs,rhs) in assignments:
+#    if isinstance(rhs, LExprOp) and rhs.op.find("const") != -1:
 
+def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants = None):
+  state = ToLeanState(constants=constants)
+
+  print("dbg> to_lean_prog(%s) type(%s) expected bitwidth: %s" % (p, p.__class__, expected_bitwidth))
   # create a single unit that is reused everywhere.
   state._append_assign(state.unit_index(), LExprUnit())
   for bb, instrs in p.iteritems():
@@ -1543,7 +1572,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None):
     (lhs,rhs) = state.assigns[-1]
     lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
     state.assigns[-1] = (lhs,rhs)
-    propagate_bitwidth(state.assigns[-1], expected_bitwidth)
+    propagate_bitwidth(rhs, expected_bitwidth)
 
   print("dbg> printing string start. ")
   out = ""

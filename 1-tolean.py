@@ -501,17 +501,28 @@ def sanitize_name(name):
   renamed = re.sub(r'[:, -]', '_', renamed)
   return renamed
 
+def gather_names_widths(constants):
+  names_widths = {}
+  for name in constants:
+    bw = unify_bitwidths([x.bitwidth for x in constants[name]])
+    if bw not in names_widths:
+      names_widths[bw] = [name]
+    else:
+      names_widths[bw].append(name)
+  return names_widths
+
 def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
   print("dbg> printing " + name + " as lean")
   (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
-  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw)
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
-  for w in src_state.constant_names.iterkeys():
+  names_widths = gather_names_widths(tgt_state.constant_names)
+  for w in names_widths.iterkeys():
     constant_decls += "("
-    constant_decls += " ".join([x  for x in src_state.constant_names[w] or x in tgt_state.constant_names[w]])
-    constant_decls += " : Bitvec " + str(bitwidth) + ")\n"
+    constant_decls += " ".join([x  for x in names_widths[w]])
+    constant_decls += " : Bitvec " + str(w) + ")\n"
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
