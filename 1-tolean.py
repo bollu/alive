@@ -523,7 +523,7 @@ def print_as_lean(opt):
   (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
-  names_widths = gather_names_widths(tgt_state.constant_names)
+  width2names = build_width2constants(tgt_state.constant_names)
   for w in names_widths.iterkeys():
     constant_decls += "("
     constant_decls += " ".join([x  for x in names_widths[w]])
