@@ -508,7 +508,7 @@ with that bitwidth. This is used when producing Lean code
 to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
 """
   names_widths = {}
-  for name in constants:
+  for name in name2constants:
     bw = unify_bitwidths([cst.bitwidth for cst in name2constants[name]])
     if bw not in names_widths:
       names_widths[bw] = [name]
