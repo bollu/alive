@@ -526,7 +526,7 @@ def print_as_lean(opt):
   width2names = build_width2constants(tgt_state.constant_names)
   for w in names_widths.iterkeys():
     constant_decls += "("
-    constant_decls += " ".join([x  for x in names_widths[w]])
+    constant_decls += " ".join([name for name in width2constants[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
