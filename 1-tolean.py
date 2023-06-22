@@ -501,7 +501,12 @@ def sanitize_name(name):
   renamed = re.sub(r'[:, -]', '_', renamed)
   return renamed
 
-def gather_names_widths(constants):
+def build_width2constants(name2constants):
+"""
+build a map mapping each bitwidth to the list of constants
+with that bitwidth. This is used when producing Lean code
+to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
+"""
   names_widths = {}
   for name in constants:
     bw = unify_bitwidths([x.bitwidth for x in constants[name]])
