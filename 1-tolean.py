@@ -545,19 +545,20 @@ def print_as_lean(opt):
   out += (",")
   out += " TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
+  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += "  [dsl_bb|\n"
   out += src_str + "\n"
   out += ("  ]");
   out += ("  ⊑\n");
   out += "  TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
+  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += "  [dsl_bb|\n"
   out += tgt_str + "\n"
   out += ("  ]");
   out += ("\n  := by")
   out += ("\n     simp_mlir")
+  out += ("\n     try simp_alive")
   out += ("\n     print_goal_as_error")
   return out;
 
@@ -565,6 +566,7 @@ def print_as_lean(opt):
 LEAN_PREAMBLE= """import SSA.Core.WellTypedFramework
 import SSA.Core.Tactic
 import SSA.Projects.InstCombine.InstCombineBase
+import SSA.Projects.InstCombine.Tactic
 
 open SSA InstCombine EDSL
 """

@@ -1169,7 +1169,6 @@ def to_str_prog(p, skip):
         out += "  %s\n" % v
   return out
 
-
 def propagate_bitwidth(expr,bw, skip=[]):
   print("dbg> propagating bw " + str(bw) + " to " + str(expr))
   if isinstance(expr, LExprUnit):
@@ -1189,17 +1188,25 @@ def propagate_bitwidth(expr,bw, skip=[]):
       propagate_bitwidth(expr.v3.expr, bw)
     return
   if isinstance(expr, LExprOp):
-    if expr.bitwidth == bw:
-      return # stop if no need to propagate further
-    #don't propagate something more general
+    #if expr.bitwidth == bw:
+    #  return # stop if no need to propagate further
+    ##don't propagate something more general
     if unify_bitwidths([expr.bitwidth, bw]) != bw:
       return
     #icmp's arguments have nothing to do with its output. stop
     if expr.op.find("icmp") != -1:
       return
+    #it is a pretty hacky design with a string for the const expr
+    #so we hackily update it too
+    if expr.op.find("ofInt") != -1:
+      expr.op = expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
+      print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
     expr.bitwidth = bw
     if expr.op.find("select") != -1:
       skip = [1]
+      #first argument to a select has to have width 1
+      print("dbg> propagating select first argument %s" % expr.v)
+      propagate_bitwidth(expr.v, 1, [2,3])
     else:
       skip = []
     propagate_bitwidth(expr.v, bw, skip)
@@ -1443,7 +1450,11 @@ def to_lean_value(val, state):
     const_bitwidth = state.const_bitwidth(val.getName())
     if const_bitwidth is not None:
       bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
-    const_expr = "const (%s)" % val.getName()
+    if val.getName() == "true" or val.getName() == "false":
+      assert bitwidth == 1
+      const_expr = "const (Bitvec.ofBool %s)" % val.getName()
+    else:
+      const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val.getName())
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
@@ -1499,6 +1510,7 @@ def to_lean_select(instr, state):
   assert isinstance(instr, Select)
   assert isinstance(state, ToLeanState)
   lcond = to_lean_value(instr.c, state)
+  propagate_bitwidth(lcond, 1)
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   triple = state.build_triple(lcond, lv1, lv2)

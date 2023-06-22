@@ -129,8 +129,8 @@ tests/instcombine/muldivrem.opt,1030,
 tests/instcombine/muldivrem.opt,1049,
 tests/instcombine/muldivrem.opt,1285,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; conversionop.op = 'zext'
-tests/instcombine/select.opt,Select:485-2,
-tests/instcombine/select.opt,Select:489-2,
+tests/instcombine/select.opt,Select:485-2,Error: incompatible bitwidths: 1and32
+tests/instcombine/select.opt,Select:489-2,Error: incompatible bitwidths: 1and32
 tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
