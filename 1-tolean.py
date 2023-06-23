@@ -501,18 +501,18 @@ def sanitize_name(name):
   renamed = re.sub(r'[:, -]', '_', renamed)
   return renamed
 
-def build_width2constants(name2constants):
+def build_width2names(name2constants):
 # build a map mapping each bitwidth to the list of constants
 # with that bitwidth. This is used when producing Lean code
 # to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
   width2names = {}
   for name in name2constants:
     bw = unify_bitwidths([cst.bitwidth for cst in name2constants[name]])
-    if bw not in names_widths:
-      names_widths[bw] = [name]
+    if bw not in width2names:
+      width2names[bw] = [name]
     else:
-      names_widths[bw].append(name)
-  return names_widths
+      width2names[bw].append(name)
+  return width2names
 
 def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
@@ -521,10 +521,10 @@ def print_as_lean(opt):
   (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
-  width2names = build_width2constants(tgt_state.constant_names)
-  for w in width2constants.iterkeys():
+  width2names = build_width2names(tgt_state.constant_names)
+  for w in width2names.iterkeys():
     constant_decls += "("
-    constant_decls += " ".join([name for name in width2constants[w]])
+    constant_decls += " ".join([name for name in width2names[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
