@@ -502,11 +502,9 @@ def sanitize_name(name):
   return renamed
 
 def build_width2constants(name2constants):
-"""
-build a map mapping each bitwidth to the list of constants
-with that bitwidth. This is used when producing Lean code
-to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
-"""
+# build a map mapping each bitwidth to the list of constants
+# with that bitwidth. This is used when producing Lean code
+# to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
   width2names = {}
   for name in name2constants:
     bw = unify_bitwidths([cst.bitwidth for cst in name2constants[name]])
@@ -563,7 +561,7 @@ def print_as_lean(opt):
   out += ("  ]");
   out += ("\n  := by")
   out += ("\n     simp_mlir")
-  out += ("\n     try simp_alive")
+  out += ("\n     simp_alive")
   out += ("\n     print_goal_as_error")
   return out;
 
