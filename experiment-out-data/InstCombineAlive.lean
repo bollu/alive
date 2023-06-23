@@ -6,7 +6,7 @@ import SSA.Projects.InstCombine.Tactic
 open SSA InstCombine EDSL
 
 
--- Name:RHS
+-- Name:AddSub:1043
 -- precondition: true
 /-
   %Y = and %Z, C1
@@ -22,7 +22,7 @@ open SSA InstCombine EDSL
   %r = sub %RHS, %or
 
 -/
-theorem alive_RHS : forall (w : Nat) (C1 Z RHS : Bitvec w)
+theorem alive_AddSub_1043 : forall (w : Nat) (C1 Z RHS : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -71,7 +71,7 @@ theorem alive_RHS : forall (w : Nat) (C1 Z RHS : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AddSub:1152
 -- precondition: true
 /-
   %r = add i1 %x, %y
@@ -80,7 +80,7 @@ theorem alive_RHS : forall (w : Nat) (C1 Z RHS : Bitvec w)
   %r = xor %x, %y
 
 -/
-theorem alive_x: forall (y x : Bitvec 1)
+theorem alive_AddSub_1152: forall (y x : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -110,7 +110,7 @@ theorem alive_x: forall (y x : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1156
 -- precondition: true
 /-
   %a = add %b, %b
@@ -119,7 +119,7 @@ theorem alive_x: forall (y x : Bitvec 1)
   %a = shl %b, 1
 
 -/
-theorem alive_b : forall (w : Nat) (b : Bitvec w)
+theorem alive_AddSub_1156 : forall (w : Nat) (b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -148,7 +148,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1156-2
 -- precondition: true
 /-
   %a = add nsw %b, %b
@@ -157,7 +157,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
   %a = shl nsw %b, 1
 
 -/
-theorem alive_b : forall (w : Nat) (b : Bitvec w)
+theorem alive_AddSub_1156_2 : forall (w : Nat) (b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -186,7 +186,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1156-3
 -- precondition: true
 /-
   %a = add nuw %b, %b
@@ -195,7 +195,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
   %a = shl nuw %b, 1
 
 -/
-theorem alive_b : forall (w : Nat) (b : Bitvec w)
+theorem alive_AddSub_1156_3 : forall (w : Nat) (b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -224,7 +224,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1164
 -- precondition: true
 /-
   %na = sub 0, %a
@@ -235,7 +235,7 @@ theorem alive_b : forall (w : Nat) (b : Bitvec w)
   %c = sub %b, %a
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1164 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -271,7 +271,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1165
 -- precondition: true
 /-
   %na = sub 0, %a
@@ -285,7 +285,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %c = sub 0, %ab
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1165 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -330,7 +330,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1176
 -- precondition: true
 /-
   %nb = sub 0, %b
@@ -341,7 +341,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %c = sub %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1176 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -377,7 +377,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AddSub:1202
 -- precondition: true
 /-
   %nx = xor %x, -1
@@ -388,7 +388,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = sub (C - 1), %x
 
 -/
-theorem alive_C : forall (w : Nat) (x C : Bitvec w)
+theorem alive_AddSub_1202 : forall (w : Nat) (x C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -427,7 +427,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1295
 -- precondition: true
 /-
   %aab = and %a, %b
@@ -440,7 +440,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
   %c = or %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1295 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -478,7 +478,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1309
 -- precondition: true
 /-
   %lhs = and %a, %b
@@ -491,7 +491,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %c = add %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1309 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -529,7 +529,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1309-2
 -- precondition: true
 /-
   %lhs = and %a, %b
@@ -542,7 +542,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %c = add nsw %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1309_2 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -580,7 +580,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AddSub:1309-3
 -- precondition: true
 /-
   %lhs = and %a, %b
@@ -593,7 +593,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %c = add nuw %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AddSub_1309_3 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -631,7 +631,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AddSub:1539
 -- precondition: true
 /-
   %na = sub 0, %a
@@ -642,7 +642,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = add %x, %a
 
 -/
-theorem alive_x : forall (w : Nat) (a x : Bitvec w)
+theorem alive_AddSub_1539 : forall (w : Nat) (a x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -678,7 +678,7 @@ theorem alive_x : forall (w : Nat) (a x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AddSub:1539-2
 -- precondition: true
 /-
   %r = sub %x, C
@@ -687,7 +687,7 @@ theorem alive_x : forall (w : Nat) (a x : Bitvec w)
   %r = add %x, -C
 
 -/
-theorem alive_C : forall (w : Nat) (x C : Bitvec w)
+theorem alive_AddSub_1539_2 : forall (w : Nat) (x C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -718,7 +718,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AddSub:1546
 -- precondition: true
 /-
   %na = sub nsw 0, %a
@@ -729,7 +729,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
   %r = add nsw %x, %a
 
 -/
-theorem alive_x : forall (w : Nat) (a x : Bitvec w)
+theorem alive_AddSub_1546 : forall (w : Nat) (a x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -765,7 +765,7 @@ theorem alive_x : forall (w : Nat) (a x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AddSub:1556
 -- precondition: true
 /-
   %r = sub i1 %x, %y
@@ -774,7 +774,7 @@ theorem alive_x : forall (w : Nat) (a x : Bitvec w)
   %r = xor %x, %y
 
 -/
-theorem alive_x: forall (y x : Bitvec 1)
+theorem alive_AddSub_1556: forall (y x : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -804,7 +804,7 @@ theorem alive_x: forall (y x : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:a
+-- Name:AddSub:1560
 -- precondition: true
 /-
   %r = sub -1, %a
@@ -813,7 +813,7 @@ theorem alive_x: forall (y x : Bitvec 1)
   %r = xor %a, -1
 
 -/
-theorem alive_a : forall (w : Nat) (a : Bitvec w)
+theorem alive_AddSub_1560 : forall (w : Nat) (a : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -843,7 +843,7 @@ theorem alive_a : forall (w : Nat) (a : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AddSub:1564
 -- precondition: true
 /-
   %nx = xor %x, -1
@@ -854,7 +854,7 @@ theorem alive_a : forall (w : Nat) (a : Bitvec w)
   %r = add %x, (C + 1)
 
 -/
-theorem alive_C : forall (w : Nat) (x C : Bitvec w)
+theorem alive_AddSub_1564 : forall (w : Nat) (x C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -893,7 +893,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:AddSub:1574
 -- precondition: true
 /-
   %rhs = add %X, C2
@@ -904,7 +904,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
   %r = sub (C - C2), %X
 
 -/
-theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
+theorem alive_AddSub_1574 : forall (w : Nat) (X C C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -942,7 +942,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:AddSub:1614
 -- precondition: true
 /-
   %Op1 = add %X, %Y
@@ -953,7 +953,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
   %r = sub 0, %Y
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_AddSub_1614 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -988,7 +988,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:AddSub:1619
 -- precondition: true
 /-
   %Op0 = sub %X, %Y
@@ -999,7 +999,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = sub 0, %Y
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_AddSub_1619 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1034,7 +1034,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AddSub:1624
 -- precondition: true
 /-
   %Op0 = or %A, %B
@@ -1047,7 +1047,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = and %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AddSub_1624 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1085,7 +1085,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:AndOrXor:135
 -- precondition: true
 /-
   %op = xor %X, C1
@@ -1097,7 +1097,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %a, (C1 & C2)
 
 -/
-theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
+theorem alive_AndOrXor_135 : forall (w : Nat) (X C1 C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1137,7 +1137,7 @@ theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:AndOrXor:144
 -- precondition: true
 /-
   %op = or %X, C1
@@ -1149,7 +1149,7 @@ theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
   %r = and %o, C2
 
 -/
-theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
+theorem alive_AndOrXor_144 : forall (w : Nat) (X C1 C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1189,7 +1189,7 @@ theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:d
+-- Name:AndOrXor:698
 -- precondition: true
 /-
   %a1 = and %a, %b
@@ -1208,7 +1208,7 @@ theorem alive_C2 : forall (w : Nat) (X C1 C2 : Bitvec w)
   %r = icmp eq %a3, 0
 
 -/
-theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
+theorem alive_AndOrXor_698 : forall (w : Nat) (a b d : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1265,7 +1265,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:d
+-- Name:AndOrXor:709
 -- precondition: true
 /-
   %a1 = and %a, %b
@@ -1284,7 +1284,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
   %r = icmp eq %a3, %or
 
 -/
-theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
+theorem alive_AndOrXor_709 : forall (w : Nat) (a b d : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1336,7 +1336,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:d
+-- Name:AndOrXor:716
 -- precondition: true
 /-
   %a1 = and %a, %b
@@ -1355,7 +1355,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
   %r = icmp eq %a3, %a
 
 -/
-theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
+theorem alive_AndOrXor_716 : forall (w : Nat) (a b d : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1407,7 +1407,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:794
 -- precondition: true
 /-
   %op0 = icmp sgt %a, %b
@@ -1420,7 +1420,7 @@ theorem alive_d : forall (w : Nat) (a b d : Bitvec w)
   %r = icmp sgt %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_794 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1458,7 +1458,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:827
 -- precondition: true
 /-
   %op0 = icmp eq %a, 0
@@ -1472,7 +1472,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = icmp eq %o, 0
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_827 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1517,7 +1517,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C1
+-- Name:AndOrXor:887-2
 -- precondition: true
 /-
   %op0 = icmp eq %a, C1
@@ -1530,7 +1530,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = false
 
 -/
-theorem alive_C1 : forall (w : Nat) (a C1 : Bitvec w)
+theorem alive_AndOrXor_887_2 : forall (w : Nat) (a C1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -1568,7 +1568,7 @@ theorem alive_C1 : forall (w : Nat) (a C1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:notOp1
+-- Name:AndOrXor:1230  ~A & ~B -> ~(A | B)
 -- precondition: true
 /-
   %op0 = xor %notOp0, -1
@@ -1582,7 +1582,7 @@ theorem alive_C1 : forall (w : Nat) (a C1 : Bitvec w)
   %r = xor %or, -1
 
 -/
-theorem alive_notOp1 : forall (w : Nat) (notOp0 notOp1 : Bitvec w)
+theorem alive_AndOrXor_1230__A__B___A__B : forall (w : Nat) (notOp0 notOp1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1627,7 +1627,7 @@ theorem alive_notOp1 : forall (w : Nat) (notOp0 notOp1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1241 (A|B) & ~(A&B) => A^B
 -- precondition: true
 /-
   %op0 = or %A, %B
@@ -1642,7 +1642,7 @@ theorem alive_notOp1 : forall (w : Nat) (notOp0 notOp1 : Bitvec w)
   %r = xor %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1241_AB__AB__AB : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1686,7 +1686,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1247 ~(A&B) & (A|B) => A^B
 -- precondition: true
 /-
   %notOp0 = and %A, %B
@@ -1701,7 +1701,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1247_AB__AB__AB : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1745,7 +1745,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1253 A & (A^B) -> A & ~B
 -- precondition: true
 /-
   %op0 = xor %A, %B
@@ -1757,7 +1757,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = and %A, %notB
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1253_A__AB___A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1794,7 +1794,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1280 (~A|B)&A -> A&B
 -- precondition: true
 /-
   %nA = xor %A, -1
@@ -1807,7 +1807,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = and %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1280_ABA___AB : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1847,7 +1847,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1288 (A ^ B) & ((B ^ C) ^ A) -> (A ^ B) & ~C
 -- precondition: true
 /-
   %op0 = xor %A, %B
@@ -1863,7 +1863,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = and %op0, %negC
 
 -/
-theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
+theorem alive_AndOrXor_1288_A__B__B__C__A___A__B__C : forall (w : Nat) (A C B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1910,7 +1910,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1294 (A | B) & ((~A) ^ B) -> (A & B)
 -- precondition: true
 /-
   %op0 = or %A, %B
@@ -1925,7 +1925,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
   %r = and %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1294_A__B__A__B___A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -1969,7 +1969,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:1683-1
 -- precondition: true
 /-
   %op0 = icmp ugt %a, %b
@@ -1982,7 +1982,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = icmp uge %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_1683_1 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -2020,7 +2020,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:1683-2
 -- precondition: true
 /-
   %op0 = icmp uge %a, %b
@@ -2033,7 +2033,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = true
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_1683_2 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -2071,7 +2071,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1704
 -- precondition: true
 /-
   %cmp1 = icmp eq %B, 0
@@ -2085,7 +2085,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = icmp uge %b1, %A
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1704 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -2128,7 +2128,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1705
 -- precondition: true
 /-
   %cmp1 = icmp eq %B, 0
@@ -2142,7 +2142,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = icmp uge %b1, %A
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1705 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -2185,7 +2185,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:1733
 -- precondition: true
 /-
   %cmp1 = icmp ne %A, 0
@@ -2199,7 +2199,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = icmp ne %or, 0
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_1733 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -2244,7 +2244,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AndOrXor:2063  (X ^ C1) | C2 --> (X | C2) ^ (C1 & ~C2)
 -- precondition: true
 /-
   %op0 = xor %x, C1
@@ -2256,7 +2256,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %or, (C1 & ~C)
 
 -/
-theorem alive_C : forall (w : Nat) (x C1 C : Bitvec w)
+theorem alive_AndOrXor_2063__X__C1__C2____X__C2__C1__C2 : forall (w : Nat) (x C1 C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2297,7 +2297,7 @@ theorem alive_C : forall (w : Nat) (x C1 C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2113   ((~A & B) | A) -> (A | B)
 -- precondition: true
 /-
   %negA = xor %A, -1
@@ -2310,7 +2310,7 @@ theorem alive_C : forall (w : Nat) (x C1 C : Bitvec w)
   %r = or %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2113___A__B__A___A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2350,7 +2350,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2118   ((A & B) | ~A) -> (~A | B)
 -- precondition: true
 /-
   %negA = xor %A, -1
@@ -2363,7 +2363,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %negA, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2118___A__B__A___A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2403,7 +2403,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2123   (A & (~B)) | (A ^ B) -> (A ^ B)
 -- precondition: true
 /-
   %negB = xor %B, -1
@@ -2418,7 +2418,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2123___A__B__A__B___A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2462,7 +2462,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:D
+-- Name:AndOrXor:2188
 -- precondition: true
 /-
   %C = xor %D, -1
@@ -2479,7 +2479,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %A, %D
 
 -/
-theorem alive_D : forall (w : Nat) (A D : Bitvec w)
+theorem alive_AndOrXor_2188 : forall (w : Nat) (A D : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2529,7 +2529,7 @@ theorem alive_D : forall (w : Nat) (A D : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2231  (A ^ B) | ((B ^ C) ^ A) -> (A ^ B) | C
 -- precondition: true
 /-
   %op0 = xor %A, %B
@@ -2544,7 +2544,7 @@ theorem alive_D : forall (w : Nat) (A D : Bitvec w)
   %r = or %op0, %C
 
 -/
-theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
+theorem alive_AndOrXor_2231__A__B__B__C__A___A__B__C : forall (w : Nat) (A C B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2588,7 +2588,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2243  ((B | C) & A) | B -> B | (A & C)
 -- precondition: true
 /-
   %o = or %B, %C
@@ -2602,7 +2602,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
   %r = or %B, %a
 
 -/
-theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
+theorem alive_AndOrXor_2243__B__C__A__B___B__A__C : forall (w : Nat) (A C B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2644,7 +2644,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2247  (~A | ~B) == (~(A & B))
 -- precondition: true
 /-
   %na = xor %A, -1
@@ -2658,7 +2658,7 @@ theorem alive_B : forall (w : Nat) (A C B : Bitvec w)
   %r = xor %a, -1
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2247__A__B__A__B : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2703,7 +2703,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:op0
+-- Name:AndOrXor:2263
 -- precondition: true
 /-
   %op1 = xor %op0, %B
@@ -2714,7 +2714,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %op0, %B
 
 -/
-theorem alive_op0 : forall (w : Nat) (B op0 : Bitvec w)
+theorem alive_AndOrXor_2263 : forall (w : Nat) (B op0 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2748,7 +2748,7 @@ theorem alive_op0 : forall (w : Nat) (B op0 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2264
 -- precondition: true
 /-
   %na = xor %A, -1
@@ -2762,7 +2762,7 @@ theorem alive_op0 : forall (w : Nat) (B op0 : Bitvec w)
   %r = or %A, %nb
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2264 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2805,7 +2805,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2265
 -- precondition: true
 /-
   %op0 = and %A, %B
@@ -2818,7 +2818,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2265 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2856,7 +2856,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2284
 -- precondition: true
 /-
   %o = or %A, %B
@@ -2870,7 +2870,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %A, %not
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2284 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2913,7 +2913,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2285
 -- precondition: true
 /-
   %o = xor %A, %B
@@ -2927,7 +2927,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %A, %not
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2285 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -2970,7 +2970,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:AndOrXor:2297
 -- precondition: true
 /-
   %op0 = and %A, %B
@@ -2985,7 +2985,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = xor %na, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec w)
+theorem alive_AndOrXor_2297 : forall (w : Nat) (A B : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3029,7 +3029,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:op1
+-- Name:AndOrXor:2367
 -- precondition: true
 /-
   %op0 = or %A, C1
@@ -3041,7 +3041,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec w)
   %r = or %i, C1
 
 -/
-theorem alive_op1 : forall (w : Nat) (A C1 op1 : Bitvec w)
+theorem alive_AndOrXor_2367 : forall (w : Nat) (A C1 op1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3079,7 +3079,7 @@ theorem alive_op1 : forall (w : Nat) (A C1 op1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:D
+-- Name:AndOrXor:2375
 -- precondition: true
 /-
   %op0 = select i1 %x, %A, %B
@@ -3094,7 +3094,7 @@ theorem alive_op1 : forall (w : Nat) (A C1 op1 : Bitvec w)
   %r = select i1 %x, %t, %f
 
 -/
-theorem alive_D : forall (w : Nat) (A x C B D : Bitvec 1)
+theorem alive_AndOrXor_2375 : forall (w : Nat) (A x C B D : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -3142,7 +3142,7 @@ theorem alive_D : forall (w : Nat) (A x C B D : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:y
+-- Name:AndOrXor:2416
 -- precondition: true
 /-
   %x = xor %nx, -1
@@ -3156,7 +3156,7 @@ theorem alive_D : forall (w : Nat) (A x C B D : Bitvec 1)
   %r = or %nx, %ny
 
 -/
-theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
+theorem alive_AndOrXor_2416 : forall (w : Nat) (nx y : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3200,7 +3200,7 @@ theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:y
+-- Name:AndOrXor:2417
 -- precondition: true
 /-
   %x = xor %nx, -1
@@ -3214,7 +3214,7 @@ theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
   %r = and %nx, %ny
 
 -/
-theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
+theorem alive_AndOrXor_2417 : forall (w : Nat) (nx y : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3258,7 +3258,7 @@ theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AndOrXor:2429
 -- precondition: true
 /-
   %op0 = and %x, %y
@@ -3271,7 +3271,7 @@ theorem alive_y : forall (w : Nat) (nx y : Bitvec w)
   %r = or %nx, %ny
 
 -/
-theorem alive_x : forall (w : Nat) (y x : Bitvec w)
+theorem alive_AndOrXor_2429 : forall (w : Nat) (y x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3312,7 +3312,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AndOrXor:2430
 -- precondition: true
 /-
   %op0 = or %x, %y
@@ -3325,7 +3325,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
   %r = and %nx, %ny
 
 -/
-theorem alive_x : forall (w : Nat) (y x : Bitvec w)
+theorem alive_AndOrXor_2430 : forall (w : Nat) (y x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3366,7 +3366,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AndOrXor:2443
 -- precondition: true
 /-
   %nx = xor %x, -1
@@ -3379,7 +3379,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
   %r = ashr %x, %y
 
 -/
-theorem alive_x : forall (w : Nat) (y x : Bitvec w)
+theorem alive_AndOrXor_2443 : forall (w : Nat) (y x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3420,7 +3420,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:AndOrXor:2453
 -- precondition: true
 /-
   %op0 = icmp slt %x, %y
@@ -3431,7 +3431,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
   %r = icmp sge %x, %y
 
 -/
-theorem alive_x : forall (w : Nat) (y x : Bitvec w)
+theorem alive_AndOrXor_2453 : forall (w : Nat) (y x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -3466,7 +3466,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AndOrXor:2475
 -- precondition: true
 /-
   %op0 = sub C, %x
@@ -3477,7 +3477,7 @@ theorem alive_x : forall (w : Nat) (y x : Bitvec w)
   %r = add %x, (-1 - C)
 
 -/
-theorem alive_C : forall (w : Nat) (x C : Bitvec w)
+theorem alive_AndOrXor_2475 : forall (w : Nat) (x C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3515,7 +3515,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:AndOrXor:2486
 -- precondition: true
 /-
   %op0 = add %x, C
@@ -3526,7 +3526,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
   %r = sub (-1 - C), %x
 
 -/
-theorem alive_C : forall (w : Nat) (x C : Bitvec w)
+theorem alive_AndOrXor_2486 : forall (w : Nat) (x C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3564,7 +3564,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:op1
+-- Name:AndOrXor:2581  (B|A)^B -> A & ~B
 -- precondition: true
 /-
   %op0 = or %a, %op1
@@ -3576,7 +3576,7 @@ theorem alive_C : forall (w : Nat) (x C : Bitvec w)
   %r = and %a, %nop1
 
 -/
-theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
+theorem alive_AndOrXor_2581__BAB___A__B : forall (w : Nat) (a op1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3613,7 +3613,7 @@ theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:op1
+-- Name:AndOrXor:2587  (B&A)^A -> ~B & A
 -- precondition: true
 /-
   %op0 = and %a, %op1
@@ -3625,7 +3625,7 @@ theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
   %r = and %na, %op1
 
 -/
-theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
+theorem alive_AndOrXor_2587__BAA___B__A : forall (w : Nat) (a op1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3662,7 +3662,7 @@ theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2595
 -- precondition: true
 /-
   %op0 = and %a, %b
@@ -3675,7 +3675,7 @@ theorem alive_op1 : forall (w : Nat) (a op1 : Bitvec w)
   %r = xor %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2595 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3713,7 +3713,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2607
 -- precondition: true
 /-
   %na = xor %a, -1
@@ -3730,7 +3730,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = xor %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2607 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3780,7 +3780,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2617
 -- precondition: true
 /-
   %na = xor %a, -1
@@ -3797,7 +3797,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = xor %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2617 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3847,7 +3847,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2627
 -- precondition: true
 /-
   %op0 = xor %a, %c
@@ -3862,7 +3862,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = xor %and, %c
 
 -/
-theorem alive_b : forall (w : Nat) (a c b : Bitvec w)
+theorem alive_AndOrXor_2627 : forall (w : Nat) (a c b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3907,7 +3907,7 @@ theorem alive_b : forall (w : Nat) (a c b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2647
 -- precondition: true
 /-
   %op0 = and %a, %b
@@ -3920,7 +3920,7 @@ theorem alive_b : forall (w : Nat) (a c b : Bitvec w)
   %r = or %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2647 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -3958,7 +3958,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2658
 -- precondition: true
 /-
   %nb = xor %b, -1
@@ -3974,7 +3974,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = xor %and, -1
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2658 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4023,7 +4023,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:AndOrXor:2663
 -- precondition: true
 /-
   %op0 = icmp ule %a, %b
@@ -4036,7 +4036,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = icmp uge %a, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec w)
+theorem alive_AndOrXor_2663 : forall (w : Nat) (a b : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -4074,7 +4074,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:152
 -- precondition: true
 /-
   %r = mul %x, -1
@@ -4083,7 +4083,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec w)
   %r = sub 0, %x
 
 -/
-theorem alive_x : forall (w : Nat) (x : Bitvec w)
+theorem alive_152 : forall (w : Nat) (x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4113,7 +4113,7 @@ theorem alive_x : forall (w : Nat) (x : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:160
 -- precondition: true
 /-
   %sh = shl i7 %x, C2
@@ -4124,7 +4124,7 @@ theorem alive_x : forall (w : Nat) (x : Bitvec w)
   %r = mul %x, (C1 << C2)
 
 -/
-theorem alive_C2: forall (x C1 C2 : Bitvec 7)
+theorem alive_160: forall (x C1 C2 : Bitvec 7)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 7)))
@@ -4162,7 +4162,7 @@ theorem alive_C2: forall (x C1 C2 : Bitvec 7)
      simp_alive
      print_goal_as_error
 
--- Name:Op1
+-- Name:229
 -- precondition: true
 /-
   %Op0 = add %X, C1
@@ -4175,7 +4175,7 @@ theorem alive_C2: forall (x C1 C2 : Bitvec 7)
   %r = add %tmp, %mul
 
 -/
-theorem alive_Op1 : forall (w : Nat) (X C1 Op1 : Bitvec w)
+theorem alive_229 : forall (w : Nat) (X C1 Op1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4215,7 +4215,7 @@ theorem alive_Op1 : forall (w : Nat) (X C1 Op1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:239
 -- precondition: true
 /-
   %a = sub 0, %X
@@ -4228,7 +4228,7 @@ theorem alive_Op1 : forall (w : Nat) (X C1 Op1 : Bitvec w)
   %r = mul %X, %Y
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_239 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4270,7 +4270,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:265
 -- precondition: true
 /-
   %div = udiv exact %X, %Y
@@ -4281,7 +4281,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = %X
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_265 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4314,7 +4314,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:265-2
 -- precondition: true
 /-
   %div = sdiv exact %X, %Y
@@ -4325,7 +4325,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = %X
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_265_2 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4358,7 +4358,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:266
 -- precondition: true
 /-
   %div = udiv exact %X, %Y
@@ -4371,7 +4371,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = sub 0, %X
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_266 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4412,7 +4412,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:266-2
 -- precondition: true
 /-
   %div = sdiv exact %X, %Y
@@ -4425,7 +4425,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = sub 0, %X
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_266_2 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4466,7 +4466,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:275
 -- precondition: true
 /-
   %div = udiv i5 %X, %Y
@@ -4478,7 +4478,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = sub %X, %rem
 
 -/
-theorem alive_X: forall (Y X : Bitvec 5)
+theorem alive_275: forall (Y X : Bitvec 5)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 5)))
@@ -4514,7 +4514,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:275-2
 -- precondition: true
 /-
   %div = sdiv i5 %X, %Y
@@ -4526,7 +4526,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
   %r = sub %X, %rem
 
 -/
-theorem alive_X: forall (Y X : Bitvec 5)
+theorem alive_275_2: forall (Y X : Bitvec 5)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 5)))
@@ -4562,7 +4562,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:276
 -- precondition: true
 /-
   %div = sdiv i5 %X, %Y
@@ -4576,7 +4576,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
   %r = sub %rem, %X
 
 -/
-theorem alive_X: forall (Y X : Bitvec 5)
+theorem alive_276: forall (Y X : Bitvec 5)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 5)))
@@ -4618,7 +4618,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:276-2
 -- precondition: true
 /-
   %div = udiv i5 %X, %Y
@@ -4632,7 +4632,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
   %r = sub %rem, %X
 
 -/
-theorem alive_X: forall (Y X : Bitvec 5)
+theorem alive_276_2: forall (Y X : Bitvec 5)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 5)))
@@ -4674,7 +4674,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:283
 -- precondition: true
 /-
   %r = mul i1 %X, %Y
@@ -4683,7 +4683,7 @@ theorem alive_X: forall (Y X : Bitvec 5)
   %r = and %X, %Y
 
 -/
-theorem alive_X: forall (Y X : Bitvec 1)
+theorem alive_283: forall (Y X : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -4713,7 +4713,7 @@ theorem alive_X: forall (Y X : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:Op1
+-- Name:290 & 292
 -- precondition: true
 /-
   %Op0 = shl 1, %Y
@@ -4724,7 +4724,7 @@ theorem alive_X: forall (Y X : Bitvec 1)
   %r = shl %Op1, %Y
 
 -/
-theorem alive_Op1 : forall (w : Nat) (Y Op1 : Bitvec w)
+theorem alive_290__292 : forall (w : Nat) (Y Op1 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4760,7 +4760,7 @@ theorem alive_Op1 : forall (w : Nat) (Y Op1 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:c
+-- Name:SimplifyDivRemOfSelect
 -- precondition: true
 /-
   %sel = select i1 %c, %Y, 0
@@ -4771,7 +4771,7 @@ theorem alive_Op1 : forall (w : Nat) (Y Op1 : Bitvec w)
   %r = udiv %X, %Y
 
 -/
-theorem alive_c : forall (w : Nat) (Y X c : Bitvec 1)
+theorem alive_SimplifyDivRemOfSelect : forall (w : Nat) (Y X c : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -4809,7 +4809,7 @@ theorem alive_c : forall (w : Nat) (Y X c : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:805
 -- precondition: true
 /-
   %r = sdiv 1, %X
@@ -4820,7 +4820,7 @@ theorem alive_c : forall (w : Nat) (Y X c : Bitvec 1)
   %r = select i1 %c, %X, 0
 
 -/
-theorem alive_X : forall (w : Nat) (X : Bitvec 1)
+theorem alive_805 : forall (w : Nat) (X : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -4856,7 +4856,7 @@ theorem alive_X : forall (w : Nat) (X : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:Op1
+-- Name:820
 -- precondition: true
 /-
   %Z = srem i9 %X, %Op1
@@ -4869,7 +4869,7 @@ theorem alive_X : forall (w : Nat) (X : Bitvec 1)
   %r = sdiv %X, %Op1
 
 -/
-theorem alive_Op1: forall (X Op1 : Bitvec 9)
+theorem alive_820: forall (X Op1 : Bitvec 9)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 9)))
@@ -4907,7 +4907,7 @@ theorem alive_Op1: forall (X Op1 : Bitvec 9)
      simp_alive
      print_goal_as_error
 
--- Name:Op1
+-- Name:820'
 -- precondition: true
 /-
   %Z = urem i9 %X, %Op1
@@ -4920,7 +4920,7 @@ theorem alive_Op1: forall (X Op1 : Bitvec 9)
   %r = udiv %X, %Op1
 
 -/
-theorem alive_Op1: forall (X Op1 : Bitvec 9)
+theorem alive_820': forall (X Op1 : Bitvec 9)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 9)))
@@ -4958,7 +4958,7 @@ theorem alive_Op1: forall (X Op1 : Bitvec 9)
      simp_alive
      print_goal_as_error
 
--- Name:N
+-- Name:891
 -- precondition: true
 /-
   %s = shl i13 1, %N
@@ -4969,7 +4969,7 @@ theorem alive_Op1: forall (X Op1 : Bitvec 9)
   %r = lshr %x, %N
 
 -/
-theorem alive_N: forall (x N : Bitvec 13)
+theorem alive_891: forall (x N : Bitvec 13)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 13)))
@@ -5005,7 +5005,7 @@ theorem alive_N: forall (x N : Bitvec 13)
      simp_alive
      print_goal_as_error
 
--- Name:N
+-- Name:891-exact
 -- precondition: true
 /-
   %s = shl i13 1, %N
@@ -5016,7 +5016,7 @@ theorem alive_N: forall (x N : Bitvec 13)
   %r = lshr exact %x, %N
 
 -/
-theorem alive_N: forall (x N : Bitvec 13)
+theorem alive_891_exact: forall (x N : Bitvec 13)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 13)))
@@ -5052,7 +5052,7 @@ theorem alive_N: forall (x N : Bitvec 13)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:1030
 -- precondition: true
 /-
   %r = sdiv %X, -1
@@ -5061,7 +5061,7 @@ theorem alive_N: forall (x N : Bitvec 13)
   %r = sub 0, %X
 
 -/
-theorem alive_X : forall (w : Nat) (X : Bitvec w)
+theorem alive_1030 : forall (w : Nat) (X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -5091,7 +5091,7 @@ theorem alive_X : forall (w : Nat) (X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:1049
 -- precondition: true
 /-
   %Op0 = sub nsw i11 0, %X
@@ -5102,7 +5102,7 @@ theorem alive_X : forall (w : Nat) (X : Bitvec w)
   %r = sdiv %X, -C
 
 -/
-theorem alive_C: forall (X C : Bitvec 11)
+theorem alive_1049: forall (X C : Bitvec 11)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 11)))
@@ -5139,7 +5139,7 @@ theorem alive_C: forall (X C : Bitvec 11)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:Select:637
 -- precondition: true
 /-
   %c = icmp eq %X, C
@@ -5150,7 +5150,7 @@ theorem alive_C: forall (X C : Bitvec 11)
   %r = select i1 %c, C, %Y
 
 -/
-theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
+theorem alive_Select_637 : forall (w : Nat) (Y C : Bitvec 1)
 (X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
@@ -5187,7 +5187,7 @@ theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:Select:641
 -- precondition: true
 /-
   %c = icmp ne %X, C
@@ -5198,7 +5198,7 @@ theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
   %r = select i1 %c, %Y, C
 
 -/
-theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
+theorem alive_Select_641 : forall (w : Nat) (Y C : Bitvec 1)
 (X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
@@ -5235,7 +5235,7 @@ theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:699
 -- precondition: true
 /-
   %c = icmp uge %A, %B
@@ -5250,7 +5250,7 @@ theorem alive_X : forall (w : Nat) (Y C : Bitvec 1)
   %umax2 = select i1 %c, %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
+theorem alive_Select_699 : forall (w : Nat) (A B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5292,7 +5292,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:700
 -- precondition: true
 /-
   %c = icmp slt %A, %B
@@ -5307,7 +5307,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
   %smin2 = select i1 %c, %A, %B
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
+theorem alive_Select_700 : forall (w : Nat) (A B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5349,7 +5349,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:704
 -- precondition: true
 /-
   %c = icmp slt %A, %B
@@ -5364,7 +5364,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
   %smax = %A
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
+theorem alive_Select_704 : forall (w : Nat) (A B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5405,7 +5405,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:705
 -- precondition: true
 /-
   %c = icmp sge %A, %B
@@ -5420,7 +5420,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
   %umin = %A
 
 -/
-theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
+theorem alive_Select_705 : forall (w : Nat) (A B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5461,7 +5461,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:A
+-- Name:Select:740
 -- precondition: true
 /-
   %c = icmp sgt %A, 0
@@ -5480,7 +5480,7 @@ theorem alive_B : forall (w : Nat) (A B : Bitvec 1)
   %abs2 = select i1 %c, %A, %minus
 
 -/
-theorem alive_A : forall (w : Nat) (A : Bitvec 1)
+theorem alive_Select_740 : forall (w : Nat) (A : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5536,7 +5536,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:A
+-- Name:Select:741
 -- precondition: true
 /-
   %c = icmp sgt %A, 0
@@ -5555,7 +5555,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
   %abs2 = select i1 %c, %minus, %A
 
 -/
-theorem alive_A : forall (w : Nat) (A : Bitvec 1)
+theorem alive_Select_741 : forall (w : Nat) (A : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5611,7 +5611,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:A
+-- Name:Select:746
 -- precondition: true
 /-
   %c = icmp slt %A, 0
@@ -5631,7 +5631,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
   %abs2 = select i1 %c3, %A, %minus
 
 -/
-theorem alive_A : forall (w : Nat) (A : Bitvec 1)
+theorem alive_Select_746 : forall (w : Nat) (A : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5690,7 +5690,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:A
+-- Name:Select:747
 -- precondition: true
 /-
   %c = icmp sgt %A, 0
@@ -5710,7 +5710,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
   %abs2 = select i1 %c3, %A, %minus
 
 -/
-theorem alive_A : forall (w : Nat) (A : Bitvec 1)
+theorem alive_Select_747 : forall (w : Nat) (A : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5769,7 +5769,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:846
 -- precondition: true
 /-
   %A = select i1 %B, true, %C
@@ -5778,7 +5778,7 @@ theorem alive_A : forall (w : Nat) (A : Bitvec 1)
   %A = or %B, %C
 
 -/
-theorem alive_B: forall (C B : Bitvec 1)
+theorem alive_Select_846: forall (C B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5809,7 +5809,7 @@ theorem alive_B: forall (C B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:850
 -- precondition: true
 /-
   %A = select i1 %B, false, %C
@@ -5819,7 +5819,7 @@ theorem alive_B: forall (C B : Bitvec 1)
   %A = and %notb, %C
 
 -/
-theorem alive_B: forall (C B : Bitvec 1)
+theorem alive_Select_850: forall (C B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5853,7 +5853,7 @@ theorem alive_B: forall (C B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:855
 -- precondition: true
 /-
   %A = select i1 %B, %C, false
@@ -5862,7 +5862,7 @@ theorem alive_B: forall (C B : Bitvec 1)
   %A = and %B, %C
 
 -/
-theorem alive_B: forall (C B : Bitvec 1)
+theorem alive_Select_855: forall (C B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5893,7 +5893,7 @@ theorem alive_B: forall (C B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:B
+-- Name:Select:859
 -- precondition: true
 /-
   %A = select i1 %B, %C, true
@@ -5903,7 +5903,7 @@ theorem alive_B: forall (C B : Bitvec 1)
   %A = or %notb, %C
 
 -/
-theorem alive_B: forall (C B : Bitvec 1)
+theorem alive_Select_859: forall (C B : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5937,7 +5937,7 @@ theorem alive_B: forall (C B : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:Select:851
 -- precondition: true
 /-
   %r = select i1 %a, %b, %a
@@ -5946,7 +5946,7 @@ theorem alive_B: forall (C B : Bitvec 1)
   %r = and %a, %b
 
 -/
-theorem alive_b: forall (a b : Bitvec 1)
+theorem alive_Select_851: forall (a b : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -5976,7 +5976,7 @@ theorem alive_b: forall (a b : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:Select:852
 -- precondition: true
 /-
   %r = select i1 %a, %a, %b
@@ -5985,7 +5985,7 @@ theorem alive_b: forall (a b : Bitvec 1)
   %r = or %a, %b
 
 -/
-theorem alive_b: forall (a b : Bitvec 1)
+theorem alive_Select_852: forall (a b : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -6015,7 +6015,7 @@ theorem alive_b: forall (a b : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:Select:858
 -- precondition: true
 /-
   %nota = xor %a, -1
@@ -6026,7 +6026,7 @@ theorem alive_b: forall (a b : Bitvec 1)
   %r = and %nota, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
+theorem alive_Select_858 : forall (w : Nat) (a b : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -6062,7 +6062,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:b
+-- Name:Select:859'
 -- precondition: true
 /-
   %nota = xor %a, -1
@@ -6073,7 +6073,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
   %r = or %nota, %b
 
 -/
-theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
+theorem alive_Select_859' : forall (w : Nat) (a b : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -6109,7 +6109,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:x
+-- Name:Select:962
 -- precondition: true
 /-
   %s1 = add %x, %y
@@ -6123,7 +6123,7 @@ theorem alive_b : forall (w : Nat) (a b : Bitvec 1)
   %r = add %x, %yz
 
 -/
-theorem alive_x : forall (w : Nat) (y c z : Bitvec 1)
+theorem alive_Select_962 : forall (w : Nat) (y c z : Bitvec 1)
 (x : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
@@ -6168,7 +6168,7 @@ theorem alive_x : forall (w : Nat) (y c z : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:W
+-- Name:Select:1070
 -- precondition: true
 /-
   %X = select i1 %c, %W, %Z
@@ -6179,7 +6179,7 @@ theorem alive_x : forall (w : Nat) (y c z : Bitvec 1)
   %r = select i1 %c, %W, %Y
 
 -/
-theorem alive_W : forall (w : Nat) (Y c Z W : Bitvec 1)
+theorem alive_Select_1070 : forall (w : Nat) (Y c Z W : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -6217,7 +6217,7 @@ theorem alive_W : forall (w : Nat) (Y c Z W : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:W
+-- Name:Select:1078
 -- precondition: true
 /-
   %Y = select i1 %c, %W, %Z
@@ -6228,7 +6228,7 @@ theorem alive_W : forall (w : Nat) (Y c Z W : Bitvec 1)
   %r = select i1 %c, %X, %Z
 
 -/
-theorem alive_W : forall (w : Nat) (X c Z W : Bitvec 1)
+theorem alive_Select_1078 : forall (w : Nat) (X c Z W : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 1)))
@@ -6266,7 +6266,7 @@ theorem alive_W : forall (w : Nat) (X c Z W : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:val
+-- Name:Select:1087
 -- precondition: true
 /-
   %c = xor i1 %val, true
@@ -6277,7 +6277,7 @@ theorem alive_W : forall (w : Nat) (X c Z W : Bitvec 1)
   %r = select i1 %val, %Y, %X
 
 -/
-theorem alive_val : forall (w : Nat) (Y X val : Bitvec 1)
+theorem alive_Select_1087 : forall (w : Nat) (Y X val : Bitvec 1)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6315,7 +6315,7 @@ theorem alive_val : forall (w : Nat) (Y X val : Bitvec 1)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:Select:1100
 -- precondition: true
 /-
   %r = select i1 true, %X, %Y
@@ -6324,7 +6324,7 @@ theorem alive_val : forall (w : Nat) (Y X val : Bitvec 1)
   %r = %X
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_Select_1100 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6353,7 +6353,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:X
+-- Name:Select:1105
 -- precondition: true
 /-
   %r = select i1 false, %X, %Y
@@ -6362,7 +6362,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = %Y
 
 -/
-theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
+theorem alive_Select_1105 : forall (w : Nat) (Y X : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6391,7 +6391,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 239
 -- precondition: true
 /-
   %Op0 = shl %X, C
@@ -6402,7 +6402,7 @@ theorem alive_X : forall (w : Nat) (Y X : Bitvec w)
   %r = and %X, (-1 u>> C)
 
 -/
-theorem alive_C : forall (w : Nat) (X C : Bitvec w)
+theorem alive_InstCombineShift__239 : forall (w : Nat) (X C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6439,7 +6439,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 279
 -- precondition: true
 /-
   %Op0 = lshr %X, C
@@ -6450,7 +6450,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
   %r = and %X, (-1 << C)
 
 -/
-theorem alive_C : forall (w : Nat) (X C : Bitvec w)
+theorem alive_InstCombineShift__279 : forall (w : Nat) (X C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6487,7 +6487,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:InstCombineShift: 351
 -- precondition: true
 /-
   %Op0 = mul i7 %X, C1
@@ -6498,7 +6498,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
   %r = mul %X, (C1 << C2)
 
 -/
-theorem alive_C2: forall (X C1 C2 : Bitvec 7)
+theorem alive_InstCombineShift__351: forall (X C1 C2 : Bitvec 7)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 7)))
@@ -6536,7 +6536,7 @@ theorem alive_C2: forall (X C1 C2 : Bitvec 7)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 422-1
 -- precondition: true
 /-
   %Op1 = lshr i31 %X, C
@@ -6551,7 +6551,7 @@ theorem alive_C2: forall (X C1 C2 : Bitvec 7)
   %r = and %a, (-1 << C)
 
 -/
-theorem alive_C: forall (Y X C : Bitvec 31)
+theorem alive_InstCombineShift__422_1: forall (Y X C : Bitvec 31)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 31)))
@@ -6598,7 +6598,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 422-2
 -- precondition: true
 /-
   %Op1 = ashr i31 %X, C
@@ -6613,7 +6613,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
   %r = and %a, (-1 << C)
 
 -/
-theorem alive_C: forall (Y X C : Bitvec 31)
+theorem alive_InstCombineShift__422_2: forall (Y X C : Bitvec 31)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 31)))
@@ -6660,7 +6660,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:InstCombineShift: 440
 -- precondition: true
 /-
   %s = lshr %X, C
@@ -6677,7 +6677,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
   %r = xor %a, %y2
 
 -/
-theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
+theorem alive_InstCombineShift__440 : forall (w : Nat) (Y X C C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6729,7 +6729,7 @@ theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 458
 -- precondition: true
 /-
   %s = ashr i31 %X, C
@@ -6744,7 +6744,7 @@ theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
   %r = and %a, (-1 << C)
 
 -/
-theorem alive_C: forall (Y X C : Bitvec 31)
+theorem alive_InstCombineShift__458: forall (Y X C : Bitvec 31)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 31)))
@@ -6791,7 +6791,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:InstCombineShift: 476
 -- precondition: true
 /-
   %shr = lshr %X, C
@@ -6808,7 +6808,7 @@ theorem alive_C: forall (Y X C : Bitvec 31)
   %r = or %a, %s2
 
 -/
-theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
+theorem alive_InstCombineShift__476 : forall (w : Nat) (Y X C C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6860,7 +6860,7 @@ theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:InstCombineShift: 497
 -- precondition: true
 /-
   %Op0 = xor %X, C2
@@ -6872,7 +6872,7 @@ theorem alive_C2 : forall (w : Nat) (Y X C C2 : Bitvec w)
   %r = xor %s2, (C2 u>> C)
 
 -/
-theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
+theorem alive_InstCombineShift__497 : forall (w : Nat) (X C C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6912,7 +6912,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C2
+-- Name:InstCombineShift: 497'''
 -- precondition: true
 /-
   %Op0 = add %X, C2
@@ -6924,7 +6924,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
   %r = add %s2, (C2 << C)
 
 -/
-theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
+theorem alive_InstCombineShift__497''' : forall (w : Nat) (X C C2 : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -6964,7 +6964,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C
+-- Name:InstCombineShift: 582
 -- precondition: true
 /-
   %Op0 = shl %X, C
@@ -6975,7 +6975,7 @@ theorem alive_C2 : forall (w : Nat) (X C C2 : Bitvec w)
   %r = and %X, (-1 u>> C)
 
 -/
-theorem alive_C : forall (w : Nat) (X C : Bitvec w)
+theorem alive_InstCombineShift__582 : forall (w : Nat) (X C : Bitvec w)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec w)))
@@ -7012,7 +7012,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
      simp_alive
      print_goal_as_error
 
--- Name:C1
+-- Name:InstCombineShift: 724
 -- precondition: true
 /-
   %Op0 = shl i31 C1, %A
@@ -7023,7 +7023,7 @@ theorem alive_C : forall (w : Nat) (X C : Bitvec w)
   %r = shl (C1 << C2), %A
 
 -/
-theorem alive_C1: forall (A C2 C1 : Bitvec 31)
+theorem alive_InstCombineShift__724: forall (A C2 C1 : Bitvec 31)
 , TSSA.eval
   (Op := Op) (e := e)
   (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec 31)))
