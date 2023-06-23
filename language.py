@@ -1,3 +1,6 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
 # Copyright 2013-2015 The Alive authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -1452,7 +1455,7 @@ def to_lean_value(val, state):
       bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
     if val.getName() == "true" or val.getName() == "false":
       assert bitwidth == 1
-      const_expr = "const (Bitvec.ofBool %s)" % val.getName()
+      const_expr = "const (↑%s)" % val.getName()
     else:
       const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val.getName())
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
