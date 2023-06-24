@@ -1450,14 +1450,22 @@ def to_lean_value(val, state):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
     bitwidth = to_bitwidth(val)
-    const_bitwidth = state.const_bitwidth(val.getName())
+    val_str = val.getName()
+    const_bitwidth = state.const_bitwidth(val_str)
     if const_bitwidth is not None:
       bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
-    if val.getName() == "true" or val.getName() == "false":
+    if val_str == "true" or val_str == "false":
       assert bitwidth == 1
-      const_expr = "const (↑%s)" % val.getName()
+      const_expr = "const (↑%s)" % val_str
+    elif str(val_str) == "1":
+      const_expr = "const (1)"
+    elif str(val_str) == "0":
+      const_expr = "const (0)"
+    elif str(val_str) == "-1":
+      const_expr = "const (-1)"
     else:
-      const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val.getName())
+      const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val_str)
+      print("dbg> exotic constant: (%s)")
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)

@@ -568,7 +568,7 @@ def print_as_lean(opt):
 
 LEAN_PREAMBLE= """import SSA.Core.WellTypedFramework
 import SSA.Core.Tactic
-import SSA.Projects.InstCombine.InstCombineBase
+import SSA.Projects.InstCombine.Base
 import SSA.Projects.InstCombine.Tactic
 
 open SSA InstCombine EDSL
@@ -627,7 +627,7 @@ def summarize_stats(stats):
   print("summary> total:%5s / %5s" % (total_successes, total_counts))
 
 def convert_to_lean_all():
-  out_path = "experiment-out-data/InstCombineAlive.lean"
+  out_path = "experiment-out-data/Alive.lean"
   paths = ["tests/instcombine/addsub.opt",
            "tests/instcombine/andorxor.opt",
            "tests/instcombine/muldivrem.opt",
@@ -670,7 +670,7 @@ def convert_to_lean_all():
       print("error: %s" % err)
       print("--")
 
-    stats.write("experiment-out-data/InstCombineAlive.csv")
+    stats.write("experiment-out-data/Alive.csv")
 
     summarize_stats(stats)
 if __name__ == "__main__":
