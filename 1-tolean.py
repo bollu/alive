@@ -1,4 +1,5 @@
 #! /usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 # Copyright 2014-2015 The Alive authors.
 #
@@ -27,6 +28,8 @@ import stopit
 import pdb
 import time
 import csv
+import re
+
 def block_model(s, sneg, m):
   # First simplify the model.
   sneg.push()
@@ -493,12 +496,43 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
 
   return True # succeeded, did not time out
 
+def sanitize_name(name):
+  renamed = re.sub(r'[()~&>|^=]', '', name)
+  renamed = re.sub(r'[:, -]', '_', renamed)
+  return renamed
+
+def build_width2names(name2constants):
+# build a map mapping each bitwidth to the list of constants
+# with that bitwidth. This is used when producing Lean code
+# to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
+  width2names = {}
+  for name in name2constants:
+    bw = unify_bitwidths([cst.bitwidth for cst in name2constants[name]])
+    if bw not in width2names:
+      width2names[bw] = [name]
+    else:
+      width2names[bw].append(name)
+  return width2names
 
 def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
-  (src_str, src_state) = to_lean_prog(src, num_indent=2, skip=[])
-  (tgt_str, tgt_state) = to_lean_prog(tgt, num_indent=2, skip=[])
-
+  print("dbg> printing " + name + " as lean")
+  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
+  bitwidth = unify_bitwidths([src_bw, tgt_bw])
+  constant_decls = ""
+  width2names = build_width2names(tgt_state.constant_names)
+  for w in width2names.iterkeys():
+    constant_decls += "("
+    constant_decls += " ".join([nm for nm in width2names[w]])
+    constant_decls += " : Bitvec " + str(w) + ")\n"
+  for w in tgt_state.constant_names.iterkeys():
+    assert w in src_state.constant_names
+  print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
+  if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
+    forall_stmt = " : forall (w : Nat) "
+  else:
+    forall_stmt =  ": forall "
   print "----------------------------------------"
   out = ""
   out += ("\n\n")
@@ -509,32 +543,35 @@ def print_as_lean(opt):
   out += "=>\n"
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
-  out += "open SSA EDSL in\n"
-  out += ("example : forall (w : Nat) ")
-  out += "(" + " ".join(src_state.constant_names + tgt_state.constant_names) + " : Nat)"
+  out += ("theorem alive_" + sanitize_name(name) + forall_stmt)
+  out += constant_decls
   out += (",")
-  out += "TSSA.eval\n"
+  out += " TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))\n"
+  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += "  [dsl_bb|\n"
   out += src_str + "\n"
   out += ("  ]");
-  out += ("  = \n");
+  out += ("  ⊑\n");
   out += "  TSSA.eval\n"
   out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.TERMINATOR (UserType.base (BaseType.bitvec w)))\n"
+  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += "  [dsl_bb|\n"
   out += tgt_str + "\n"
   out += ("  ]");
-  out += ("\n  := by sorry")
+  out += ("\n  := by")
+  out += ("\n     simp_mlir")
+  out += ("\n     simp_alive")
+  out += ("\n     print_goal_as_error")
   return out;
 
 
-LEAN_PREAMBLE="""
-import SSA.Core.WellTypedFramework
-import SSA.Projects.InstCombine.InstCombineBase
+LEAN_PREAMBLE= """import SSA.Core.WellTypedFramework
+import SSA.Core.Tactic
+import SSA.Projects.InstCombine.Base
+import SSA.Projects.InstCombine.Tactic
 
-open SSA InstCombine
+open SSA InstCombine EDSL
 """
 
 
@@ -590,7 +627,7 @@ def summarize_stats(stats):
   print("summary> total:%5s / %5s" % (total_successes, total_counts))
 
 def convert_to_lean_all():
-  out_path = "experiment-out-data/InstCombineAlive.lean"
+  out_path = "experiment-out-data/Alive.lean"
   paths = ["tests/instcombine/addsub.opt",
            "tests/instcombine/andorxor.opt",
            "tests/instcombine/muldivrem.opt",
@@ -598,6 +635,7 @@ def convert_to_lean_all():
            "tests/instcombine/shift.opt"]
   stats = Statistics()
   errors = []
+  names = []
   with open(out_path, "w") as of:
     of.write(LEAN_PREAMBLE)
     # first run everything for 1 minute, then 5 minutes, then 1 hour
@@ -607,9 +645,13 @@ def convert_to_lean_all():
         opts = parse_opt_file(f.read())
         for opt in opts:
             name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+            while name in names:
+              name = name + "'"
+            names.append(name)
+            opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
             print("%s : %s" % (pre, pre.__class__))
             if str(pre) != "true": continue
-            error = None 
+            error = None
             try:
               out = print_as_lean(opt)
               of.write(out)
@@ -628,7 +670,7 @@ def convert_to_lean_all():
       print("error: %s" % err)
       print("--")
 
-    stats.write("experiment-out-data/InstCombineAlive.csv")
+    stats.write("experiment-out-data/Alive.csv")
 
     summarize_stats(stats)
 if __name__ == "__main__":

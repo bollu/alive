@@ -1,3 +1,6 @@
+#! /usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
 # Copyright 2013-2015 The Alive authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -1110,6 +1113,34 @@ class Ret(TerminatorInst):
     return And(self.type == self.val.type, self.type.getTypeConstraints(bitwidth))
 
 
+def to_bitwidth(obj):
+    t = str(obj.type)
+    if len(t) > 0 and t[0] == 'i':
+      return int(t[1:])
+    else:
+      return 'w'
+
+def unify_bitwidths_base(w1, w2):
+  if w1 == 'w':
+    return w2
+  if w2 == 'w':
+    return w1
+  if w1 != w2:
+      raise RuntimeError("Error: incompatible bitwidths: " + str(w1) + "and" + str(w2))
+  else:
+    return w1
+
+def unify_bitwidths(ws):
+  #single var case
+  if isinstance(ws, str) or isinstance(ws, int):
+    return ws
+  assert isinstance(ws, list)
+  res = 'w'
+  for w in ws:
+    res = unify_bitwidths_base(w,res)
+  print("dbg> unifying" + str(ws) + ":" + str(res))
+  return res
+
 ################################
 def print_prog(p, skip):
   for bb, instrs in p.iteritems():
@@ -1141,9 +1172,57 @@ def to_str_prog(p, skip):
         out += "  %s\n" % v
   return out
 
+def propagate_bitwidth(expr,bw, skip=[]):
+  print("dbg> propagating bw " + str(bw) + " to " + str(expr))
+  if isinstance(expr, LExprUnit):
+    return
+  if isinstance(expr, LExprPair):
+    if 1 not in skip:
+      propagate_bitwidth(expr.v1.expr, bw)
+    if 2 not in skip:
+      propagate_bitwidth(expr.v2.expr, bw)
+    return
+  if isinstance(expr, LExprTriple):
+    if 1 not in skip:
+      propagate_bitwidth(expr.v1.expr, bw)
+    if 2 not in skip:
+      propagate_bitwidth(expr.v2.expr, bw)
+    if 3 not in skip:
+      propagate_bitwidth(expr.v3.expr, bw)
+    return
+  if isinstance(expr, LExprOp):
+    #if expr.bitwidth == bw:
+    #  return # stop if no need to propagate further
+    ##don't propagate something more general
+    if unify_bitwidths([expr.bitwidth, bw]) != bw:
+      return
+    #icmp's arguments have nothing to do with its output. stop
+    if expr.op.find("icmp") != -1:
+      return
+    #it is a pretty hacky design with a string for the const expr
+    #so we hackily update it too
+    if expr.op.find("ofInt") != -1:
+      expr.op = expr.op.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
+      print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
+    expr.bitwidth = bw
+    if expr.op.find("select") != -1:
+      skip = [1]
+      #first argument to a select has to have width 1
+      print("dbg> propagating select first argument %s" % expr.v)
+      propagate_bitwidth(expr.v, 1, [2,3])
+    else:
+      skip = []
+    propagate_bitwidth(expr.v, bw, skip)
+    return
+  if isinstance(expr, LVar):
+    propagate_bitwidth(expr.expr, bw)
+    return
+  print("dbg>  can't propagate from %s (type %s). Unknown type" % (expr, expr.__class__))
+
 class LVar:
   def __init__(self, v):
     assert isinstance(v, int)
+    self.expr = None
     self.v = v
 
   def __repr__(self):
@@ -1160,7 +1239,9 @@ class LExpr:
 
 
 class LExprUnit(LExpr):
-  def __init__(self): pass
+  def __init__(self):
+    self.bitwidth = 'w'
+  def bw(self): return self.bitwidth
   def __str__(self): return self.to_lean_str()
   def to_lean_str(self): return "unit: "
 
@@ -1170,6 +1251,9 @@ class LExprPair(LExpr):
     assert isinstance(v2, LVar)
     self.v1 = v1
     self.v2 = v2
+    self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth]
+
+  def bw(self): return self.bitwidth
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1185,6 +1269,9 @@ class LExprTriple(LExpr):
     self.v1 = v1
     self.v2 = v2
     self.v3 = v3
+    self.bitwidth = [v1.expr.bitwidth, v2.expr.bitwidth, v3.expr.bitwidth]
+
+  def bw(self): return self.bitwidth
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1196,27 +1283,53 @@ class LExprTriple(LExpr):
             self.v3.to_lean_str()
 
 class LExprOp(LExpr):
-  def __init__(self, op, v):
+  def __init__(self, op, bitwidth, v):
     assert isinstance(op, str)
+    assert isinstance(bitwidth, int) or isinstance(bitwidth, str)
     assert isinstance(v, LVar)
     self.op = op
+
+    if self.op.find("select") != -1:
+      self.bitwidth = unify_bitwidths(v.expr.bitwidth[1:] + [bitwidth])
+    else:
+      if isinstance(v.expr.bitwidth, list):
+        self.bitwidth = unify_bitwidths(v.expr.bitwidth + [bitwidth])
+      else:
+        self.bitwidth = unify_bitwidths([v.expr.bitwidth, bitwidth])
+    propagate_bitwidth(v.expr, self.bitwidth)
     self.v = v
+
+  #output bitwidth
+  def bw(self):
+    if self.op.find("icmp") != -1:
+      return 1
+    else:
+      return self.bitwidth
+
   def __repr__(self):
-    return "op:" + self.op + " " + self.v.to_lean_str()
+    if self.op.find("const") == -1:
+      return "op:" + self.op + " " + str(self.bitwidth) + " " + self.v.to_lean_str()
+    else:
+      return "op:" + self.op + " " + self.v.to_lean_str()
 
   def to_lean_str(self):
     return str(self)
 
+
 class ToLeanState:
   def unit_index(self):
-    return LVar(9999)
+    return self.unit_var
 
-  def __init__(self):
+  def __init__(self, constants):
     self.assigns = []
-    self.constant_names = []
+    if constants is None:
+      self.constant_names = {}
+    else:
+      self.constant_names = constants.copy()
     self.varmap = {}
+    self.unit_var = LVar(0) # 0 should never be assigned
+    self.unit_var.expr = LExprUnit()
     self.nvars = 0 # number of variables so far
-    pass
 
   def new_var(self): # return a new variable name
     self.nvars += 1
@@ -1228,13 +1341,24 @@ class ToLeanState:
     print "dbg> adding mapping '%s' -> '%s'" % (var, lvar)
     self.varmap[var] = lvar
 
-  def add_constant_name(self, name):
+  def add_constant_name(self, name, const_expr):
     assert isinstance(name, str)
-    self.constant_names.append(name)
-  
+    if self.constant_names.has_key(name):
+        #I'm hoping this is a refrerence and will get mutated
+        self.constant_names[name].append(const_expr)
+    else:
+        self.constant_names[name] = [const_expr]
+
+  def const_bitwidth(self, name):
+    if name not in self.constant_names:
+      return None
+    else:
+      return unify_bitwidths([x.bitwidth for x in self.constant_names[name]])
+
   def _append_assign(self, lhs, rhs):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
+    lhs.expr = rhs
     self.assigns.append((lhs, rhs))
 
   def build_assign(self, rhs):
@@ -1273,9 +1397,9 @@ def to_lean_unary_cst_value(val, state):
   assert isinstance(val, CnstUnaryOp)
   assert isinstance(state, ToLeanState)
   if val.op == CnstUnaryOp.Not:
-    return state.build_assign(LExprOp("not w", to_lean_value(val.v, state)))
+    return state.build_assign(LExprOp("not", to_bitwidth(val), to_lean_value(val.v, state)))
   elif val.op == CnstUnaryOp.Neg:
-    return state.build_assign(LExprOp("neg w", to_lean_value(val.v, state)))
+    return state.build_assign(LExprOp("neg", to_bitwidth(val), to_lean_value(val.v, state)))
   else:
     raise RuntimeError("unknown unary constant '%s'" % (val.op, ))
 
@@ -1299,18 +1423,21 @@ def to_lean_binary_cst_value(val, state):
     CnstBinaryOp.DivU : "divu",
     CnstBinaryOp.RemU : "remu",
     CnstBinaryOp.AShr : "ashr",
-    CnstBinaryOp.LShr : "lhsr",
+    CnstBinaryOp.LShr : "lshr",
     CnstBinaryOp.Shl : "shl",
   }
 
   opname = None
   if val.op in mapping:
-    opname = mapping[val.op] + " " + "w"
+    opname = mapping[val.op]
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
-
   largs = state.build_pair(v1, v2)
-  return state.build_assign(LExprOp(opname, largs))
+  bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bw(), v2.expr.bw()])
+  propagate_bitwidth(v1.expr, bitwidth)
+  propagate_bitwidth(v2.expr, bitwidth)
+  print "dbg> building op '%s' with bitwidth '%s'" % (opname, bitwidth)
+  return state.build_assign(LExprOp(opname, bitwidth, largs))
 
 def to_lean_value(val, state):
   assert isinstance(val, Value)
@@ -1322,8 +1449,24 @@ def to_lean_value(val, state):
   if isinstance(val, CnstBinaryOp):
     return to_lean_binary_cst_value(val, state)
   if isinstance(val, ConstantVal):
-    # FIXME: hardcode width 'w'
-    lrhs = LExprOp("const (Bitvec.ofInt' w (%s))" % val.getName(), state.unit_index())
+    bitwidth = to_bitwidth(val)
+    val_str = val.getName()
+    const_bitwidth = state.const_bitwidth(val_str)
+    if const_bitwidth is not None:
+      bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
+    if val_str == "true" or val_str == "false":
+      assert bitwidth == 1
+      const_expr = "const (↑%s)" % val_str
+    elif str(val_str) == "1":
+      const_expr = "const (1)"
+    elif str(val_str) == "0":
+      const_expr = "const (0)"
+    elif str(val_str) == "-1":
+      const_expr = "const (-1)"
+    else:
+      const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val_str)
+      print("dbg> exotic constant: (%s)")
+    lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     return lval
@@ -1332,11 +1475,15 @@ def to_lean_value(val, state):
     if lval is not None:
       return lval  
     cleaned_up_name = val.name.replace("%", "")
-    lrhs = LExprOp("const (Bitvec.ofInt' w (%s))" % cleaned_up_name, state.unit_index())
+    bitwidth = to_bitwidth(val)
+    const_bitwidth = state.const_bitwidth(cleaned_up_name)
+    if const_bitwidth is not None:
+      bitwidth = unify_bitwidths([bitwidth, const_bitwidth])
+    lrhs = LExprOp("const (%s)" % cleaned_up_name, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
     state.add_var_mapping(val.name, lval)
     # TODO: think if this can be unified with ConstantVal
-    state.add_constant_name(cleaned_up_name) # add a new constant to be generated in the def.
+    state.add_constant_name(cleaned_up_name, lrhs) # add a new constant to be generated in the def.
     return lval
   elif isinstance(val, Instr):
     return state.find_var_or_throw(val.getName())
@@ -1348,22 +1495,24 @@ def to_lean_binop(bop, state):
   lv1 = to_lean_value(bop.v1, state)
   lv2 = to_lean_value(bop.v2, state)
   pair = state.build_pair(lv1, lv2)
-  # FIXME: hardcoded width to be 'w'
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
+  propagate_bitwidth(lv1.expr, bitwidth)
+  propagate_bitwidth(lv2.expr, bitwidth)
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
-  if bop.op == BinOp.Add: return LExprOp("add w", pair)
-  if bop.op == BinOp.Sub: return LExprOp("sub w", pair)
-  if bop.op == BinOp.Mul: return LExprOp("mul w", pair)
-  if bop.op == BinOp.UDiv: return LExprOp("udiv w", pair)
-  if bop.op == BinOp.SDiv: return LExprOp("sdiv w", pair)
-  if bop.op == BinOp.URem: return LExprOp("urem w", pair)
-  if bop.op == BinOp.SRem: return LExprOp("srem w", pair)
-  if bop.op == BinOp.Shl: return LExprOp("shl w", pair)
-  if bop.op == BinOp.AShr: return LExprOp("ashr w", pair)
-  if bop.op == BinOp.LShr: return LExprOp("lhsr w", pair)
-  if bop.op == BinOp.Mul: return LExprOp("mul w", pair)
-  if bop.op == BinOp.And: return LExprOp("and w", pair)
-  if bop.op == BinOp.Or: return LExprOp("or w", pair)
-  if bop.op == BinOp.Xor: return LExprOp("xor w", pair)
+  if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
+  if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)
+  if bop.op == BinOp.Mul: return LExprOp("mul", bitwidth, pair)
+  if bop.op == BinOp.UDiv: return LExprOp("udiv", bitwidth, pair)
+  if bop.op == BinOp.SDiv: return LExprOp("sdiv", bitwidth, pair)
+  if bop.op == BinOp.URem: return LExprOp("urem", bitwidth, pair)
+  if bop.op == BinOp.SRem: return LExprOp("srem", bitwidth, pair)
+  if bop.op == BinOp.Shl: return LExprOp("shl", bitwidth, pair)
+  if bop.op == BinOp.AShr: return LExprOp("ashr", bitwidth, pair)
+  if bop.op == BinOp.LShr: return LExprOp("lshr", bitwidth, pair)
+  if bop.op == BinOp.Mul: return LExprOp("mul", bitwidth, pair)
+  if bop.op == BinOp.And: return LExprOp("and", bitwidth, pair)
+  if bop.op == BinOp.Or: return LExprOp("or", bitwidth, pair)
+  if bop.op == BinOp.Xor: return LExprOp("xor", bitwidth, pair)
   else:
     raise RuntimeError("unknown binop '%s' ; bop.op = '%s'" % (bop, bop.op)) 
 
@@ -1372,10 +1521,12 @@ def to_lean_select(instr, state):
   assert isinstance(instr, Select)
   assert isinstance(state, ToLeanState)
   lcond = to_lean_value(instr.c, state)
+  propagate_bitwidth(lcond, 1)
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   triple = state.build_triple(lcond, lv1, lv2)
-  return LExprOp("select", triple)
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
+  return LExprOp("select", bitwidth, triple)
 
 def to_lean_conversion_op(instr, state):
   assert isinstance(instr, ConversionOp)
@@ -1389,11 +1540,12 @@ def to_lean_conversion_op(instr, state):
 
 def to_lean_icmp(instr, state):
   assert isinstance(instr, Icmp)
-  opname = "%s w" % (Icmp.opnames[instr.op], )
+  opname = "icmp %s "  % (Icmp.opnames[instr.op], )
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = state.build_pair(lv1, lv2)
-  return LExprOp(opname, pair)
+  bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
+  return LExprOp(opname, bitwidth, pair)
 
 def to_lean_instr(instr, state):
   print("dbg> to_lean_instr(%s) type(%s)" % (instr, instr.__class__))
@@ -1407,18 +1559,20 @@ def to_lean_instr(instr, state):
     return to_lean_icmp(instr, state)
   elif isinstance(instr, CopyOperand):
     var = to_lean_value(instr.v, state)
-    return LExprOp("copy", var) # copy variable into this value.
+    return LExprOp("copy", var.expr.bw() ,var) # copy variable into this value.
   else:
     raise RuntimeError("unknown instruction '%s' (type: '%s')" % (instr, instr.__class__))
-  
-    
-def to_lean_prog(p, num_indent=2, skip=[]):
-  state = ToLeanState()
-  out = ""
-  out += " "*num_indent + "^bb"
-  
+
+#def update_constants(state, assigns):
+#  for (lhs,rhs) in assignments:
+#    if isinstance(rhs, LExprOp) and rhs.op.find("const") != -1:
+
+def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants = None):
+  state = ToLeanState(constants=constants)
+
+  print("dbg> to_lean_prog(%s) type(%s) expected bitwidth: %s" % (p, p.__class__, expected_bitwidth))
   # create a single unit that is reused everywhere.
-  state._append_assign(state.unit_index(), LExprUnit()) 
+  state._append_assign(state.unit_index(), LExprUnit())
   for bb, instrs in p.iteritems():
     if bb != "":
       raise RuntimeError("expected no basic block name, got '%s'" % (bb, ))
@@ -1429,6 +1583,7 @@ def to_lean_prog(p, num_indent=2, skip=[]):
       # print("dbg> type of k(%s) : '%s', of v(%s) : '%s'" % (k, type(k), v, v.__class__))
       print("dbg> k:%s := v:%s" % (k, v))
       lrhs = to_lean_instr(v, state) # l for lean
+      #TODO here
       kstr = str(k)
       if kstr[0] == '%':
         llhs = state.build_assign(lrhs)
@@ -1436,20 +1591,29 @@ def to_lean_prog(p, num_indent=2, skip=[]):
       else:
         raise RuntimeError("unknown instruction with side effect: '%s'" % ((k, v)))
   last_var = None
+  if expected_bitwidth is not None:
+    (lhs,rhs) = state.assigns[-1]
+    lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
+    state.assigns[-1] = (lhs,rhs)
+    propagate_bitwidth(rhs, expected_bitwidth)
+
+  print("dbg> printing string start. ")
+  out = ""
+  out += " "*num_indent + "^bb"
   for (i, (lhs, rhs)) in enumerate(state.assigns):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
     out += "\n" + " " * num_indent + lhs.to_lean_str() + " := " + rhs.to_lean_str()
     if i + 1 < len(state.assigns):
       out += ";" # we have more, so print a ;
-
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
+  bitwidth = last_var.expr.bw()
   out += "\n" + " " * num_indent + "dsl_ret " + lhs.to_lean_str()
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
-  return (out, state)
+  return (out, state, bitwidth)
 
 def countUsers(prog):
   m = {}
