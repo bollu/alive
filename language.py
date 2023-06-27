@@ -1498,6 +1498,8 @@ def to_lean_binop(bop, state):
   bitwidth = unify_bitwidths([lv1.expr.bw(), lv2.expr.bw()])
   propagate_bitwidth(lv1.expr, bitwidth)
   propagate_bitwidth(lv2.expr, bitwidth)
+  if bop.flags != []:
+    raise RuntimeError("binop with flags not supported")
   #   And, Or, Xor, Add, Sub, Mul, Div, DivU, Rem, RemU, AShr, LShr, Shl,\
   if bop.op == BinOp.Add: return LExprOp("add", bitwidth, pair)
   if bop.op == BinOp.Sub: return LExprOp("sub", bitwidth, pair)

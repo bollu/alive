@@ -3,19 +3,19 @@ tests/instcombine/addsub.opt,AddSub:1043,
 tests/instcombine/addsub.opt,AddSub:1098,unknown conversion op 'zext i1 %a' ; conversionop.op = 'zext'
 tests/instcombine/addsub.opt,AddSub:1152,
 tests/instcombine/addsub.opt,AddSub:1156,
-tests/instcombine/addsub.opt,AddSub:1156-2,
-tests/instcombine/addsub.opt,AddSub:1156-3,
+tests/instcombine/addsub.opt,AddSub:1156-2,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1156-3,binop with flags not supported
 tests/instcombine/addsub.opt,AddSub:1164,
 tests/instcombine/addsub.opt,AddSub:1165,
 tests/instcombine/addsub.opt,AddSub:1176,
 tests/instcombine/addsub.opt,AddSub:1202,
 tests/instcombine/addsub.opt,AddSub:1295,
 tests/instcombine/addsub.opt,AddSub:1309,
-tests/instcombine/addsub.opt,AddSub:1309-2,
-tests/instcombine/addsub.opt,AddSub:1309-3,
+tests/instcombine/addsub.opt,AddSub:1309-2,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1309-3,binop with flags not supported
 tests/instcombine/addsub.opt,AddSub:1539,
 tests/instcombine/addsub.opt,AddSub:1539-2,
-tests/instcombine/addsub.opt,AddSub:1546,
+tests/instcombine/addsub.opt,AddSub:1546,binop with flags not supported
 tests/instcombine/addsub.opt,AddSub:1556,
 tests/instcombine/addsub.opt,AddSub:1560,
 tests/instcombine/addsub.opt,AddSub:1564,
@@ -106,10 +106,10 @@ tests/instcombine/muldivrem.opt,152,
 tests/instcombine/muldivrem.opt,160,
 tests/instcombine/muldivrem.opt,229,
 tests/instcombine/muldivrem.opt,239,
-tests/instcombine/muldivrem.opt,265,
-tests/instcombine/muldivrem.opt,265-2,
-tests/instcombine/muldivrem.opt,266,
-tests/instcombine/muldivrem.opt,266-2,
+tests/instcombine/muldivrem.opt,265,binop with flags not supported
+tests/instcombine/muldivrem.opt,265-2,binop with flags not supported
+tests/instcombine/muldivrem.opt,266,binop with flags not supported
+tests/instcombine/muldivrem.opt,266-2,binop with flags not supported
 tests/instcombine/muldivrem.opt,275,
 tests/instcombine/muldivrem.opt,275-2,
 tests/instcombine/muldivrem.opt,276,
@@ -122,11 +122,11 @@ tests/instcombine/muldivrem.opt,809,unknown conversion op 'zext %c' ; conversion
 tests/instcombine/muldivrem.opt,820,
 tests/instcombine/muldivrem.opt,820',
 tests/instcombine/muldivrem.opt,891,
-tests/instcombine/muldivrem.opt,891-exact,
+tests/instcombine/muldivrem.opt,891-exact,binop with flags not supported
 tests/instcombine/muldivrem.opt,976,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,976-exact,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,1030,
-tests/instcombine/muldivrem.opt,1049,
+tests/instcombine/muldivrem.opt,1049,binop with flags not supported
 tests/instcombine/muldivrem.opt,1285,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:485-2,Error: incompatible bitwidths: 1and32
