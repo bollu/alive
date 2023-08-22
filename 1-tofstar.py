@@ -514,7 +514,7 @@ def build_width2names(name2constants):
       width2names[bw].append(name)
   return width2names
 
-def print_as_lean(opt):
+def print_as_fstar(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
   print("dbg> printing " + name + " as lean")
   (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
@@ -525,53 +525,40 @@ def print_as_lean(opt):
   for w in width2names.iterkeys():
     constant_decls += "("
     constant_decls += " ".join([nm for nm in width2names[w]])
-    constant_decls += " : Bitvec " + str(w) + ")\n"
+    constant_decls += " : BV.bv_t " + str(w) + ")\n"
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
-    forall_stmt = " : forall (w : Nat) "
+    forall_stmt = " : forall (w : pos) "
   else:
     forall_stmt =  ": forall "
   print "----------------------------------------"
   out = ""
   out += ("\n\n")
-  out += ("-- Name:%s\n" % (name,))
-  out += ("-- precondition: %s\n" % (pre if pre is not None else 'NONE', ))
-  out += "/-\n"
+  out += ("(* Name:%s *)\n" % (name,))
+  out += ("(* precondition: %s *)\n" % (pre if pre is not None else 'NONE', ))
+  out += "(*\n"
   out += to_str_prog(src, []) + "\n"
   out += "=>\n"
   out += to_str_prog(tgt, []) + "\n"
-  out += "-/\n"
-  out += ("theorem alive_" + sanitize_name(name) + forall_stmt)
+  out += "*)\n"
+  out += ("let alive_" + sanitize_name(name) + forall_stmt)
   out += constant_decls
   out += (",")
-  out += " TSSA.eval\n"
-  out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  out += "  [dsl_bb|\n"
-  out += src_str + "\n"
-  out += ("  ]");
-  out += ("  ⊑\n");
-  out += "  TSSA.eval\n"
-  out += "  (Op := Op) (e := e)\n"
-  out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  out += "  [dsl_bb|\n"
-  out += tgt_str + "\n"
-  out += ("  ]");
-  out += ("\n  := by")
-  out += ("\n     simp_mlir")
-  out += ("\n     simp_alive")
-  out += ("\n     print_goal_as_error")
+  # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
+  out += "  assert("
+  out += src_str 
+  out += (" == ");
+  out += tgt_str + ")\n"
+  out += " = ()"
   return out;
 
 
-LEAN_PREAMBLE= """import SSA.Core.WellTypedFramework
-import SSA.Core.Tactic
-import SSA.Projects.InstCombine.Base
-import SSA.Projects.InstCombine.Tactic
-
-open SSA InstCombine EDSL
+LEAN_PREAMBLE= """
+module Alive
+open Alive.AST
+open FStar.BV
 """
 
 
@@ -627,12 +614,13 @@ def summarize_stats(stats):
   print("summary> total:%5s / %5s" % (total_successes, total_counts))
 
 def convert_to_lean_all():
-  out_path = "experiment-out-data/Alive-Fstar.fstar"
-  paths = ["tests/instcombine/addsub.opt",
-           "tests/instcombine/andorxor.opt",
-           "tests/instcombine/muldivrem.opt",
-           "tests/instcombine/select.opt",
-           "tests/instcombine/shift.opt"]
+  out_path = "FStarOut/Alive.fst"
+  paths = ["tests/instcombine/addsub.opt"
+           # "tests/instcombine/andorxor.opt",
+           # "tests/instcombine/muldivrem.opt",
+           # "tests/instcombine/select.opt",
+           # "tests/instcombine/shift.opt"
+          ]
   stats = Statistics()
   errors = []
   names = []
@@ -650,10 +638,10 @@ def convert_to_lean_all():
             names.append(name)
             opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
             print("%s : %s" % (pre, pre.__class__))
-            if str(pre) != "true": continue
+            if str(pre) != "true": continue # remove everything with preconditions.
             error = None
             try:
-              out = print_as_lean(opt)
+              out = print_as_fstar(opt)
               of.write(out)
             except RuntimeError as e:
               error = str(e)
@@ -670,7 +658,7 @@ def convert_to_lean_all():
       print("error: %s" % err)
       print("--")
 
-    stats.write("experiment-out-data/Alive-Fstar.csv")
+    stats.write("FStarOut/Alive-FStar.csv")
 
     summarize_stats(stats)
 if __name__ == "__main__":
