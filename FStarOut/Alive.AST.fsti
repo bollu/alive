@@ -9,9 +9,9 @@ Level 3: semantics + wraparound + UB (overflow is UB)
 *)
 
 let const (n : pos) (x : BV.bv_t n) : option (BV.bv_t n) = Some x
-let add (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) = Some (BV.bvadd x y)
-let sub (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) = Some (BV.bvsub x y)
-let mul (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) = Some (BV.bvadd x y) (* HACK *)
+let add (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) =  (BV.bvadd x y)
+let sub (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) =  (BV.bvsub x y)
+let mul (n : pos) (x : BV.bv_t n) (y : BV.bv_t n) : (BV.bv_t n) =  (BV.bvadd x y) (* HACK *)
 
 open FStar.BV
 let proof2 (x y : BV.bv_t 32) = assert (bvadd x y == bvadd y  x)

@@ -1158,18 +1158,17 @@ def print_prog(p, skip):
 
 def to_str_prog(p, skip):
   out = ""
-  for bb, instrs in p.iteritems():
-    if bb != "":
-      out += "%s:\n" % bb
-
-    for k,v in instrs.iteritems():
-      if k in skip:
-        continue
-      k = str(k)
-      if k[0] == '%':
-        out += '  %s = %s\n' % (k, v)
-      else:
-        out += "  %s\n" % v
+  if len(p) != 1:
+      raise RuntimeError("ERROR: cannot Fstarify prog with more that one basic block (%s)", len(p)) 
+  (_bb, instrs) = p.items()[0]
+  for k,v in instrs.iteritems():
+    if k in skip:
+      continue
+    k = str(k)
+    if k[0] == '%':
+      out += ' let %s = %s in \n' % (k, v)
+    else:
+      out += " %s\n" % v
   return out
 
 def propagate_bitwidth(expr,bw, skip=[]):
@@ -1229,7 +1228,8 @@ class LVar:
     return self.to_lean_str()
 
   def to_lean_str(self):
-    return "%v" + str(self.v)
+    # return "%v" + str(self.v)
+    return "var_" + str(self.v)
 
   
 class LExpr:
@@ -1243,7 +1243,7 @@ class LExprUnit(LExpr):
     self.bitwidth = 'w'
   def bw(self): return self.bitwidth
   def __str__(self): return self.to_lean_str()
-  def to_lean_str(self): return "unit: "
+  def to_lean_str(self): return "unit"
 
 class LExprPair(LExpr):
   def __init__(self, v1, v2):
@@ -1259,7 +1259,7 @@ class LExprPair(LExpr):
     return self.to_lean_str()
 
   def to_lean_str(self):
-    return "pair:" + self.v1.to_lean_str() + " " + self.v2.to_lean_str()
+    return "pair " + self.v1.to_lean_str() + " " + self.v2.to_lean_str()
 
 class LExprTriple(LExpr):
   def __init__(self, v1, v2, v3):
@@ -1308,14 +1308,14 @@ class LExprOp(LExpr):
 
   def __repr__(self):
     if self.op.find("const") == -1:
-      return "op:" + self.op + " " + str(self.bitwidth) + " " + self.v.to_lean_str()
+     # is a const op. TODO: I don't need to pass the damn unit argument anumore.
+      return "op_" + self.op + " " + str(self.bitwidth) + " " + self.v.to_lean_str()
     else:
-      return "op:" + self.op + " " + self.v.to_lean_str()
+      return "op_" + self.op + " " + self.v.to_lean_str()
 
   def to_lean_str(self):
     return str(self)
-
-
+  
 class ToLeanState:
   def unit_index(self):
     return self.unit_var
@@ -1475,6 +1475,7 @@ def to_lean_value(val, state):
     if lval is not None:
       return lval  
     cleaned_up_name = val.name.replace("%", "")
+    cleaned_up_name = "input_" + cleaned_up_name.lower() # input vars
     bitwidth = to_bitwidth(val)
     const_bitwidth = state.const_bitwidth(cleaned_up_name)
     if const_bitwidth is not None:
@@ -1601,18 +1602,16 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
 
   print("dbg> printing string start. ")
   out = ""
-  out += " "*num_indent + "^bb"
+  # out += " "*num_indent + "^bb"
   for (i, (lhs, rhs)) in enumerate(state.assigns):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
-    out += "\n" + " " * num_indent + lhs.to_lean_str() + " := " + rhs.to_lean_str()
-    if i + 1 < len(state.assigns):
-      out += ";" # we have more, so print a ;
+    out += "\n" + " " * num_indent + "let " + lhs.to_lean_str() + " = " + rhs.to_lean_str() + " in"
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
   bitwidth = last_var.expr.bw()
-  out += "\n" + " " * num_indent + "dsl_ret " + lhs.to_lean_str()
+  out += "\n" + " " * num_indent + "(* return_value *) " + lhs.to_lean_str()
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
   return (out, state, bitwidth)

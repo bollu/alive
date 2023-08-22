@@ -3,3 +3,6 @@
 libz3.so
 z3*.py
 *.code-workspace
+*.sw*
+[#]*[#]
+.[#]*[#]

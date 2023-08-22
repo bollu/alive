@@ -530,9 +530,9 @@ def print_as_fstar(opt):
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
-    forall_stmt = " : forall (w : pos) "
+    forall_stmt = " (w : pos) "
   else:
-    forall_stmt =  ": forall "
+    forall_stmt =  " "
   print "----------------------------------------"
   out = ""
   out += ("\n\n")
@@ -545,12 +545,12 @@ def print_as_fstar(opt):
   out += "*)\n"
   out += ("let alive_" + sanitize_name(name) + forall_stmt)
   out += constant_decls
-  out += (",")
+  # out += (",")
   # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  out += "  assert("
+  out += " : Lemma (("
   out += src_str 
-  out += (" == ");
-  out += tgt_str + ")\n"
+  out += (") == (");
+  out += tgt_str + "))\n"
   out += " = ()"
   return out;
 
@@ -631,6 +631,8 @@ def convert_to_lean_all():
       with open(path, "r") as f:
         print("parsing '%s'" %(path, ))
         opts = parse_opt_file(f.read())
+        CUTOFF = 1
+        opts = opts[0:2]
         for opt in opts:
             name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
             while name in names:
