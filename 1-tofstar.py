@@ -555,9 +555,22 @@ def print_as_fstar(opt):
 
 
 LEAN_PREAMBLE= """
-module Alive
-open Alive.AST
+module U = FStar.UInt
+module BV = FStar.BV
 open FStar.BV
+
+
+let op_const (#n : pos) (x : BV.bv_t n) (u: unit) : (BV.bv_t n) = x
+let op_and (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = bvand (fst x) (snd x)
+let op_xor (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = bvxor (fst x) (snd x)
+let op_add (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = bvadd (fst x) (snd x)
+let op_not (n : pos) (x : BV.bv_t n) :  (BV.bv_t n) = bvnot x
+let op_or (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = bvor (fst x) (snd x)
+let op_sub (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = bvsub (fst x) (snd x)
+let op_shl (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = fst x (* TODO *)
+let op_ashr (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = fst x (* TODO *)
+let op_lshr (n : pos) (x : BV.bv_t n * BV.bv_t n) : (BV.bv_t n) = fst x (* TODO *)
+
 """
 
 
@@ -614,7 +627,7 @@ def summarize_stats(stats):
 
 def convert_to_lean_all():
   out_path = "FStarOut/Alive.fst"
-  paths = ["tests/instcombine/addsub.opt"
+  paths = [("tests/instcombine/addsub.opt", "FStarOut/addsub/"),
            # "tests/instcombine/andorxor.opt",
            # "tests/instcombine/muldivrem.opt",
            # "tests/instcombine/select.opt",
@@ -623,31 +636,31 @@ def convert_to_lean_all():
   stats = Statistics()
   errors = []
   names = []
-  with open(out_path, "w") as of:
-    of.write(LEAN_PREAMBLE)
-    # first run everything for 1 minute, then 5 minutes, then 1 hour
-    for path in paths:
-      with open(path, "r") as f:
-        print("parsing '%s'" %(path, ))
-        opts = parse_opt_file(f.read())
-        CUTOFF = 1
-        opts = opts[0:2]
-        for opt in opts:
-            name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
-            while name in names:
-              name = name + "'"
-            names.append(name)
-            opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
-            print("%s : %s" % (pre, pre.__class__))
-            if str(pre) != "true": continue # remove everything with preconditions.
-            error = None
-            try:
-              out = print_as_fstar(opt)
-              of.write(out)
-            except RuntimeError as e:
-              error = str(e)
-              errors.append((path, opt, e))
-            stats.add(Statistics.Row(file=path, name=name, error=error))
+  for (inpath, outdir) in paths:
+    with open(inpath, "r") as f:
+      print("parsing '%s'" %(inpath, ))
+      opts = parse_opt_file(f.read())
+      for (optix, opt) in enumerate(opts):
+          name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+          while name in names:
+            name = name + "'"
+          names.append(name)
+          opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
+          print("%s : %s" % (pre, pre.__class__))
+          if str(pre) != "true": continue # remove everything with preconditions.
+          error = None
+          try:
+            if not os.path.isdir(outdir):
+              os.makedirs(outdir)
+            of = open("%s/Eg%d.fst" % (outdir, optix + 1), "w")
+            of.write("module Eg%d\n" % (optix + 1))
+            of.write(LEAN_PREAMBLE)
+            out = print_as_fstar(opt)
+            of.write(out)
+          except RuntimeError as e:
+            error = str(e)
+            errors.append((inpath, opt, e))
+          stats.add(Statistics.Row(file=inpath, name=name, error=error))
 
     print "#errors: %d" % len(errors)
     for (path, opt, err) in errors:

@@ -1,2 +1,27 @@
 file,name,error
 tests/instcombine/addsub.opt,AddSub:1043,
+tests/instcombine/addsub.opt,AddSub:1098,unknown conversion op 'zext i1 %a' ; conversionop.op = 'zext'
+tests/instcombine/addsub.opt,AddSub:1152,
+tests/instcombine/addsub.opt,AddSub:1156,
+tests/instcombine/addsub.opt,AddSub:1156-2,binops with flags '['nsw']' not supported
+tests/instcombine/addsub.opt,AddSub:1156-3,binops with flags '['nuw']' not supported
+tests/instcombine/addsub.opt,AddSub:1164,
+tests/instcombine/addsub.opt,AddSub:1165,
+tests/instcombine/addsub.opt,AddSub:1176,
+tests/instcombine/addsub.opt,AddSub:1202,
+tests/instcombine/addsub.opt,AddSub:1295,
+tests/instcombine/addsub.opt,AddSub:1309,
+tests/instcombine/addsub.opt,AddSub:1309-2,binops with flags '['nsw']' not supported
+tests/instcombine/addsub.opt,AddSub:1309-3,binops with flags '['nuw']' not supported
+tests/instcombine/addsub.opt,AddSub:1539,
+tests/instcombine/addsub.opt,AddSub:1539-2,
+tests/instcombine/addsub.opt,AddSub:1546,binops with flags '['nsw']' not supported
+tests/instcombine/addsub.opt,AddSub:1556,
+tests/instcombine/addsub.opt,AddSub:1560,
+tests/instcombine/addsub.opt,AddSub:1564,
+tests/instcombine/addsub.opt,AddSub:1574,
+tests/instcombine/addsub.opt,AddSub:1582,unknown conversion op 'zext i1 %X' ; conversionop.op = 'zext'
+tests/instcombine/addsub.opt,AddSub:1587,unknown conversion op 'sext i1 %X' ; conversionop.op = 'sext'
+tests/instcombine/addsub.opt,AddSub:1614,
+tests/instcombine/addsub.opt,AddSub:1619,
+tests/instcombine/addsub.opt,AddSub:1624,

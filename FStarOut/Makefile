@@ -29,4 +29,3 @@ $(OUTPUT_DIRECTORY)/%.ml: %.fst
                    --codegen OCaml \
                    --extract_module $(basename $(notdir $<))
 	chmod -x $@
-
