@@ -1159,7 +1159,7 @@ def print_prog(p, skip):
 def to_str_prog(p, skip):
   out = ""
   if len(p) != 1:
-      raise RuntimeError("ERROR: cannot Fstarify prog with more that one basic block (%s)", len(p)) 
+      raise RuntimeError("ERROR: cannot Fstarify prog with more that one basic block (%s)", len(p))
   (_bb, instrs) = p.items()[0]
   for k,v in instrs.iteritems():
     if k in skip:
@@ -1231,7 +1231,7 @@ class LVar:
     # return "%v" + str(self.v)
     return "var_" + str(self.v)
 
-  
+
 class LExpr:
   def to_lean_str(self):
     raise RuntimeError("to_lean_str not implemented")
@@ -1243,7 +1243,7 @@ class LExprUnit(LExpr):
     self.bitwidth = 'w'
   def bw(self): return self.bitwidth
   def __str__(self): return self.to_lean_str()
-  def to_lean_str(self): return "unit"
+  def to_lean_str(self): return "()"
 
 class LExprPair(LExpr):
   def __init__(self, v1, v2):
@@ -1259,7 +1259,7 @@ class LExprPair(LExpr):
     return self.to_lean_str()
 
   def to_lean_str(self):
-    return "pair " + self.v1.to_lean_str() + " " + self.v2.to_lean_str()
+    return "(" + self.v1.to_lean_str() + ", " + self.v2.to_lean_str() + ")"
 
 class LExprTriple(LExpr):
   def __init__(self, v1, v2, v3):
@@ -1315,7 +1315,7 @@ class LExprOp(LExpr):
 
   def to_lean_str(self):
     return str(self)
-  
+
 class ToLeanState:
   def unit_index(self):
     return self.unit_var
@@ -1333,8 +1333,8 @@ class ToLeanState:
 
   def new_var(self): # return a new variable name
     self.nvars += 1
-    return LVar(self.nvars)  
-  
+    return LVar(self.nvars)
+
   def add_var_mapping(self, var, lvar):
     assert isinstance(var, str)
     assert isinstance(lvar, LVar)
@@ -1365,12 +1365,12 @@ class ToLeanState:
     v = self.new_var()
     self._append_assign(v, rhs)
     return v
-  
+
   def build_pair(self, v1, v2):
     v = self.new_var()
     self._append_assign(v, LExprPair(v1, v2))
     return v
-    
+
   def build_triple(self, v1, v2, v3):
     v = self.new_var()
     self._append_assign(v, LExprTriple(v1, v2, v3))
@@ -1457,14 +1457,15 @@ def to_lean_value(val, state):
     if val_str == "true" or val_str == "false":
       assert bitwidth == 1
       const_expr = "const (↑%s)" % val_str
+    # TODO: consider generalizing to the case where the val_str is a constant number?
     elif str(val_str) == "1":
-      const_expr = "const (1)"
+      const_expr = "const (BV.int2bv 1)"
     elif str(val_str) == "0":
-      const_expr = "const (0)"
+      const_expr = "const (BV.int2bv 0)"
     elif str(val_str) == "-1":
-      const_expr = "const (-1)"
+      const_expr = "const (BV.int2bv -1)"
     else:
-      const_expr = "const (Bitvec.ofInt %s (%s))" % (bitwidth, val_str)
+      const_expr = "const (#%s) (BV.int2bv (%s))" % (bitwidth, val_str)
       print("dbg> exotic constant: (%s)")
     lrhs = LExprOp(const_expr, bitwidth, state.unit_index())
     lval = state.build_assign(lrhs)
@@ -1473,7 +1474,7 @@ def to_lean_value(val, state):
   elif isinstance(val, Input):
     lval = state.find_var_or_none(val.name)
     if lval is not None:
-      return lval  
+      return lval
     cleaned_up_name = val.name.replace("%", "")
     cleaned_up_name = "input_" + cleaned_up_name.lower() # input vars
     bitwidth = to_bitwidth(val)
@@ -1517,7 +1518,7 @@ def to_lean_binop(bop, state):
   if bop.op == BinOp.Or: return LExprOp("or", bitwidth, pair)
   if bop.op == BinOp.Xor: return LExprOp("xor", bitwidth, pair)
   else:
-    raise RuntimeError("unknown binop '%s' ; bop.op = '%s'" % (bop, bop.op)) 
+    raise RuntimeError("unknown binop '%s' ; bop.op = '%s'" % (bop, bop.op))
 
 def to_lean_select(instr, state):
   print("dbg> to_lean_state(%s) type(%s)" % (instr, instr.__class__))
@@ -1539,7 +1540,7 @@ def to_lean_conversion_op(instr, state):
   lv1 = to_lean_value(instr.v, state)
   type_src = instr.stype
   type_tgt = instr.type
-  raise RuntimeError("unknown conversion op '%s' ; conversionop.op = '%s'" % (instr, ConversionOp.opnames[instr.op])) 
+  raise RuntimeError("unknown conversion op '%s' ; conversionop.op = '%s'" % (instr, ConversionOp.opnames[instr.op]))
 
 def to_lean_icmp(instr, state):
   assert isinstance(instr, Icmp)

@@ -1,6 +1,5 @@
 #! /usr/bin/env python2
 # -*- coding: utf-8 -*-
-
 # Copyright 2014-2015 The Alive authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# This file implements code to 
+# This file implements code to
 # convert Alive definitions into Lean, and produce statistics
 # about the conversion.
 
@@ -548,7 +547,7 @@ def print_as_fstar(opt):
   # out += (",")
   # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
   out += " : Lemma (("
-  out += src_str 
+  out += src_str
   out += (") == (");
   out += tgt_str + "))\n"
   out += " = ()"
@@ -567,19 +566,19 @@ class Statistics:
   class Row:
     def __init__(self, file, name, error):
       self.file = file
-      self.name = name 
+      self.name = name
       self.error = error
 
     @classmethod
     def write_header(cls, csv_writer):
       csv_writer.writerow(["file", "name", "error"])
-    
+
     def write(self, csv_writer):
       csv_writer.writerow([self.file, self.name, self.error])
 
   def __init__(self):
-    self.rows = [] 
-  
+    self.rows = []
+
   def add(self, row):
     self.rows.append(row)
 
@@ -605,7 +604,7 @@ def summarize_stats(stats):
     totals_per_file[row.file] += 1
     total_counts += 1
     if row.error is not None: continue
-    successess_per_file[row.file] += 1    
+    successess_per_file[row.file] += 1
     total_successes += 1
 
   for file in successess_per_file:
