@@ -628,10 +628,10 @@ def summarize_stats(stats):
 def convert_to_lean_all():
   out_path = "FStarOut/Alive.fst"
   paths = [("tests/instcombine/addsub.opt", "FStarOut/addsub/"),
-           # "tests/instcombine/andorxor.opt",
-           # "tests/instcombine/muldivrem.opt",
-           # "tests/instcombine/select.opt",
-           # "tests/instcombine/shift.opt"
+           ("tests/instcombine/andorxor.opt", "FStarOut/andorxor/"),
+           ("tests/instcombine/muldivrem.opt","FStarOut/muldivrem/"),
+           ("tests/instcombine/select.opt","FStarOut/select/"),
+           ("tests/instcombine/shift.opt", "FStarOut/shift/"),
           ]
   stats = Statistics()
   errors = []
