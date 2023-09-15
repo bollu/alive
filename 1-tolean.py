@@ -547,7 +547,7 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
 
-  out += "def " + sanitize_name(name) + "_src"
+  out += "def " + sanitize_name(name) + "_src "
   out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
   out += " :=\n"
   out += "[mlir_region| {\n"
@@ -555,7 +555,8 @@ def print_as_lean(opt):
   out += src_str + "\n"
   out += "}]\n\n"
 
-  out += "def " + sanitize_name(name) + "_tgt"
+  out += "def " + sanitize_name(name) + "_tgt "
+  out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
   out += ":=\n"
   out += "[mlir_region| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
