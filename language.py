@@ -22,7 +22,9 @@ from codegen import *
 def bitwidth_to_lean_str(w):
   # TODO: make bitwidth a Python type.
   if isinstance(w, str):
-    return "$(.i %s)" % w
+    # The actual name is ignored, since at most one arbitrary width is supported
+    # We check further down that there are in fact not multiple width variables
+    return "_"
   else:
     assert isinstance(w, int)
     return "i%s" % (w, )

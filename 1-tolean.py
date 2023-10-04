@@ -522,6 +522,7 @@ def print_as_lean(opt):
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
   width2names = build_width2names(tgt_state.constant_names)
+  assert len(width2names) <= 1 # For now, at most one arbitrary width is supported
   argument_list = []
   for w in width2names.iterkeys():
     constant_decls += "("
