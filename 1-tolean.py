@@ -551,7 +551,7 @@ def print_as_lean(opt):
   out += "def " + sanitize_name(name) + "_src "
   out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
   out += " :=\n"
-  out += "[mlir_region| {\n"
+  out += "[mlir_icom ("+ ", ".join(width2names.iterkeys()) +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += src_str + "\n"
   out += "}]\n\n"
@@ -559,7 +559,7 @@ def print_as_lean(opt):
   out += "def " + sanitize_name(name) + "_tgt "
   out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
   out += ":=\n"
-  out += "[mlir_region| {\n"
+  out += "[mlir_icom ("+ ", ".join(width2names.iterkeys()) +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += tgt_str + "\n"
   out += "}]\n"
