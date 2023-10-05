@@ -529,7 +529,7 @@ def print_as_lean(opt):
     constant_decls += " ".join([nm for nm in width2names[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
     for nm in width2names[w]:
-      argument_list.append("%%%s : $(.i %s)" % (nm, str(w)))
+      argument_list.append("%%%s : _" % (nm))
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
@@ -588,8 +588,7 @@ def print_as_lean(opt):
 
 
 LEAN_PREAMBLE= """
-import SSA.Projects.MLIRSyntax.EDSL
--- import SSA.Projects.InstCombine.LLVM.Transform
+import SSA.Projects.InstCombine.LLVM.EDSL
 open MLIR AST
 """
 
