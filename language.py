@@ -1310,7 +1310,8 @@ class LExprConstant(LExpr):
     return self.bitwidth
 
   def to_lean_str(self):
-    return ('"llvm.constant" () { value = $(.int %s (.i %s)) }' % (self.const, self.bitwidth)) + \
+    bitwidth = self.bitwidth if isinstance(self.bitwidth, int) else '_'
+    return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth)) + \
      ':' + self.type_to_lean_str()
   
   def __repr__(self):
@@ -1638,7 +1639,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   assert isinstance(last_var, LVar)
   bitwidth = last_var.expr.bw()
   out += "\n" + " " * num_indent + \
-        '"llvm.return" (%s) : () -> (%s)' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
+        '"llvm.return" (%s) : (%s) -> ()' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
   return (out, state, bitwidth)
