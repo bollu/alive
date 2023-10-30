@@ -1209,7 +1209,7 @@ def propagate_bitwidth(expr, bw, skip=[]):
   
   if isinstance(expr, LExprConstant):
     # TODO(bollu): check if this code does what you think it does.
-    if expr.bitwidth.find("ofInt") != -1:
+    if str(expr.bitwidth).find("ofInt") != -1:
       expr.bitwidth = expr.bitwidth.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
       print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
       raise RuntimeError("updated constant bitwidth!")
@@ -1233,8 +1233,8 @@ def propagate_bitwidth(expr, bw, skip=[]):
     if expr.op.find("select") != -1:
       skip = [1]
       #first argument to a select has to have width 1
-      print("dbg> propagating select first argument %s" % expr.v)
-      propagate_bitwidth(expr.v, 1, [2,3])
+      print("dbg> propagating select first argument %s" % expr.args)
+      propagate_bitwidth(expr.args, 1, [2,3])
     else:
       skip = []
     propagate_bitwidth(expr.args, bw, skip)
@@ -1456,7 +1456,8 @@ def to_lean_binary_cst_value(val, state):
     opname = mapping[val.op]
   else:
       raise RuntimeError("unknown binary constant '%s', op index: '%s'" % (val, val.op, ))
-  largs = state.build_pair(v1, v2)
+  largs = LArgumentList([v1, v2])
+  # largs = state.build_pair(v1, v2)
   bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bw(), v2.expr.bw()])
   propagate_bitwidth(v1.expr, bitwidth)
   propagate_bitwidth(v2.expr, bitwidth)
@@ -1571,7 +1572,7 @@ def to_lean_conversion_op(instr, state):
 
 def to_lean_icmp(instr, state):
   assert isinstance(instr, Icmp)
-  opname = "icmp %s "  % (Icmp.opnames[instr.op], )
+  opname = "icmp.%s"  % (Icmp.opnames[instr.op], )
   lv1 = to_lean_value(instr.v1, state)
   lv2 = to_lean_value(instr.v2, state)
   pair = LArgumentList([lv1, lv2])
