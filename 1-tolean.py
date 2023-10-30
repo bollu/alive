@@ -548,7 +548,7 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
 
-  out += "def " + sanitize_name(name) + "_src "
+  out += "def " + "alive_" + sanitize_name(name) + "_src "
   out += " ".join(["(%s : Nat)" % w for w in variable_width_names])
   out += " :=\n"
   out += "[mlir_icom ("+ ", ".join(variable_width_names) +  ")| {\n"
@@ -556,7 +556,7 @@ def print_as_lean(opt):
   out += src_str + "\n"
   out += "}]\n\n"
 
-  out += "def " + sanitize_name(name) + "_tgt "
+  out += "def " + "alive_" + sanitize_name(name) + "_tgt "
   out += " ".join(["(%s : Nat)" % w for w in variable_width_names])
   out += ":=\n"
   out += "[mlir_icom ("+ ", ".join(variable_width_names) +  ")| {\n"
@@ -574,8 +574,8 @@ def print_as_lean(opt):
     theorem_block +=  ""
     width_str = ""
   theorem_block +=  " : "
-  theorem_block += sanitize_name(name) + "_src" + width_str + " ⊑ " + sanitize_name(name) + "_tgt" + width_str + " := by\n"
-  theorem_block += "  unfold " + sanitize_name(name) + "_src" + " " + sanitize_name(name) + "_tgt\n"
+  theorem_block += "alive_" + sanitize_name(name) + "_src" + width_str + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + width_str + " := by\n"
+  theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
   theorem_block += "  simp_alive_peephole\n"
   theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"
  
@@ -688,7 +688,7 @@ def convert_to_lean_all():
         print("parsing '%s'" %(path, ))
         opts = parse_opt_file(f.read())
         for opt in opts:
-            if ix >= 3: break
+            # if ix >= 3: break
             name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
             while name in names:
               name = name + "'"
