@@ -537,7 +537,13 @@ def print_as_lean(opt):
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   print "----------------------------------------"
-  variable_width_names = [str(w) for w in width2names.iterkeys() if not isinstance(w, int)]
+  if bitwidth == 'w' or src_str.find("_") != -1 or tgt_str.find("_") != -1:
+    variable_width_name = " w "
+    variable_width_def = " (w : Nat) "
+  else:
+    variable_width_name = ""
+    variable_width_def = ""
+
   out = ""
   out += ("\n\n")
   out += ("-- Name:%s\n" % (name,))
@@ -548,18 +554,16 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
 
-  out += "def " + "alive_" + sanitize_name(name) + "_src "
-  out += " ".join(["(%s : Nat)" % w for w in variable_width_names])
+  out += "def " + "alive_" + sanitize_name(name) + "_src " + variable_width_def + " "
   out += " :=\n"
-  out += "[mlir_icom ("+ ", ".join(variable_width_names) +  ")| {\n"
+  out += "[mlir_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += src_str + "\n"
   out += "}]\n\n"
 
-  out += "def " + "alive_" + sanitize_name(name) + "_tgt "
-  out += " ".join(["(%s : Nat)" % w for w in variable_width_names])
+  out += "def " + "alive_" + sanitize_name(name) + "_tgt " + variable_width_def + " "
   out += ":=\n"
-  out += "[mlir_icom ("+ ", ".join(variable_width_names) +  ")| {\n"
+  out += "[mlir_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += tgt_str + "\n"
   out += "}]\n"
@@ -567,14 +571,9 @@ def print_as_lean(opt):
 
   theorem_block = ""
   theorem_block += "theorem alive_" + sanitize_name(name) 
-  if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
-    theorem_block += " (w : Nat) "
-    width_str = " w "
-  else:
-    theorem_block +=  ""
-    width_str = ""
+  theorem_block += " " + variable_width_def + " "
   theorem_block +=  " : "
-  theorem_block += "alive_" + sanitize_name(name) + "_src" + width_str + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + width_str + " := by\n"
+  theorem_block += "alive_" + sanitize_name(name) + "_src" + variable_width_name + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + variable_width_name + " := by\n"
   theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
   theorem_block += "  simp_alive_peephole\n"
   theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"

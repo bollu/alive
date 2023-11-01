@@ -1202,28 +1202,33 @@ def propagate_bitwidth(expr, bw, skip=[]):
   # TODO: make this a member of each of the arguments.
   if isinstance(expr, LArgumentList):
     for (ix, arg) in enumerate(expr.vars):
-      if ix in skip: continue
+      if ix+1 in skip: continue
       assert isinstance(arg, LVar) # must be to be an argument list.
       propagate_bitwidth(arg.expr, bw)
     return
   
   if isinstance(expr, LExprConstant):
-    # TODO(bollu): check if this code does what you think it does.
-    if str(expr.bitwidth).find("ofInt") != -1:
-      expr.bitwidth = expr.bitwidth.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
-      print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
-      raise RuntimeError("updated constant bitwidth!")
+    expr.bitwidth = bw
+    # # TODO(bollu): check if this code does what you think it does.
+    # if str(expr.bitwidth).find("ofInt") != -1:
+    #   expr.bitwidth = expr.bitwidth.replace(("ofInt " + str(expr.bitwidth)),("ofInt " + str(bw)))
+    #   print("dbg> updating const %s to bitwidth %s" % (expr.op, str(bw)))
+    #   raise RuntimeError("updated constant bitwidth!")
     return
 
   if isinstance(expr, LExprOp):
     #if expr.bitwidth == bw:
     #  return # stop if no need to propagate further
+    #icmp's arguments have nothing to do with its output. stop
+    if expr.op.find("icmp") != -1:
+      propagate_bitwidth(expr.args, bw, skip)
+      unify_bitwidths([expr.bitwidth, 1])
+      return
+
     ##don't propagate something more general
     if unify_bitwidths([expr.bitwidth, bw]) != bw:
       return
-    #icmp's arguments have nothing to do with its output. stop
-    if expr.op.find("icmp") != -1:
-      return
+
     #it is a pretty hacky design with a string for the const expr
     #so we hackily update it too
     if expr.op.find("ofInt") != -1:
@@ -1235,6 +1240,7 @@ def propagate_bitwidth(expr, bw, skip=[]):
       #first argument to a select has to have width 1
       print("dbg> propagating select first argument %s" % expr.args)
       propagate_bitwidth(expr.args, 1, [2,3])
+      expr.bitwidth = expr.args[1].bw
     else:
       skip = []
     propagate_bitwidth(expr.args, bw, skip)
@@ -1310,15 +1316,14 @@ class LExprConstant(LExpr):
     return self.bitwidth
 
   def to_lean_str(self):
-    bitwidth = self.bitwidth if isinstance(self.bitwidth, int) else '_'
-    return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth)) + \
+    return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth_to_lean_str(self.bw()))) + \
      ':' + self.type_to_lean_str()
   
   def __repr__(self):
     return self.to_lean_str()
 
   def type_to_lean_str(self):
-    return "() -> (%s)" % (bitwidth_to_lean_str(self.bitwidth))
+    return "() -> (%s)" % (bitwidth_to_lean_str(self.bw()))
 
 class LExprOp(LExpr):
   def __init__(self, op, bitwidth, args):
@@ -1333,10 +1338,13 @@ class LExprOp(LExpr):
 
     if self.op.find("select") != -1:
       self.bitwidth = unify_bitwidths(args.get_bitwidths()[1:] + [bitwidth])
+    elif self.op.find("icmp") != -1:
+      self.bitwidth = 1
+      unify_bitwidths([bitwidth, 1])
+      unify_bitwidths(args.get_bitwidths())
     else:
-      self.bitwidth = unify_bitwidths(args.get_bitwidths() + [bitwidth])
-    propagate_bitwidth(self.args, self.bitwidth)
-    self.args = args
+      self.bitwidth = bitwidth
+      propagate_bitwidth(self.args, self.bitwidth)
 
   #output bitwidth
   def bw(self):
