@@ -1384,7 +1384,7 @@ class ToLeanState:
   def add_var_mapping(self, var, lvar):
     assert isinstance(var, str)
     assert isinstance(lvar, LVar)
-    print "dbg> adding mapping '%s' -> '%s := %s'" % (var, lvar, lvar.expr)
+    print("dbg> adding mapping '%s' -> '%s := %s'" % (var, lvar, lvar.expr))
     self.varmap[var] = lvar
 
   def add_constant_name(self, name, const_expr):
@@ -1413,7 +1413,7 @@ class ToLeanState:
     return v
 
   def find_var_or_throw(self, v):
-    print "dbg> find_var_or_throw '%s'" % (v, ),
+    print("dbg> find_var_or_throw '%s'" % (v, ),)
     if v in self.varmap:
       print(" -> self.varmap[v]")
       return self.varmap[v]
@@ -1421,7 +1421,7 @@ class ToLeanState:
       raise RuntimeError("unknown variable '%s'" % (v, ))
 
   def find_var_or_none(self, v):
-    print "dbg> find_var_or_none '%s'" % (v, ),
+    print("dbg> find_var_or_none '%s'" % (v, ),)
     if v in self.varmap:
       print(" -> self.varmap[v] : %s" % (self.varmap[v]))
       return self.varmap[v]
@@ -1473,7 +1473,7 @@ def to_lean_binary_cst_value(val, state):
   bitwidth = unify_bitwidths([to_bitwidth(val), v1.expr.bw(), v2.expr.bw()])
   propagate_bitwidth(v1.expr, bitwidth)
   propagate_bitwidth(v2.expr, bitwidth)
-  print "dbg> building op '%s' with bitwidth '%s'" % (opname, bitwidth)
+  print("dbg> building op '%s' with bitwidth '%s'" % (opname, bitwidth))
   return state.build_assign(LExprOp(opname, bitwidth, largs))
 
 def to_lean_value(val, state):
