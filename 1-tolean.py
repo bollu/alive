@@ -556,14 +556,14 @@ def print_as_lean(opt):
 
   out += "def " + "alive_" + sanitize_name(name) + "_src " + variable_width_def + " "
   out += " :=\n"
-  out += "[mlir_icom ("+ variable_width_name +  ")| {\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += src_str + "\n"
   out += "}]\n\n"
 
   out += "def " + "alive_" + sanitize_name(name) + "_tgt " + variable_width_def + " "
   out += ":=\n"
-  out += "[mlir_icom ("+ variable_width_name +  ")| {\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += tgt_str + "\n"
   out += "}]\n"
