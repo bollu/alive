@@ -580,25 +580,6 @@ def print_as_lean(opt):
  
 
   out += theorem_block
-  # out += constant_decls
-  # out += (",")
-  # out += " TSSA.eval\n"
-  # out += "  (Op := Op) (e := e)\n"
-  # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  # out += "  [dsl_bb|\n"
-  # out += src_str + "\n"
-  # out += ("  ]");
-  # out += ("  ⊑\n");
-  # out += "  TSSA.eval\n"
-  # out += "  (Op := Op) (e := e)\n"
-  # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  # out += "  [dsl_bb|\n"
-  # out += tgt_str + "\n"
-  # out += ("  ]");
-  # out += ("\n  := by")
-  # out += ("\n     simp_mlir")
-  # out += ("\n     simp_alive")
-  # out += ("\n     print_goal_as_error")
   return out;
 
 
