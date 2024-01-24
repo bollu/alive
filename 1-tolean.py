@@ -1,4 +1,5 @@
-#! /usr/bin/env python2
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 # Copyright 2014-2015 The Alive authors.
 #
@@ -13,6 +14,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# This file implements code to 
+# convert Alive definitions into Lean, and produce statistics
+# about the conversion.
 
 import argparse, glob, re, sys
 from language import *
@@ -24,6 +28,8 @@ import stopit
 import pdb
 import time
 import csv
+import re
+
 def block_model(s, sneg, m):
   # First simplify the model.
   sneg.push()
@@ -490,91 +496,209 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
 
   return True # succeeded, did not time out
 
-# a row in the CSV data that we write.
-class Row:
-  def __init__(self, path, name, bitwidth, timeout, time_elapsed, exitcode, did_timeout):
-    self.path = path
-    self.name = name
-    self.bitwidth = bitwidth
-    self.timeout = timeout
-    self.time_elapsed = time_elapsed
-    self.exitcode = exitcode
-    self.did_timeout = did_timeout
+def sanitize_name(name):
+  renamed = re.sub(r'[()~&>|^=]', '', name)
+  renamed = re.sub(r'[:, -]', '_', renamed)
+  return renamed
 
-  @classmethod
-  def write_header(cls, csv_writer):
-    csv_writer.writerow(["path", "name", "bitwidth", "timeout", "time_elapsed", "exitcode", "did_timeout"])
-
-  def write(self, csv_writer):
-    csv_writer.writerow([self.path, self.name, self.bitwidth, self.timeout, self.time_elapsed, self.exitcode, self.did_timeout])
-
-
-def verify_opt_with_timeout(path, opt, timeout, bitwidth):
-  name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
-  print '----------------------------------------'
-  if str(pre) != "true": print("%s has precondition; skipping." % (name, )); return None
-  # timer using python standard library
-  start_time = time.time()
-  hide_progress = False
-  p1 = Process(target=check_opt, args=(opt, timeout, bitwidth, hide_progress))
-  p1.start()
-  p1.join(timeout=timeout)
-  end_time = time.time()
-  p1.terminate()
-  exitcode = p1.exitcode
-  did_timeout = exitcode is None
-  print("timeout: [%4s]. bitwidth: [%4s], elapsed: [%4s] seconds. exitcode: [%s]. Timed out? [%s]" % \
-    (timeout, bitwidth, end_time - start_time, exitcode, did_timeout))
-  row = Row(path, name, bitwidth, timeout, end_time - start_time, exitcode, did_timeout)
-  return row
-
-def alive_ir_to_lean(ir):
-    return ""
-    pass
-
+def build_width2names(name2constants):
+# build a map mapping each bitwidth to the list of constants
+# with that bitwidth. This is used when producing Lean code
+# to declare variables as `(a b c : Bitvec 1) (d e f : Bitvec 2)
+  width2names = {}
+  for name in name2constants:
+    bw = unify_bitwidths([cst.bitwidth for cst in name2constants[name]])
+    if bw not in width2names:
+      width2names[bw] = [name]
+    else:
+      width2names[bw].append(name)
+  return width2names
 
 def print_as_lean(opt):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+  print("dbg> printing " + name + " as lean")
+  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
+  bitwidth = unify_bitwidths([src_bw, tgt_bw])
+  constant_decls = ""
+  width2names = build_width2names(tgt_state.constant_names)
+  assert len(width2names) <= 1 # For now, at most one arbitrary width is supported
+  argument_list = []
+  for w in width2names.iterkeys():
+    constant_decls += "("
+    constant_decls += " ".join([nm for nm in width2names[w]])
+    constant_decls += " : Bitvec " + str(w) + ")\n"
+    for nm in width2names[w]:
+      if not isinstance(w, int):
+        argument_list.append("%%%s : _" % (nm))
+      else:
+        argument_list.append("%%%s : i%s" % (nm, w))
+  for w in tgt_state.constant_names.iterkeys():
+    assert w in src_state.constant_names
+  print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   print "----------------------------------------"
+  if bitwidth == 'w' or src_str.find("_") != -1 or tgt_str.find("_") != -1:
+    variable_width_name = " w "
+    variable_width_def = " (w : Nat) "
+  else:
+    variable_width_name = ""
+    variable_width_def = ""
+
   out = ""
   out += ("\n\n")
   out += ("-- Name:%s\n" % (name,))
   out += ("-- precondition: %s\n" % (pre if pre is not None else 'NONE', ))
   out += "/-\n"
-  out += print_prog(src, []) + "\n"
+  out += to_str_prog(src, []) + "\n"
   out += "=>\n"
-  out += print_prog(tgt, []) + "\n"
+  out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
-  out += ("example : ")
-  out += ("TSSA.eval (Op := op) (Val := val) e re  [dsl_bb|\n");
-  out += (alive_ir_to_lean(src))
-  out += ("  ]");
-  out += ("  = \n");
-  out += ("  TSSA.eval (Op := op) (Val := val) e re [dsl_bb|\n");
-  out += (alive_ir_to_lean(tgt))
-  out += ("  ]");
-  out += ("\n  := by sorry")
+
+  out += "def " + "alive_" + sanitize_name(name) + "_src " + variable_width_def + " "
+  out += " :=\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
+  out += '^bb0('+ ", ".join(argument_list) +  '):'
+  out += src_str + "\n"
+  out += "}]\n\n"
+
+  out += "def " + "alive_" + sanitize_name(name) + "_tgt " + variable_width_def + " "
+  out += ":=\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
+  out += '^bb0('+ ", ".join(argument_list) +  '):'
+  out += tgt_str + "\n"
+  out += "}]\n"
+  
+
+  theorem_block = ""
+  theorem_block += "theorem alive_" + sanitize_name(name) 
+  theorem_block += " " + variable_width_def + " "
+  theorem_block +=  " : "
+  theorem_block += "alive_" + sanitize_name(name) + "_src" + variable_width_name + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + variable_width_name + " := by\n"
+  theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
+  theorem_block += "  simp_alive_peephole\n"
+  theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"
+ 
+
+  out += theorem_block
   return out;
 
 
+LEAN_PREAMBLE = """
+import SSA.Projects.InstCombine.LLVM.EDSL
+import SSA.Projects.InstCombine.AliveStatements
+import SSA.Projects.InstCombine.Refinement
+import SSA.Projects.InstCombine.Tactic
+
+open MLIR AST
+open Std (BitVec)
+open Ctxt (Var)
+
+namespace AliveAutoGenerated
+set_option pp.proofs false
+set_option pp.proofs.withType false
+
+"""
+
+class Statistics:
+  class Row:
+    def __init__(self, file, name, error):
+      self.file = file
+      self.name = name 
+      self.error = error
+
+    @classmethod
+    def write_header(cls, csv_writer):
+      csv_writer.writerow(["file", "name", "error"])
+    
+    def write(self, csv_writer):
+      csv_writer.writerow([self.file, self.name, self.error])
+
+  def __init__(self):
+    self.rows = [] 
+  
+  def add(self, row):
+    self.rows.append(row)
+
+  def write(self, out_path):
+   with open(out_path, "w") as of:
+    wof = csv.writer(of, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    Statistics.Row.write_header(wof)
+    for r in self.rows:
+      r.write(wof)
+
+def summarize_stats(stats):
+  # number of tests per file.
+  successess_per_file = {}
+  total_successes = 0
+
+  totals_per_file = {}
+  total_counts = 0
+  for row in stats.rows:
+    if row.file not in successess_per_file:
+      successess_per_file[row.file] = 0
+      totals_per_file[row.file] = 0
+
+    totals_per_file[row.file] += 1
+    total_counts += 1
+    if row.error is not None: continue
+    successess_per_file[row.file] += 1    
+    total_successes += 1
+
+  for file in successess_per_file:
+    print("summary> file:%40s  #tests:%5s / %5s" % \
+            (file, successess_per_file[file], totals_per_file[file]))
+  print("summary> total:%5s / %5s" % (total_successes, total_counts))
 
 def convert_to_lean_all():
-  out_path = "experiment-out-data/out.lean"
+  out_path = "../../../SSA/Projects/InstCombine/AliveAutoGenerated.lean"
   paths = ["tests/instcombine/addsub.opt",
            "tests/instcombine/andorxor.opt",
            "tests/instcombine/muldivrem.opt",
            "tests/instcombine/select.opt",
            "tests/instcombine/shift.opt"]
+  stats = Statistics()
+  errors = []
+  names = []
+  ix = 0
   with open(out_path, "w") as of:
+    of.write(LEAN_PREAMBLE)
     # first run everything for 1 minute, then 5 minutes, then 1 hour
     for path in paths:
       with open(path, "r") as f:
         print("parsing '%s'" %(path, ))
         opts = parse_opt_file(f.read())
         for opt in opts:
-            of.write(print_as_lean(opt))
-            return
+            # if ix >= 3: break
+            name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+            while name in names:
+              name = name + "'"
+            names.append(name)
+            opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
+            print("%s : %s" % (pre, pre.__class__))
+            if str(pre) != "true": continue
+            error = None
+            try:
+              out = print_as_lean(opt)
+              of.write(out)
+            except (RuntimeError, AssertionError) as e:
+              error = str(e)
+              errors.append((path, opt, e))
+            ix += 1
+            stats.add(Statistics.Row(file=path, name=name, error=error))
 
+    print "#errors: %d" % len(errors)
+    for (path, opt, err) in errors:
+      name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
+      print("%s:%s" % (path, name))
+      print(to_str_prog(src, []))
+      print("=>")
+      print(to_str_prog(tgt, []))
+      print("error: %s" % err)
+      print("--")
+
+    stats.write("experiment-out-data/Alive.csv")
+
+    summarize_stats(stats)
 if __name__ == "__main__":
   try:
     convert_to_lean_all()

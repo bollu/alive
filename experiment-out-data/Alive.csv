@@ -1,0 +1,185 @@
+file,name,error
+tests/instcombine/addsub.opt,AddSub:1043,
+tests/instcombine/addsub.opt,AddSub:1098,unknown conversion op 'zext i1 %a' ; conversionop.op = 'zext'
+tests/instcombine/addsub.opt,AddSub:1152,
+tests/instcombine/addsub.opt,AddSub:1156,
+tests/instcombine/addsub.opt,AddSub:1156-2,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1156-3,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1164,
+tests/instcombine/addsub.opt,AddSub:1165,
+tests/instcombine/addsub.opt,AddSub:1176,
+tests/instcombine/addsub.opt,AddSub:1202,
+tests/instcombine/addsub.opt,AddSub:1295,
+tests/instcombine/addsub.opt,AddSub:1309,
+tests/instcombine/addsub.opt,AddSub:1309-2,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1309-3,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1539,
+tests/instcombine/addsub.opt,AddSub:1539-2,
+tests/instcombine/addsub.opt,AddSub:1546,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1556,
+tests/instcombine/addsub.opt,AddSub:1560,
+tests/instcombine/addsub.opt,AddSub:1564,
+tests/instcombine/addsub.opt,AddSub:1574,
+tests/instcombine/addsub.opt,AddSub:1582,unknown conversion op 'zext i1 %X' ; conversionop.op = 'zext'
+tests/instcombine/addsub.opt,AddSub:1587,unknown conversion op 'sext i1 %X' ; conversionop.op = 'sext'
+tests/instcombine/addsub.opt,AddSub:1614,
+tests/instcombine/addsub.opt,AddSub:1619,
+tests/instcombine/addsub.opt,AddSub:1624,
+tests/instcombine/andorxor.opt,AndOrXor:135,
+tests/instcombine/andorxor.opt,AndOrXor:144,
+tests/instcombine/andorxor.opt,AndOrXor:516,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/andorxor.opt,AndOrXor:523,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/andorxor.opt,AndOrXor:698,
+tests/instcombine/andorxor.opt,AndOrXor:709,
+tests/instcombine/andorxor.opt,AndOrXor:716,
+tests/instcombine/andorxor.opt,AndOrXor:794,
+tests/instcombine/andorxor.opt,AndOrXor:827,
+tests/instcombine/andorxor.opt,AndOrXor:887-2,
+tests/instcombine/andorxor.opt,AndOrXor:1191-1,unknown conversion op 'zext %newICMP' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:1191-2,unknown conversion op 'zext %newICMP' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:1207,unknown conversion op 'trunc %a' ; conversionop.op = 'trunc'
+tests/instcombine/andorxor.opt,AndOrXor:1230  ~A & ~B -> ~(A | B),
+tests/instcombine/andorxor.opt,AndOrXor:1241 (A|B) & ~(A&B) => A^B,
+tests/instcombine/andorxor.opt,AndOrXor:1247 ~(A&B) & (A|B) => A^B,
+tests/instcombine/andorxor.opt,AndOrXor:1253 A & (A^B) -> A & ~B,
+tests/instcombine/andorxor.opt,AndOrXor:1280 (~A|B)&A -> A&B,
+tests/instcombine/andorxor.opt,AndOrXor:1288 (A ^ B) & ((B ^ C) ^ A) -> (A ^ B) & ~C,
+tests/instcombine/andorxor.opt,AndOrXor:1294 (A | B) & ((~A) ^ B) -> (A & B),
+tests/instcombine/andorxor.opt,AndOrXor:1346 (sext),unknown conversion op 'sext %x' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1346 (zext),unknown conversion op 'zext %x' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:1346 (trunc),unknown conversion op 'trunc %x' ; conversionop.op = 'trunc'
+tests/instcombine/andorxor.opt,AndOrXor:1388,unknown conversion op 'sext i1 %a' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1395,unknown conversion op 'sext i1 %a' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1574,unknown conversion op 'sext %Cond' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1577,unknown conversion op 'sext %Cond' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1581,unknown conversion op 'sext %Cond' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1583,unknown conversion op 'sext %Cond' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:1683-1,
+tests/instcombine/andorxor.opt,AndOrXor:1683-2,
+tests/instcombine/andorxor.opt,AndOrXor:1704,
+tests/instcombine/andorxor.opt,AndOrXor:1705,
+tests/instcombine/andorxor.opt,AndOrXor:1733,
+tests/instcombine/andorxor.opt,AndOrXor:2063  (X ^ C1) | C2 --> (X | C2) ^ (C1 & ~C2),
+tests/instcombine/andorxor.opt,AndOrXor:2113   ((~A & B) | A) -> (A | B),
+tests/instcombine/andorxor.opt,AndOrXor:2118   ((A & B) | ~A) -> (~A | B),
+tests/instcombine/andorxor.opt,AndOrXor:2123   (A & (~B)) | (A ^ B) -> (A ^ B),
+tests/instcombine/andorxor.opt,AndOrXor:2188,
+tests/instcombine/andorxor.opt,AndOrXor:2231  (A ^ B) | ((B ^ C) ^ A) -> (A ^ B) | C,
+tests/instcombine/andorxor.opt,AndOrXor:2243  ((B | C) & A) | B -> B | (A & C),
+tests/instcombine/andorxor.opt,AndOrXor:2247  (~A | ~B) == (~(A & B)),
+tests/instcombine/andorxor.opt,AndOrXor:2263,
+tests/instcombine/andorxor.opt,AndOrXor:2264,
+tests/instcombine/andorxor.opt,AndOrXor:2265,
+tests/instcombine/andorxor.opt,AndOrXor:2284,
+tests/instcombine/andorxor.opt,AndOrXor:2285,
+tests/instcombine/andorxor.opt,AndOrXor:2297,
+tests/instcombine/andorxor.opt,AndOrXor:2321-1,unknown conversion op 'zext %A' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:2321-2,unknown conversion op 'sext %A' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:2321-3,unknown conversion op 'trunc %A' ; conversionop.op = 'trunc'
+tests/instcombine/andorxor.opt,AndOrXor:2356,unknown conversion op 'sext i1 %A' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:2367,
+tests/instcombine/andorxor.opt,AndOrXor:2375,
+tests/instcombine/andorxor.opt,AndOrXor:2416,
+tests/instcombine/andorxor.opt,AndOrXor:2417,
+tests/instcombine/andorxor.opt,AndOrXor:2429,
+tests/instcombine/andorxor.opt,AndOrXor:2430,
+tests/instcombine/andorxor.opt,AndOrXor:2443,
+tests/instcombine/andorxor.opt,AndOrXor:2453,
+tests/instcombine/andorxor.opt,AndOrXor:2459-1,unknown conversion op 'zext %cmp to i11' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:2459-2,unknown conversion op 'sext %cmp to i11' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:2475,
+tests/instcombine/andorxor.opt,AndOrXor:2486,
+tests/instcombine/andorxor.opt,AndOrXor:2515   ((X^C1) >> C2)^C3 -> (X>>C2) ^ ((C1>>C2)^C3),"cannot convert value 'lshr(C1, C2)' (type: 'constants.CnstFunction')"
+tests/instcombine/andorxor.opt,AndOrXor:2581  (B|A)^B -> A & ~B,
+tests/instcombine/andorxor.opt,AndOrXor:2587  (B&A)^A -> ~B & A,
+tests/instcombine/andorxor.opt,AndOrXor:2595,
+tests/instcombine/andorxor.opt,AndOrXor:2607,
+tests/instcombine/andorxor.opt,AndOrXor:2617,
+tests/instcombine/andorxor.opt,AndOrXor:2627,
+tests/instcombine/andorxor.opt,AndOrXor:2647,
+tests/instcombine/andorxor.opt,AndOrXor:2658,
+tests/instcombine/andorxor.opt,AndOrXor:2663,
+tests/instcombine/andorxor.opt,AndOrXor:2681-1,unknown conversion op 'zext %a' ; conversionop.op = 'zext'
+tests/instcombine/andorxor.opt,AndOrXor:2681-2,unknown conversion op 'sext %a' ; conversionop.op = 'sext'
+tests/instcombine/andorxor.opt,AndOrXor:2681-3,unknown conversion op 'trunc %a' ; conversionop.op = 'trunc'
+tests/instcombine/muldivrem.opt,152,
+tests/instcombine/muldivrem.opt,160,
+tests/instcombine/muldivrem.opt,229,
+tests/instcombine/muldivrem.opt,239,
+tests/instcombine/muldivrem.opt,265,binop with flags not supported
+tests/instcombine/muldivrem.opt,265-2,binop with flags not supported
+tests/instcombine/muldivrem.opt,266,binop with flags not supported
+tests/instcombine/muldivrem.opt,266-2,binop with flags not supported
+tests/instcombine/muldivrem.opt,275,
+tests/instcombine/muldivrem.opt,275-2,
+tests/instcombine/muldivrem.opt,276,
+tests/instcombine/muldivrem.opt,276-2,
+tests/instcombine/muldivrem.opt,283,
+tests/instcombine/muldivrem.opt,290 & 292,
+tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,
+tests/instcombine/muldivrem.opt,805,
+tests/instcombine/muldivrem.opt,809,unknown conversion op 'zext %c' ; conversionop.op = 'zext'
+tests/instcombine/muldivrem.opt,820,
+tests/instcombine/muldivrem.opt,820',
+tests/instcombine/muldivrem.opt,891,
+tests/instcombine/muldivrem.opt,891-exact,binop with flags not supported
+tests/instcombine/muldivrem.opt,976,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
+tests/instcombine/muldivrem.opt,976-exact,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
+tests/instcombine/muldivrem.opt,1030,
+tests/instcombine/muldivrem.opt,1049,binop with flags not supported
+tests/instcombine/muldivrem.opt,1285,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
+tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; conversionop.op = 'zext'
+tests/instcombine/select.opt,Select:485-2,Error: incompatible bitwidths: 1and32
+tests/instcombine/select.opt,Select:489-2,Error: incompatible bitwidths: 1and32
+tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:576',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/select.opt,Select:637,
+tests/instcombine/select.opt,Select:641,
+tests/instcombine/select.opt,Select:699,
+tests/instcombine/select.opt,Select:700,
+tests/instcombine/select.opt,Select:704,
+tests/instcombine/select.opt,Select:705,
+tests/instcombine/select.opt,Select:740,
+tests/instcombine/select.opt,Select:741,
+tests/instcombine/select.opt,Select:746,
+tests/instcombine/select.opt,Select:747,
+tests/instcombine/select.opt,Select:846,
+tests/instcombine/select.opt,Select:850,
+tests/instcombine/select.opt,Select:855,
+tests/instcombine/select.opt,Select:859,
+tests/instcombine/select.opt,Select:851,
+tests/instcombine/select.opt,Select:852,
+tests/instcombine/select.opt,Select:858,
+tests/instcombine/select.opt,Select:859',
+tests/instcombine/select.opt,Select:869,unknown conversion op 'zext C' ; conversionop.op = 'zext'
+tests/instcombine/select.opt,Select:873,unknown conversion op 'sext C' ; conversionop.op = 'sext'
+tests/instcombine/select.opt,Select:877,unknown conversion op 'zext %notc' ; conversionop.op = 'zext'
+tests/instcombine/select.opt,Select:883,unknown conversion op 'sext %notc' ; conversionop.op = 'sext'
+tests/instcombine/select.opt,Select:962,
+tests/instcombine/select.opt,Select:967a,Error: incompatible bitwidths: 9and1
+tests/instcombine/select.opt,Select:967b,Error: incompatible bitwidths: 9and1
+tests/instcombine/select.opt,Select:1070,
+tests/instcombine/select.opt,Select:1078,
+tests/instcombine/select.opt,Select:1087,
+tests/instcombine/select.opt,Select:1100,
+tests/instcombine/select.opt,Select:1105,
+tests/instcombine/shift.opt,InstCombineShift: 239,
+tests/instcombine/shift.opt,InstCombineShift: 279,
+tests/instcombine/shift.opt,InstCombineShift: 351,
+tests/instcombine/shift.opt,InstCombineShift: 366-1,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 366-2,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 366-3,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 366-4,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 366-5,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 366-6,unknown conversion op 'trunc %TrOp' ; conversionop.op = 'trunc'
+tests/instcombine/shift.opt,InstCombineShift: 422-1,
+tests/instcombine/shift.opt,InstCombineShift: 422-2,
+tests/instcombine/shift.opt,InstCombineShift: 440,
+tests/instcombine/shift.opt,InstCombineShift: 458,
+tests/instcombine/shift.opt,InstCombineShift: 476,
+tests/instcombine/shift.opt,InstCombineShift: 497,
+tests/instcombine/shift.opt,InstCombineShift: 497''',
+tests/instcombine/shift.opt,InstCombineShift: 582,
+tests/instcombine/shift.opt,InstCombineShift: 724,
