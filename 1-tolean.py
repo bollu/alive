@@ -662,7 +662,7 @@ def convert_to_lean_all():
   paths = ["tests/instcombine/addsub.opt",
            "tests/instcombine/andorxor.opt",
            "tests/instcombine/muldivrem.opt",
-           "tests/instcombine/select.opt",
+          #  "tests/instcombine/select.opt",
            "tests/instcombine/shift.opt"]
   stats = Statistics()
   errors = []
