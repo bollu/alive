@@ -529,15 +529,21 @@ def print_as_lean(opt):
     constant_decls += " ".join([nm for nm in width2names[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
     for nm in width2names[w]:
-      argument_list.append("%%%s : _" % (nm))
+      if not isinstance(w, int):
+        argument_list.append("%%%s : _" % (nm))
+      else:
+        argument_list.append("%%%s : i%s" % (nm, w))
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
-  if bitwidth == 'w' or src_str.find(" w ") != -1 or tgt_str.find(" w ") != -1:
-    forall_stmt = " forall (w : Nat) "
-  else:
-    forall_stmt =  " forall "
   print "----------------------------------------"
+  if bitwidth == 'w' or src_str.find("_") != -1 or tgt_str.find("_") != -1:
+    variable_width_name = " w "
+    variable_width_def = " (w : Nat) "
+  else:
+    variable_width_name = ""
+    variable_width_def = ""
+
   out = ""
   out += ("\n\n")
   out += ("-- Name:%s\n" % (name,))
@@ -548,42 +554,32 @@ def print_as_lean(opt):
   out += to_str_prog(tgt, []) + "\n"
   out += "-/\n"
 
-  out += "def " + sanitize_name(name) + "_src "
-  out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
+  out += "def " + "alive_" + sanitize_name(name) + "_src " + variable_width_def + " "
   out += " :=\n"
-  out += "[alive_icom ("+ ", ".join(width2names.iterkeys()) +  ")| {\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += src_str + "\n"
   out += "}]\n\n"
 
-  out += "def " + sanitize_name(name) + "_tgt "
-  out += " ".join(["(%s : Nat)" % w for w in width2names.iterkeys()])
+  out += "def " + "alive_" + sanitize_name(name) + "_tgt " + variable_width_def + " "
   out += ":=\n"
-  out += "[alive_icom ("+ ", ".join(width2names.iterkeys()) +  ")| {\n"
+  out += "[alive_icom ("+ variable_width_name +  ")| {\n"
   out += '^bb0('+ ", ".join(argument_list) +  '):'
   out += tgt_str + "\n"
   out += "}]\n"
   
-  # out += ("theorem alive_" + sanitize_name(name) + forall_stmt)
-  # out += constant_decls
-  # out += (",")
-  # out += " TSSA.eval\n"
-  # out += "  (Op := Op) (e := e)\n"
-  # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  # out += "  [dsl_bb|\n"
-  # out += src_str + "\n"
-  # out += ("  ]");
-  # out += ("  ⊑\n");
-  # out += "  TSSA.eval\n"
-  # out += "  (Op := Op) (e := e)\n"
-  # out += "  (i := TSSAIndex.STMT (UserType.base (BaseType.bitvec " + str(bitwidth) + ")))\n"
-  # out += "  [dsl_bb|\n"
-  # out += tgt_str + "\n"
-  # out += ("  ]");
-  # out += ("\n  := by")
-  # out += ("\n     simp_mlir")
-  # out += ("\n     simp_alive")
-  # out += ("\n     print_goal_as_error")
+
+  theorem_block = ""
+  theorem_block += "theorem alive_" + sanitize_name(name) 
+  theorem_block += " " + variable_width_def + " "
+  theorem_block +=  " : "
+  theorem_block += "alive_" + sanitize_name(name) + "_src" + variable_width_name + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + variable_width_name + " := by\n"
+  theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
+  theorem_block += "  simp_alive_peephole\n"
+  theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"
+ 
+
+  out += theorem_block
   return out;
 
 
@@ -592,6 +588,7 @@ import SSA.Projects.InstCombine.LLVM.EDSL
 import SSA.Projects.InstCombine.AliveStatements
 import SSA.Projects.InstCombine.Refinement
 import SSA.Projects.InstCombine.Tactic
+
 open MLIR AST
 open Std (BitVec)
 open Ctxt (Var)
@@ -671,7 +668,7 @@ def convert_to_lean_all():
         print("parsing '%s'" %(path, ))
         opts = parse_opt_file(f.read())
         for opt in opts:
-            if ix >= 1: break
+            # if ix >= 3: break
             name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
             while name in names:
               name = name + "'"
@@ -683,7 +680,7 @@ def convert_to_lean_all():
             try:
               out = print_as_lean(opt)
               of.write(out)
-            except RuntimeError as e:
+            except (RuntimeError, AssertionError, AttributeError) as e:
               error = str(e)
               errors.append((path, opt, e))
             ix += 1
