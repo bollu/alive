@@ -3,19 +3,19 @@ tests/instcombine/addsub.opt,AddSub:1043,
 tests/instcombine/addsub.opt,AddSub:1098,unknown conversion op 'zext i1 %a' ; conversionop.op = 'zext'
 tests/instcombine/addsub.opt,AddSub:1152,
 tests/instcombine/addsub.opt,AddSub:1156,
-tests/instcombine/addsub.opt,AddSub:1156-2,binop with flags not supported
-tests/instcombine/addsub.opt,AddSub:1156-3,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1156-2,binops with flags '['nsw']' not supported
+tests/instcombine/addsub.opt,AddSub:1156-3,binops with flags '['nuw']' not supported
 tests/instcombine/addsub.opt,AddSub:1164,
 tests/instcombine/addsub.opt,AddSub:1165,
 tests/instcombine/addsub.opt,AddSub:1176,
 tests/instcombine/addsub.opt,AddSub:1202,
 tests/instcombine/addsub.opt,AddSub:1295,
 tests/instcombine/addsub.opt,AddSub:1309,
-tests/instcombine/addsub.opt,AddSub:1309-2,binop with flags not supported
-tests/instcombine/addsub.opt,AddSub:1309-3,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1309-2,binops with flags '['nsw']' not supported
+tests/instcombine/addsub.opt,AddSub:1309-3,binops with flags '['nuw']' not supported
 tests/instcombine/addsub.opt,AddSub:1539,
 tests/instcombine/addsub.opt,AddSub:1539-2,
-tests/instcombine/addsub.opt,AddSub:1546,binop with flags not supported
+tests/instcombine/addsub.opt,AddSub:1546,binops with flags '['nsw']' not supported
 tests/instcombine/addsub.opt,AddSub:1556,
 tests/instcombine/addsub.opt,AddSub:1560,
 tests/instcombine/addsub.opt,AddSub:1564,
@@ -78,7 +78,7 @@ tests/instcombine/andorxor.opt,AndOrXor:2321-2,unknown conversion op 'sext %A' ;
 tests/instcombine/andorxor.opt,AndOrXor:2321-3,unknown conversion op 'trunc %A' ; conversionop.op = 'trunc'
 tests/instcombine/andorxor.opt,AndOrXor:2356,unknown conversion op 'sext i1 %A' ; conversionop.op = 'sext'
 tests/instcombine/andorxor.opt,AndOrXor:2367,
-tests/instcombine/andorxor.opt,AndOrXor:2375,
+tests/instcombine/andorxor.opt,AndOrXor:2375,LArgumentList instance has no attribute '__getitem__'
 tests/instcombine/andorxor.opt,AndOrXor:2416,
 tests/instcombine/andorxor.opt,AndOrXor:2417,
 tests/instcombine/andorxor.opt,AndOrXor:2429,
@@ -106,27 +106,27 @@ tests/instcombine/muldivrem.opt,152,
 tests/instcombine/muldivrem.opt,160,
 tests/instcombine/muldivrem.opt,229,
 tests/instcombine/muldivrem.opt,239,
-tests/instcombine/muldivrem.opt,265,binop with flags not supported
-tests/instcombine/muldivrem.opt,265-2,binop with flags not supported
-tests/instcombine/muldivrem.opt,266,binop with flags not supported
-tests/instcombine/muldivrem.opt,266-2,binop with flags not supported
+tests/instcombine/muldivrem.opt,265,binops with flags '['exact']' not supported
+tests/instcombine/muldivrem.opt,265-2,binops with flags '['exact']' not supported
+tests/instcombine/muldivrem.opt,266,binops with flags '['exact']' not supported
+tests/instcombine/muldivrem.opt,266-2,binops with flags '['exact']' not supported
 tests/instcombine/muldivrem.opt,275,
 tests/instcombine/muldivrem.opt,275-2,
 tests/instcombine/muldivrem.opt,276,
 tests/instcombine/muldivrem.opt,276-2,
 tests/instcombine/muldivrem.opt,283,
 tests/instcombine/muldivrem.opt,290 & 292,
-tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,
-tests/instcombine/muldivrem.opt,805,
+tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/muldivrem.opt,805,LArgumentList instance has no attribute '__getitem__'
 tests/instcombine/muldivrem.opt,809,unknown conversion op 'zext %c' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,820,
 tests/instcombine/muldivrem.opt,820',
 tests/instcombine/muldivrem.opt,891,
-tests/instcombine/muldivrem.opt,891-exact,binop with flags not supported
+tests/instcombine/muldivrem.opt,891-exact,binops with flags '['exact']' not supported
 tests/instcombine/muldivrem.opt,976,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,976-exact,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,1030,
-tests/instcombine/muldivrem.opt,1049,binop with flags not supported
+tests/instcombine/muldivrem.opt,1049,binops with flags '['nsw']' not supported
 tests/instcombine/muldivrem.opt,1285,unknown conversion op 'zext Ty %X' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:485-2,Error: incompatible bitwidths: 1and32
@@ -135,16 +135,16 @@ tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 
 tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
 tests/instcombine/select.opt,Select:576',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:637,
-tests/instcombine/select.opt,Select:641,
-tests/instcombine/select.opt,Select:699,
-tests/instcombine/select.opt,Select:700,
-tests/instcombine/select.opt,Select:704,
-tests/instcombine/select.opt,Select:705,
-tests/instcombine/select.opt,Select:740,
-tests/instcombine/select.opt,Select:741,
-tests/instcombine/select.opt,Select:746,
-tests/instcombine/select.opt,Select:747,
+tests/instcombine/select.opt,Select:637,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:641,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:699,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:700,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:704,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:705,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:740,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:741,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:746,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:747,LArgumentList instance has no attribute '__getitem__'
 tests/instcombine/select.opt,Select:846,
 tests/instcombine/select.opt,Select:850,
 tests/instcombine/select.opt,Select:855,
@@ -157,12 +157,12 @@ tests/instcombine/select.opt,Select:869,unknown conversion op 'zext C' ; convers
 tests/instcombine/select.opt,Select:873,unknown conversion op 'sext C' ; conversionop.op = 'sext'
 tests/instcombine/select.opt,Select:877,unknown conversion op 'zext %notc' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:883,unknown conversion op 'sext %notc' ; conversionop.op = 'sext'
-tests/instcombine/select.opt,Select:962,
-tests/instcombine/select.opt,Select:967a,Error: incompatible bitwidths: 9and1
-tests/instcombine/select.opt,Select:967b,Error: incompatible bitwidths: 9and1
-tests/instcombine/select.opt,Select:1070,
-tests/instcombine/select.opt,Select:1078,
-tests/instcombine/select.opt,Select:1087,
+tests/instcombine/select.opt,Select:962,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:967a,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:967b,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:1070,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:1078,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:1087,LArgumentList instance has no attribute '__getitem__'
 tests/instcombine/select.opt,Select:1100,
 tests/instcombine/select.opt,Select:1105,
 tests/instcombine/shift.opt,InstCombineShift: 239,

@@ -576,7 +576,8 @@ def print_as_lean(opt):
   theorem_block += "alive_" + sanitize_name(name) + "_src" + variable_width_name + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + variable_width_name + " := by\n"
   theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
   theorem_block += "  simp_alive_ssa\n"
-  theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"
+  theorem_block += "  print_goal_as_error\n"
+  theorem_block += "  sorry -- apply " + "bitvec_" + sanitize_name(name) + "\n"
  
 
   out += theorem_block
