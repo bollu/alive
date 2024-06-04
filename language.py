@@ -1303,7 +1303,7 @@ class LArgumentList:
     if generic_syntax:
       return "(" + ",".join([v.to_lean_str() for v in self.vars]) + ")"
     else:
-      return ",".join([v.to_lean_str() for v in self.vars])
+      return ", ".join([v.to_lean_str() for v in self.vars])
 
   def type_to_lean_str(self, generic_syntax=False):
     return ", ".join([v.type_to_lean_str() for v in self.vars])
@@ -1323,9 +1323,12 @@ class LExprConstant(LExpr):
     return self.bitwidth
 
   def to_lean_str(self, generic_syntax=False):
-    return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth_to_lean_str(self.bw()))) + \
-     ':' + self.type_to_lean_str()
-  
+    if generic_syntax:
+      return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth_to_lean_str(self.bw()))) + \
+       ':' + self.type_to_lean_str()
+    else:
+      return ('llvm.mlir.constant %s : _' % self.const)
+
   def __repr__(self):
     return self.to_lean_str()
 
@@ -1621,6 +1624,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   state = ToLeanState(constants=constants)
 
   print("dbg> to_lean_prog(%s) type(%s) expected bitwidth: %s" % (p, p.__class__, expected_bitwidth))
+  using_generic_bw = False
   for bb, instrs in p.items():
     if bb != "":
       raise RuntimeError("expected no basic block name, got '%s'" % (bb, ))
@@ -1644,7 +1648,8 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
     lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
     state.assigns[-1] = (lhs,rhs)
     propagate_bitwidth(rhs, expected_bitwidth)
-
+    if lhs.bitwidth is None :
+        using_generic_bw = True
   print("dbg> printing string start. ")
   out = ""
   for (i, (lhs, rhs)) in enumerate(state.assigns):
@@ -1657,17 +1662,19 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   assert last_var is not None
   assert isinstance(last_var, LVar)
   bitwidth = last_var.expr.bw()
+  if bitwidth is None:
+    using_generic_bw = True
 
   if generic_syntax:
     out += "\n" + " " * num_indent + \
           '"llvm.return" (%s) : (%s) -> ()' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
   else:
     out += "\n" + " " * num_indent + \
-          'llvm.return (%s) : %s' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
+          'llvm.return %s : %s' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
 
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
-  return (out, state, bitwidth)
+  return (out, state, bitwidth, using_generic_bw)
 
 def countUsers(prog):
   m = {}

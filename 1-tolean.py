@@ -517,8 +517,8 @@ def build_width2names(name2constants):
 def print_as_lean(opt, generic_syntax=False):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
   print("dbg> printing " + name + " as lean")
-  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[], generic_syntax=generic_syntax)
-  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names, generic_syntax=generic_syntax)
+  (src_str, src_state, src_bw, src_uses_generic_bw) = to_lean_prog(src, num_indent=2, skip=[], generic_syntax=generic_syntax)
+  (tgt_str, tgt_state, tgt_bw, tgt_uses_generic_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names, generic_syntax=generic_syntax)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
   width2names = build_width2names(tgt_state.constant_names)
@@ -537,7 +537,7 @@ def print_as_lean(opt, generic_syntax=False):
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   print("----------------------------------------")
-  if bitwidth == 'w' or src_str.find("_") != -1 or tgt_str.find("_") != -1:
+  if bitwidth == 'w' or src_uses_generic_bw or tgt_uses_generic_bw:
     variable_width_name = " w "
     variable_width_def = " (w : Nat) "
   else:
@@ -575,9 +575,8 @@ def print_as_lean(opt, generic_syntax=False):
   theorem_block +=  " : "
   theorem_block += "alive_" + sanitize_name(name) + "_src" + variable_width_name + " ⊑ " + "alive_" + sanitize_name(name) + "_tgt" + variable_width_name + " := by\n"
   theorem_block += "  unfold " + "alive_" + sanitize_name(name) + "_src" + " " + "alive_" + sanitize_name(name) + "_tgt\n"
-  theorem_block += "  simp_alive_ssa\n"
-  theorem_block += "  print_goal_as_error\n"
-  theorem_block += "  sorry -- apply " + "bitvec_" + sanitize_name(name) + "\n"
+  theorem_block += "  simp_alive_peephole\n"
+  theorem_block += "  apply " + "bitvec_" + sanitize_name(name) + "\n"
  
 
   out += theorem_block
