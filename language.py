@@ -1172,11 +1172,11 @@ def print_prog(p, skip):
 
 def to_str_prog(p, skip):
   out = ""
-  for bb, instrs in p.iteritems():
+  for bb, instrs in p.items():
     if bb != "":
       out += "%s:\n" % bb
 
-    for k,v in instrs.iteritems():
+    for k,v in instrs.items():
       if k in skip:
         continue
       k = str(k)
@@ -1244,7 +1244,7 @@ def propagate_bitwidth(expr, bw, skip=[]):
       #first argument to a select has to have width 1
       print("dbg> propagating select first argument %s" % expr.args)
       propagate_bitwidth(expr.args, 1, [2,3])
-      expr.bitwidth = expr.args[1].bw
+      expr.bitwidth = expr.args.vars[1].bw
     else:
       skip = []
     propagate_bitwidth(expr.args, bw, skip)
@@ -1389,7 +1389,7 @@ class ToLeanState:
 
   def add_constant_name(self, name, const_expr):
     assert isinstance(name, str)
-    if self.constant_names.has_key(name):
+    if name in self.constant_names:
         #I'm hoping this is a refrerence and will get mutated
         self.constant_names[name].append(const_expr)
     else:
@@ -1615,11 +1615,11 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   state = ToLeanState(constants=constants)
 
   print("dbg> to_lean_prog(%s) type(%s) expected bitwidth: %s" % (p, p.__class__, expected_bitwidth))
-  for bb, instrs in p.iteritems():
+  for bb, instrs in p.items():
     if bb != "":
       raise RuntimeError("expected no basic block name, got '%s'" % (bb, ))
 
-    for k,v in instrs.iteritems():
+    for k,v in instrs.items():
       if k in skip:
         continue
       # print("dbg> type of k(%s) : '%s', of v(%s) : '%s'" % (k, type(k), v, v.__class__))

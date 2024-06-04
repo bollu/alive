@@ -438,14 +438,14 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   sneg = SolverFor('QF_LIA')
   sneg.add(Not(mk_and([type_pre] + type_src + type_tgt)))
 
-  has_unreach = any(v.startswith('unreachable') for v in ident_tgt.iterkeys())
-  for v in ident_src.iterkeys():
+  has_unreach = any(v.startswith('unreachable') for v in ident_tgt)
+  for v in ident_src:
     if v[0] == '%' and v not in used_src and v not in used_tgt and\
        v in skip_tgt and not has_unreach:
       print('ERROR: Temporary register %s unused and not overwritten' % v)
       exit(-1)
 
-  for v in ident_tgt.iterkeys():
+  for v in ident_tgt:
     if v[0] == '%' and v not in used_tgt and v not in ident_src:
       print('ERROR: Temporary register %s unused and does not overwrite any'\
             ' Source register' % v)
@@ -454,7 +454,7 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   # build constraints that indicate the number of users for each register.
   users_count = countUsers(src)
   users = {}
-  for k in ident_src.iterkeys():
+  for k in ident_src:
     n_users = users_count.get(k)
     users[k] = [get_users_var(k) != n_users] if n_users else []
 
@@ -524,7 +524,7 @@ def print_as_lean(opt):
   width2names = build_width2names(tgt_state.constant_names)
   assert len(width2names) <= 1 # For now, at most one arbitrary width is supported
   argument_list = []
-  for w in width2names.iterkeys():
+  for w in width2names:
     constant_decls += "("
     constant_decls += " ".join([nm for nm in width2names[w]])
     constant_decls += " : Bitvec " + str(w) + ")\n"
@@ -533,7 +533,7 @@ def print_as_lean(opt):
         argument_list.append("%%%s : _" % (nm))
       else:
         argument_list.append("%%%s : i%s" % (nm, w))
-  for w in tgt_state.constant_names.iterkeys():
+  for w in tgt_state.constant_names:
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
   print("----------------------------------------")
@@ -709,7 +709,7 @@ def convert_to_lean_all():
 if __name__ == "__main__":
   try:
     convert_to_lean_all()
-  except (IOError, e):
+  except IOError as e:
     print >> sys.stderr, 'ERROR:', e
     exit(-1)
   except KeyboardInterrupt:

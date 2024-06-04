@@ -27,8 +27,8 @@ tests/instcombine/addsub.opt,AddSub:1619,
 tests/instcombine/addsub.opt,AddSub:1624,
 tests/instcombine/andorxor.opt,AndOrXor:135,
 tests/instcombine/andorxor.opt,AndOrXor:144,
-tests/instcombine/andorxor.opt,AndOrXor:516,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/andorxor.opt,AndOrXor:523,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
+tests/instcombine/andorxor.opt,AndOrXor:516,cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
+tests/instcombine/andorxor.opt,AndOrXor:523,cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
 tests/instcombine/andorxor.opt,AndOrXor:698,
 tests/instcombine/andorxor.opt,AndOrXor:709,
 tests/instcombine/andorxor.opt,AndOrXor:716,
@@ -78,7 +78,7 @@ tests/instcombine/andorxor.opt,AndOrXor:2321-2,unknown conversion op 'sext %A' ;
 tests/instcombine/andorxor.opt,AndOrXor:2321-3,unknown conversion op 'trunc %A' ; conversionop.op = 'trunc'
 tests/instcombine/andorxor.opt,AndOrXor:2356,unknown conversion op 'sext i1 %A' ; conversionop.op = 'sext'
 tests/instcombine/andorxor.opt,AndOrXor:2367,
-tests/instcombine/andorxor.opt,AndOrXor:2375,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/andorxor.opt,AndOrXor:2375,
 tests/instcombine/andorxor.opt,AndOrXor:2416,
 tests/instcombine/andorxor.opt,AndOrXor:2417,
 tests/instcombine/andorxor.opt,AndOrXor:2429,
@@ -89,7 +89,7 @@ tests/instcombine/andorxor.opt,AndOrXor:2459-1,unknown conversion op 'zext %cmp 
 tests/instcombine/andorxor.opt,AndOrXor:2459-2,unknown conversion op 'sext %cmp to i11' ; conversionop.op = 'sext'
 tests/instcombine/andorxor.opt,AndOrXor:2475,
 tests/instcombine/andorxor.opt,AndOrXor:2486,
-tests/instcombine/andorxor.opt,AndOrXor:2515   ((X^C1) >> C2)^C3 -> (X>>C2) ^ ((C1>>C2)^C3),"cannot convert value 'lshr(C1, C2)' (type: 'constants.CnstFunction')"
+tests/instcombine/andorxor.opt,AndOrXor:2515   ((X^C1) >> C2)^C3 -> (X>>C2) ^ ((C1>>C2)^C3),"cannot convert value 'lshr(C1, C2)' (type: '<class 'constants.CnstFunction'>')"
 tests/instcombine/andorxor.opt,AndOrXor:2581  (B|A)^B -> A & ~B,
 tests/instcombine/andorxor.opt,AndOrXor:2587  (B&A)^A -> ~B & A,
 tests/instcombine/andorxor.opt,AndOrXor:2595,
@@ -116,8 +116,8 @@ tests/instcombine/muldivrem.opt,276,
 tests/instcombine/muldivrem.opt,276-2,
 tests/instcombine/muldivrem.opt,283,
 tests/instcombine/muldivrem.opt,290 & 292,
-tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/muldivrem.opt,805,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/muldivrem.opt,SimplifyDivRemOfSelect,
+tests/instcombine/muldivrem.opt,805,
 tests/instcombine/muldivrem.opt,809,unknown conversion op 'zext %c' ; conversionop.op = 'zext'
 tests/instcombine/muldivrem.opt,820,
 tests/instcombine/muldivrem.opt,820',
@@ -131,20 +131,20 @@ tests/instcombine/muldivrem.opt,1285,unknown conversion op 'zext Ty %X' ; conver
 tests/instcombine/muldivrem.opt,1298,unknown conversion op 'zext %cmp' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:485-2,Error: incompatible bitwidths: 1and32
 tests/instcombine/select.opt,Select:489-2,Error: incompatible bitwidths: 1and32
-tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:576',cannot convert value 'width(%X)' (type: 'constants.CnstFunction')
-tests/instcombine/select.opt,Select:637,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:641,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:699,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:700,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:704,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:705,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:740,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:741,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:746,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:747,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:575,cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
+tests/instcombine/select.opt,Select:575',cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
+tests/instcombine/select.opt,Select:576,cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
+tests/instcombine/select.opt,Select:576',cannot convert value 'width(%X)' (type: '<class 'constants.CnstFunction'>')
+tests/instcombine/select.opt,Select:637,
+tests/instcombine/select.opt,Select:641,
+tests/instcombine/select.opt,Select:699,
+tests/instcombine/select.opt,Select:700,
+tests/instcombine/select.opt,Select:704,
+tests/instcombine/select.opt,Select:705,
+tests/instcombine/select.opt,Select:740,
+tests/instcombine/select.opt,Select:741,
+tests/instcombine/select.opt,Select:746,
+tests/instcombine/select.opt,Select:747,
 tests/instcombine/select.opt,Select:846,
 tests/instcombine/select.opt,Select:850,
 tests/instcombine/select.opt,Select:855,
@@ -157,12 +157,12 @@ tests/instcombine/select.opt,Select:869,unknown conversion op 'zext C' ; convers
 tests/instcombine/select.opt,Select:873,unknown conversion op 'sext C' ; conversionop.op = 'sext'
 tests/instcombine/select.opt,Select:877,unknown conversion op 'zext %notc' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:883,unknown conversion op 'sext %notc' ; conversionop.op = 'sext'
-tests/instcombine/select.opt,Select:962,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:967a,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:967b,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:1070,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:1078,LArgumentList instance has no attribute '__getitem__'
-tests/instcombine/select.opt,Select:1087,LArgumentList instance has no attribute '__getitem__'
+tests/instcombine/select.opt,Select:962,
+tests/instcombine/select.opt,Select:967a,
+tests/instcombine/select.opt,Select:967b,
+tests/instcombine/select.opt,Select:1070,
+tests/instcombine/select.opt,Select:1078,
+tests/instcombine/select.opt,Select:1087,
 tests/instcombine/select.opt,Select:1100,
 tests/instcombine/select.opt,Select:1105,
 tests/instcombine/shift.opt,InstCombineShift: 239,
