@@ -7,6 +7,6 @@ pkgs.mkShell {
       my-python-packages = ps: with ps; [ z3 stopit ];
     in
     [
-      (pkgs.python2.withPackages my-python-packages)
+      (pkgs.python3.withPackages my-python-packages)
     ];
 }

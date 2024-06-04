@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+
 import argparse, glob, re, sys
 from language import *
 from parser import parse_llvm, parse_opt_file
@@ -24,6 +26,7 @@ import stopit
 import pdb
 import time
 import csv
+
 def block_model(s, sneg, m):
   # First simplify the model.
   sneg.push()
@@ -122,8 +125,8 @@ def gen_benchmark(s):
 
 def check_incomplete_solver(res, s):
   if res == unknown:
-    print '\nWARNING: The SMT solver gave up. Verification incomplete.'
-    print 'Solver says: ' + s.reason_unknown()
+    print('\nWARNING: The SMT solver gave up. Verification incomplete.')
+    print('Solver says: ' + s.reason_unknown())
     exit(-1)
 
 
@@ -155,11 +158,11 @@ def check_expr(qvars, expr, error):
   if res != unsat:
     check_incomplete_solver(res, s)
     e, src, tgt, stop, srcv, tgtv, types = error(s)
-    print '\nERROR: %s' % e
-    print 'Example:'
+    print('\nERROR: %s' % e)
+    print('Example:')
     print_var_vals(s, srcv, tgtv, stop, types)
-    print 'Source value: ' + src
-    print 'Target value: ' + tgt
+    print('Source value: ' + src)
+    print('Target value: ' + tgt)
     exit(-1)
 
 
@@ -176,7 +179,7 @@ def var_type(var, types):
 
 
 def val2binhex(v, bits):
-  return '0x%0*X' % ((bits+3) / 4, v)
+  return '0x%0*X' % ((bits+3) // 4, v)
   #if bits % 4 == 0:
   #  return '0x%0*X' % (bits / 4, v)
   #return format(v, '#0'+str(bits)+'b')
@@ -195,13 +198,13 @@ def str_model(s, v):
 
 
 def _print_var_vals(s, vars, stopv, seen, types):
-  for k,v in vars.iteritems():
+  for k,v in vars.items():
     if k == stopv:
       return
     if k in seen:
       continue
     seen |= set([k])
-    print "%s %s = %s" % (k, var_type(k, types), str_model(s, v[0]))
+    print("%s %s = %s" % (k, var_type(k, types), str_model(s, v[0])))
 
 
 def print_var_vals(s, vs1, vs2, stopv, types):
@@ -228,9 +231,9 @@ def get_smt_vars(f):
 
 
 def check_refinement(srcv, tgtv, types, extra_cnstrs, users):
-  for k,v in srcv.iteritems():
+  for k,v in srcv.items():
     # skip instructions only on one side; assumes they remain unchanged
-    if k[0] == 'C' or not tgtv.has_key(k):
+    if k[0] == 'C' or k not in tgtv:
       continue
 
     (a, defa, poisona, qvars) = v
@@ -264,9 +267,9 @@ def infer_flags(srcv, tgtv, types, extra_cnstrs, prev_flags, users):
   flag_vars_src = {}
   flag_vars_tgt = {}
 
-  for k,v in srcv.iteritems():
+  for k,v in srcv.items():
     # skip instructions only on one side; assumes they remain unchanged
-    if k[0] == 'C' or not tgtv.has_key(k):
+    if k[0] == 'C' or k not in tgtv:
       continue
 
     (a, defa, poisona, qvars) = v
@@ -280,7 +283,7 @@ def infer_flags(srcv, tgtv, types, extra_cnstrs, prev_flags, users):
     q = mk_and(users[k] + [q])
 
     input_vars = []
-    for k,v in get_smt_vars(q).iteritems():
+    for k,v in get_smt_vars(q).items():
       if k[0] == '%' or k[0] == 'C' or k.startswith('icmp_') or\
          k.startswith('alloca') or k.startswith('mem_') or k.startswith('ana_'):
         input_vars.append(v)
@@ -293,7 +296,7 @@ def infer_flags(srcv, tgtv, types, extra_cnstrs, prev_flags, users):
       elif k.startswith('u_') or k.startswith('undef'):
         continue
       else:
-        print "Unknown smt var: " + str(v)
+        print("Unknown smt var: " + str(v))
         exit(-1)
 
     q = mk_exists(qvars, q)
@@ -319,11 +322,11 @@ def infer_flags(srcv, tgtv, types, extra_cnstrs, prev_flags, users):
     check_incomplete_solver(res, s)
     m = s.model()
     min_model = []
-    for v in flag_vars_src.itervalues():
+    for v in flag_vars_src.values():
       val = m[v]
       if val and val.as_long() == 1:
         min_model.append(v == 1)
-    for v in flag_vars_tgt.itervalues():
+    for v in flag_vars_tgt.values():
       val = m[v]
       if val and val.as_long() == 0:
         min_model.append(v == 0)
@@ -350,8 +353,8 @@ def check_typed_opt(pre, src, ident_src, tgt, ident_tgt, types, users):
 
   # 1) check preconditions of BBs
   tgtbbs = tgtv.bb_pres
-  for k,v in srcv.bb_pres.iteritems():
-    if not tgtbbs.has_key(k):
+  for k,v in srcv.bb_pres.items():
+    if k not in tgtbbs:
       continue
     # assume open world. May need to add language support to state that a BB is
     # complete (closed world)
@@ -381,14 +384,14 @@ def check_typed_opt(pre, src, ident_src, tgt, ident_tgt, types, users):
 def check_opt(opt, timeout, bitwidth, hide_progress):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
 
-  print 'Optimization: ' + name
-  print 'Timeout: ' + str(timeout)
-  print 'Bitwidth: ' + str(bitwidth)
-  print 'Precondition: ' + str(pre)
+  print('Optimization: ' + name)
+  print('Timeout: ' + str(timeout))
+  print('Bitwidth: ' + str(bitwidth))
+  print('Precondition: ' + str(pre))
   print_prog(src, set([]))
-  print '=>'
+  print('=>')
   print_prog(tgt, skip_tgt)
-  print
+  print()
 
   reset_pick_one_type()
   global gbl_prev_flags
@@ -404,7 +407,7 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   s.add(type_pre)
   print("Type checking precondition...")
   if s.check() != sat:
-    print 'Precondition does not type check'
+    print('Precondition does not type check')
     exit(-1)
 
   # Only one type per variable/expression in the precondition is required.
@@ -415,14 +418,14 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   unregister_pick_one_type(get_smt_vars(type_src))
   print("Type checking source...")
   if s.check() != sat:
-    print 'Source program does not type check'
+    print('Source program does not type check')
     exit(-1)
 
   s.add(type_tgt)
   unregister_pick_one_type(get_smt_vars(type_tgt))
   print("type checking destination...")
   if s.check() != sat:
-    print 'Source and Target programs do not type check'
+    print('Source and Target programs do not type check')
     exit(-1)
 
   # Pointers are assumed to be either 32 or 64 bits
@@ -432,23 +435,23 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   sneg = SolverFor('QF_LIA')
   sneg.add(Not(mk_and([type_pre] + type_src + type_tgt)))
 
-  has_unreach = any(v.startswith('unreachable') for v in ident_tgt.iterkeys())
-  for v in ident_src.iterkeys():
+  has_unreach = any(v.startswith('unreachable') for v in ident_tgt.keys())
+  for v in ident_src.keys():
     if v[0] == '%' and v not in used_src and v not in used_tgt and\
        v in skip_tgt and not has_unreach:
-      print 'ERROR: Temporary register %s unused and not overwritten' % v
+      print('ERROR: Temporary register %s unused and not overwritten' % v)
       exit(-1)
 
-  for v in ident_tgt.iterkeys():
+  for v in ident_tgt.keys():
     if v[0] == '%' and v not in used_tgt and v not in ident_src:
-      print 'ERROR: Temporary register %s unused and does not overwrite any'\
-            ' Source register' % v
+      print('ERROR: Temporary register %s unused and does not overwrite any'\
+            ' Source register' % v)
       exit(-1)
 
   # build constraints that indicate the number of users for each register.
   users_count = countUsers(src)
   users = {}
-  for k in ident_src.iterkeys():
+  for k in ident_src.keys():
     n_users = users_count.get(k)
     users[k] = [get_users_var(k) != n_users] if n_users else []
 
@@ -481,12 +484,12 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
     assert res != unknown
 
   if res == unsat:
-    print '\nOptimization is correct!'
+    print('\nOptimization is correct!')
     if do_infer_flags():
-      print 'Flags: %s' % gbl_prev_flags[0]
-    print
+      print('Flags: %s' % gbl_prev_flags[0])
+    print()
   else:
-    print '\nVerification incomplete; did not check all bit widths\n'
+    print('\nVerification incomplete; did not check all bit widths\n')
 
   return True # succeeded, did not time out
 
@@ -569,8 +572,8 @@ def verify_all():
 if __name__ == "__main__":
   try:
     verify_all()
-  except IOError, e:
-    print >> sys.stderr, 'ERROR:', e
+  except IOError as e:
+    print('ERROR:', e, file=sys.stderr)
     exit(-1)
   except KeyboardInterrupt:
-    print '\nCaught Ctrl-C. Exiting..'
+    print('\nCaught Ctrl-C. Exiting..')

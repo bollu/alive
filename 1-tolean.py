@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright 2014-2015 The Alive authors.
@@ -128,8 +128,8 @@ def gen_benchmark(s):
 
 def check_incomplete_solver(res, s):
   if res == unknown:
-    print '\nWARNING: The SMT solver gave up. Verification incomplete.'
-    print 'Solver says: ' + s.reason_unknown()
+    print('\nWARNING: The SMT solver gave up. Verification incomplete.')
+    print('Solver says: ' + s.reason_unknown())
     exit(-1)
 
 
@@ -161,11 +161,11 @@ def check_expr(qvars, expr, error):
   if res != unsat:
     check_incomplete_solver(res, s)
     e, src, tgt, stop, srcv, tgtv, types = error(s)
-    print '\nERROR: %s' % e
-    print 'Example:'
+    print('\nERROR: %s' % e)
+    print('Example:')
     print_var_vals(s, srcv, tgtv, stop, types)
-    print 'Source value: ' + src
-    print 'Target value: ' + tgt
+    print('Source value: ' + src)
+    print('Target value: ' + tgt)
     exit(-1)
 
 
@@ -207,7 +207,7 @@ def _print_var_vals(s, vars, stopv, seen, types):
     if k in seen:
       continue
     seen |= set([k])
-    print "%s %s = %s" % (k, var_type(k, types), str_model(s, v[0]))
+    print("%s %s = %s" % (k, var_type(k, types), str_model(s, v[0])))
 
 
 def print_var_vals(s, vs1, vs2, stopv, types):
@@ -299,7 +299,7 @@ def infer_flags(srcv, tgtv, types, extra_cnstrs, prev_flags, users):
       elif k.startswith('u_') or k.startswith('undef'):
         continue
       else:
-        print "Unknown smt var: " + str(v)
+        print("Unknown smt var: " + str(v))
         exit(-1)
 
     q = mk_exists(qvars, q)
@@ -387,14 +387,14 @@ def check_typed_opt(pre, src, ident_src, tgt, ident_tgt, types, users):
 def check_opt(opt, timeout, bitwidth, hide_progress):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
 
-  print 'Optimization: ' + name
-  print 'Timeout: ' + str(timeout)
-  print 'Bitwidth: ' + str(bitwidth)
-  print 'Precondition: ' + str(pre)
+  print('Optimization: ' + name)
+  print('Timeout: ' + str(timeout))
+  print('Bitwidth: ' + str(bitwidth))
+  print('Precondition: ' + str(pre))
   print_prog(src, set([]))
-  print '=>'
+  print('=>')
   print_prog(tgt, skip_tgt)
-  print
+  print()
 
   reset_pick_one_type()
   global gbl_prev_flags
@@ -410,7 +410,7 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   s.add(type_pre)
   print("Type checking precondition...")
   if s.check() != sat:
-    print 'Precondition does not type check'
+    print('Precondition does not type check')
     exit(-1)
 
   # Only one type per variable/expression in the precondition is required.
@@ -421,14 +421,14 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   unregister_pick_one_type(get_smt_vars(type_src))
   print("Type checking source...")
   if s.check() != sat:
-    print 'Source program does not type check'
+    print('Source program does not type check')
     exit(-1)
 
   s.add(type_tgt)
   unregister_pick_one_type(get_smt_vars(type_tgt))
   print("type checking destination...")
   if s.check() != sat:
-    print 'Source and Target programs do not type check'
+    print('Source and Target programs do not type check')
     exit(-1)
 
   # Pointers are assumed to be either 32 or 64 bits
@@ -442,13 +442,13 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
   for v in ident_src.iterkeys():
     if v[0] == '%' and v not in used_src and v not in used_tgt and\
        v in skip_tgt and not has_unreach:
-      print 'ERROR: Temporary register %s unused and not overwritten' % v
+      print('ERROR: Temporary register %s unused and not overwritten' % v)
       exit(-1)
 
   for v in ident_tgt.iterkeys():
     if v[0] == '%' and v not in used_tgt and v not in ident_src:
-      print 'ERROR: Temporary register %s unused and does not overwrite any'\
-            ' Source register' % v
+      print('ERROR: Temporary register %s unused and does not overwrite any'\
+            ' Source register' % v)
       exit(-1)
 
   # build constraints that indicate the number of users for each register.
@@ -487,12 +487,12 @@ def check_opt(opt, timeout, bitwidth, hide_progress):
     assert res != unknown
 
   if res == unsat:
-    print '\nOptimization is correct!'
+    print('\nOptimization is correct!')
     if do_infer_flags():
-      print 'Flags: %s' % gbl_prev_flags[0]
-    print
+      print('Flags: %s' % gbl_prev_flags[0])
+    print()
   else:
-    print '\nVerification incomplete; did not check all bit widths\n'
+    print('\nVerification incomplete; did not check all bit widths\n')
 
   return True # succeeded, did not time out
 
@@ -536,7 +536,7 @@ def print_as_lean(opt):
   for w in tgt_state.constant_names.iterkeys():
     assert w in src_state.constant_names
   print("dbg> lhs bw: " + str(src_bw) + " rhs bw: " + str(tgt_bw) + " unified to: " + str(bitwidth))
-  print "----------------------------------------"
+  print("----------------------------------------")
   if bitwidth == 'w' or src_str.find("_") != -1 or tgt_str.find("_") != -1:
     variable_width_name = " w "
     variable_width_def = " (w : Nat) "
@@ -678,6 +678,8 @@ def convert_to_lean_all():
             while name in names:
               name = name + "'"
             names.append(name)
+            #if name == "AddSub:1043":
+            print("Opt: %s", opt)
             opt = (name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt)
             print("%s : %s" % (pre, pre.__class__))
             if str(pre) != "true": continue
@@ -691,7 +693,7 @@ def convert_to_lean_all():
             ix += 1
             stats.add(Statistics.Row(file=path, name=name, error=error))
 
-    print "#errors: %d" % len(errors)
+    print("#errors: %d" % len(errors))
     for (path, opt, err) in errors:
       name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
       print("%s:%s" % (path, name))
@@ -707,8 +709,8 @@ def convert_to_lean_all():
 if __name__ == "__main__":
   try:
     convert_to_lean_all()
-  except IOError, e:
+  except (IOError, e):
     print >> sys.stderr, 'ERROR:', e
     exit(-1)
   except KeyboardInterrupt:
-    print '\nCaught Ctrl-C. Exiting..'
+    print('\nCaught Ctrl-C. Exiting..')
