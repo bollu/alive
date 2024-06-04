@@ -1364,13 +1364,16 @@ class LExprOp(LExpr):
       return self.bitwidth
 
   def type_to_lean_str(self, generic_syntax=False):
-    return "(%s) -> (%s)" % (self.args.type_to_lean_str(generic_syntax=generic_syntax), bitwidth_to_lean_str(self.bitwidth))
+    if generic_syntax:
+      return "(%s) -> (%s)" % (self.args.type_to_lean_str(generic_syntax=generic_syntax), bitwidth_to_lean_str(self.bitwidth))
+    else:
+      return "%s" % bitwidth_to_lean_str(self.bitwidth)
 
   def to_lean_str(self, generic_syntax=False):
     if generic_syntax:
       return '"llvm.%s" %s : %s' % (self.op, self.args.to_lean_str(generic_syntax=generic_syntax), self.type_to_lean_str())
     else:
-      return 'llvm.%s %s : _' % (self.op, self.args.to_lean_str(generic_syntax=generic_syntax))
+      return 'llvm.%s %s : %s' % (self.op, self.args.to_lean_str(generic_syntax=generic_syntax),  self.type_to_lean_str(generic_syntax=False))
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1648,7 +1651,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
     lhs.bitwidth = unify_bitwidths([rhs.bitwidth, expected_bitwidth])
     state.assigns[-1] = (lhs,rhs)
     propagate_bitwidth(rhs, expected_bitwidth)
-    if lhs.bitwidth is None :
+    if lhs.bitwidth == 'w':
         using_generic_bw = True
   print("dbg> printing string start. ")
   out = ""
@@ -1662,7 +1665,7 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   assert last_var is not None
   assert isinstance(last_var, LVar)
   bitwidth = last_var.expr.bw()
-  if bitwidth is None:
+  if bitwidth == 'w':
     using_generic_bw = True
 
   if generic_syntax:
