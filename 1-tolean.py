@@ -514,11 +514,11 @@ def build_width2names(name2constants):
       width2names[bw].append(name)
   return width2names
 
-def print_as_lean(opt):
+def print_as_lean(opt, generic_syntax=False):
   name, pre, src, tgt, ident_src, ident_tgt, used_src, used_tgt, skip_tgt = opt
   print("dbg> printing " + name + " as lean")
-  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[])
-  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names)
+  (src_str, src_state, src_bw) = to_lean_prog(src, num_indent=2, skip=[], generic_syntax=generic_syntax)
+  (tgt_str, tgt_state, tgt_bw) = to_lean_prog(tgt, num_indent=2, skip=[], expected_bitwidth=src_bw, constants=src_state.constant_names, generic_syntax=generic_syntax)
   bitwidth = unify_bitwidths([src_bw, tgt_bw])
   constant_decls = ""
   width2names = build_width2names(tgt_state.constant_names)

@@ -1271,17 +1271,17 @@ class LVar:
   def __repr__(self):
     return self.to_lean_str()
 
-  def to_lean_str(self):
+  def to_lean_str(self, generic_syntax=False):
     return "%" + self.name
 
-  def type_to_lean_str(self):
+  def type_to_lean_str(self, generic_syntax=False):
     return bitwidth_to_lean_str(self.bitwidth)
   
 class LExpr:
-  def to_lean_str(self):
+  def to_lean_str(self, generic_syntax=False):
     raise RuntimeError("to_lean_str not implemented")
   
-  def type_to_lean_str(self):
+  def type_to_lean_str(self, generic_syntax=False):
     raise RuntimeError("type_to_lean_str not implemented")
 
 
@@ -1299,10 +1299,13 @@ class LArgumentList:
   def get_bitwidths(self):
     return [v.bitwidth for v in self.vars]
 
-  def to_lean_str(self):
-    return "(" + ",".join([v.to_lean_str() for v in self.vars]) + ")"
+  def to_lean_str(self, generic_syntax=False):
+    if generic_syntax:
+      return "(" + ",".join([v.to_lean_str() for v in self.vars]) + ")"
+    else:
+      return ",".join([v.to_lean_str() for v in self.vars])
 
-  def type_to_lean_str(self):
+  def type_to_lean_str(self, generic_syntax=False):
     return ", ".join([v.type_to_lean_str() for v in self.vars])
 
   def __repr__(self):
@@ -1319,14 +1322,14 @@ class LExprConstant(LExpr):
   def bw(self):
     return self.bitwidth
 
-  def to_lean_str(self):
+  def to_lean_str(self, generic_syntax=False):
     return ('"llvm.mlir.constant" () { value = %s : %s } ' % (self.const, bitwidth_to_lean_str(self.bw()))) + \
      ':' + self.type_to_lean_str()
   
   def __repr__(self):
     return self.to_lean_str()
 
-  def type_to_lean_str(self):
+  def type_to_lean_str(self, generic_syntax=False):
     return "() -> (%s)" % (bitwidth_to_lean_str(self.bw()))
 
 class LExprOp(LExpr):
@@ -1357,11 +1360,14 @@ class LExprOp(LExpr):
     else:
       return self.bitwidth
 
-  def type_to_lean_str(self):
-    return "(%s) -> (%s)" % (self.args.type_to_lean_str(), bitwidth_to_lean_str(self.bitwidth))
+  def type_to_lean_str(self, generic_syntax=False):
+    return "(%s) -> (%s)" % (self.args.type_to_lean_str(generic_syntax=generic_syntax), bitwidth_to_lean_str(self.bitwidth))
 
-  def to_lean_str(self):
-    return '"llvm.%s" %s : %s' % (self.op, self.args.to_lean_str(), self.type_to_lean_str())
+  def to_lean_str(self, generic_syntax=False):
+    if generic_syntax:
+      return '"llvm.%s" %s : %s' % (self.op, self.args.to_lean_str(generic_syntax=generic_syntax), self.type_to_lean_str())
+    else:
+      return 'llvm.%s %s : _' % (self.op, self.args.to_lean_str(generic_syntax=generic_syntax))
 
   def __repr__(self):
     return self.to_lean_str()
@@ -1611,7 +1617,7 @@ def to_lean_instr(instr, state):
 #  for (lhs,rhs) in assignments:
 #    if isinstance(rhs, LExprOp) and rhs.op.find("const") != -1:
 
-def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants = None):
+def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants = None, generic_syntax=False):
   state = ToLeanState(constants=constants)
 
   print("dbg> to_lean_prog(%s) type(%s) expected bitwidth: %s" % (p, p.__class__, expected_bitwidth))
@@ -1644,15 +1650,21 @@ def to_lean_prog(p, num_indent=2, skip=[], expected_bitwidth = None, constants =
   for (i, (lhs, rhs)) in enumerate(state.assigns):
     assert isinstance(lhs, LVar)
     assert isinstance(rhs, LExpr)
-    out += "\n" + " " * num_indent + lhs.to_lean_str() + " = " + rhs.to_lean_str()
+    out += "\n" + " " * num_indent + lhs.to_lean_str(generic_syntax=generic_syntax) + " = " + rhs.to_lean_str(generic_syntax=generic_syntax)
     # if i + 1 < len(state.assigns):
     #  out += ";" # we have more, so print a ;
     last_var = lhs
   assert last_var is not None
   assert isinstance(last_var, LVar)
   bitwidth = last_var.expr.bw()
-  out += "\n" + " " * num_indent + \
-        '"llvm.return" (%s) : (%s) -> ()' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
+
+  if generic_syntax:
+    out += "\n" + " " * num_indent + \
+          '"llvm.return" (%s) : (%s) -> ()' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
+  else:
+    out += "\n" + " " * num_indent + \
+          'llvm.return (%s) : %s' % (lhs.to_lean_str(), bitwidth_to_lean_str(lhs.bw()))
+
   # what value do we 'ret'?
   # looks like we 'ret' the last value.
   return (out, state, bitwidth)

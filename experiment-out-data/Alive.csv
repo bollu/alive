@@ -141,10 +141,10 @@ tests/instcombine/select.opt,Select:699,
 tests/instcombine/select.opt,Select:700,
 tests/instcombine/select.opt,Select:704,
 tests/instcombine/select.opt,Select:705,
-tests/instcombine/select.opt,Select:740,
-tests/instcombine/select.opt,Select:741,
-tests/instcombine/select.opt,Select:746,
-tests/instcombine/select.opt,Select:747,
+tests/instcombine/select.opt,Select:740,Error: incompatible bitwidths: 1and<bound method LVar.bw of %A>
+tests/instcombine/select.opt,Select:741,Error: incompatible bitwidths: 1and<bound method LVar.bw of %v4>
+tests/instcombine/select.opt,Select:746,Error: incompatible bitwidths: 1and<bound method LVar.bw of %A>
+tests/instcombine/select.opt,Select:747,Error: incompatible bitwidths: 1and<bound method LVar.bw of %A>
 tests/instcombine/select.opt,Select:846,
 tests/instcombine/select.opt,Select:850,
 tests/instcombine/select.opt,Select:855,
@@ -158,8 +158,8 @@ tests/instcombine/select.opt,Select:873,unknown conversion op 'sext C' ; convers
 tests/instcombine/select.opt,Select:877,unknown conversion op 'zext %notc' ; conversionop.op = 'zext'
 tests/instcombine/select.opt,Select:883,unknown conversion op 'sext %notc' ; conversionop.op = 'sext'
 tests/instcombine/select.opt,Select:962,
-tests/instcombine/select.opt,Select:967a,
-tests/instcombine/select.opt,Select:967b,
+tests/instcombine/select.opt,Select:967a,Error: incompatible bitwidths: 9and<bound method LVar.bw of %y>
+tests/instcombine/select.opt,Select:967b,Error: incompatible bitwidths: 9and<bound method LVar.bw of %v2>
 tests/instcombine/select.opt,Select:1070,
 tests/instcombine/select.opt,Select:1078,
 tests/instcombine/select.opt,Select:1087,
